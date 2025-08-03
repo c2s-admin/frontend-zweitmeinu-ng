@@ -1,0 +1,99 @@
+{
+  "data": {
+    "title": "Motivation Hero-Section",
+    "slug": "motivation",
+    "sections": [
+      {
+        "__component": "sections.hero-section",
+        "title": "Motivation & Geschichte",
+        "subtitle": "Von der Aufdeckung des Bottroper Zytoskandals zur führenden Healthcare-Technologie für bessere Patientenversorgung.",
+        "description": "Unser Antrieb ist es, Patienten dabei zu helfen, die bestmögliche medizinische Versorgung zu erhalten. Was als Reaktion auf einen der größten Medizinskandale Deutschlands begann, ist heute zu einer umfassenden Plattform für medizinische Zweitmeinungen gewachsen.",
+        "backgroundType": "gradient",
+        "backgroundColor": "bg-healthcare-primary",
+        "textAlignment": "center",
+        "contentMaxWidth": "4xl",
+        "minHeight": "lg",
+        "showBackgroundPattern": true,
+        "patternType": "medical-circles",
+
+        "badge": {
+          "showBadge": true,
+          "badgeText": "Patientenversorgung im Zentrum",
+          "badgeIcon": "heart",
+          "badgeColor": "healthcare-accent-green",
+          "badgeVariant": "pill"
+        },
+
+        "buttons": [
+          {
+            "__component": "ui.button",
+            "text": "Unsere Geschichte",
+            "url": "#geschichte",
+            "variant": "secondary",
+            "icon": "book-open",
+            "size": "lg",
+            "openInNewTab": false
+          },
+          {
+            "__component": "ui.button",
+            "text": "Mission & Vision",
+            "url": "#mission",
+            "variant": "outline-white",
+            "icon": "target",
+            "size": "lg",
+            "openInNewTab": false
+          }
+        ],
+
+        "seo": {
+          "__component": "seo.meta-data",
+          "metaTitle": "Motivation & Geschichte - Zweitmeinung.ng",
+          "metaDescription": "Erfahren Sie mehr über unsere Motivation und Geschichte - vom Bottroper Zytoskandal zur führenden Healthcare-Technologie für bessere Patientenversorgung.",
+          "canonicalURL": "/motivation",
+          "keywords": "Motivation, Geschichte, Bottroper Zytoskandal, Healthcare-Technologie, Patientenversorgung, medizinische Zweitmeinung",
+          "ogImage": "/images/motivation-hero-og.jpg",
+          "twitterCard": "summary_large_image"
+        },
+
+        "accessibility": {
+          "ariaLabel": "Motivation und Geschichte Hauptbereich",
+          "focusManagement": true,
+          "screenReaderText": "Hauptbereich über die Motivation und Geschichte von Zweitmeinung.ng"
+        },
+
+        "animations": {
+          "enableAnimations": true,
+          "fadeInDuration": 800,
+          "slideDirection": "up",
+          "staggerChildren": 200
+        }
+      }
+    ],
+
+    "seo": {
+      "__component": "seo.meta-data",
+      "metaTitle": "Motivation & Geschichte - Zweitmeinung.ng",
+      "metaDescription": "Entdecken Sie die Motivation hinter Zweitmeinung.ng - von der Aufdeckung des Bottroper Zytoskandals zur führenden Healthcare-Technologie.",
+      "canonicalURL": "/motivation",
+      "noIndex": false,
+      "noFollow": false,
+      "structuredData": {
+        "@context": "https://schema.org",
+        "@type": "AboutPage",
+        "name": "Motivation & Geschichte",
+        "description": "Die Geschichte und Motivation hinter Zweitmeinung.ng",
+        "url": "https://zweitmeinung.ng/motivation",
+        "mainEntity": {
+          "@type": "Organization",
+          "name": "Zweitmeinung.ng",
+          "foundingDate": "2019",
+          "description": "Führende Plattform für medizinische Zweitmeinungen in Deutschland"
+        }
+      }
+    },
+
+    "publishedAt": "2024-01-15T10:00:00.000Z",
+    "createdAt": "2024-01-15T10:00:00.000Z",
+    "updatedAt": "2024-01-15T10:00:00.000Z"
+  }
+}
