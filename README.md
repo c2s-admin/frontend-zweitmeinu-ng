@@ -1,36 +1,334 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🏥 Healthcare Website Frontend - Zweitmeinung.ng
 
-## Getting Started
+> Modern healthcare platform for medical second opinions with intelligent search and expert consultation features.
 
-First, run the development server:
+[![Next.js](https://img.shields.io/badge/Next.js-15.3.2-black?style=flat-square&logo=next.js)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.5.4-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4.10-38B2AC?style=flat-square&logo=tailwind-css)](https://tailwindcss.com/)
+[![Bun](https://img.shields.io/badge/Bun-1.1.26-orange?style=flat-square&logo=bun)](https://bun.sh/)
+[![Strapi](https://img.shields.io/badge/Strapi-5.x-purple?style=flat-square&logo=strapi)](https://strapi.io/)
 
+## 🚀 Live Demo
+
+🔗 **Live Website:** [frontend-zweitmeinu-ng.netlify.app](https://frontend-zweitmeinu-ng.netlify.app)
+📱 **Mobile Optimized:** Fully responsive design
+🏥 **Features:** FAQ Search, Medical Experts, Second Opinions
+
+---
+
+## ✨ Key Features
+
+### 🧠 **AI-Powered Functionality**
+- **Intelligent FAQ Auto-Complete** with medical terminology and fuzzy search
+- **Smart FAQ Categorization** with hybrid API + keyword fallback system
+- **Medical Dictionary Integration** with 50+ medical terms and synonyms
+- **Advanced Search Algorithms** with highlighting and relevance scoring
+
+### 🏥 **Healthcare Specific**
+- **Medical Second Opinion Platform** for expert consultations
+- **FAQ System** with 7 specialized medical categories
+- **Vote & Feedback System** for FAQ quality assessment
+- **Expert Profiles** and consultation booking
+- **Medical Terminology Support** in German
+
+### 🎨 **Modern User Experience**
+- **Custom Healthcare Design System** with professional medical styling
+- **Responsive Mobile-First Design** optimized for all devices
+- **Real-time Search Results** with debounced input and live updates
+- **Optimistic UI Updates** for instant user feedback
+- **Accessibility Features** (ARIA, Screen readers, Keyboard navigation)
+
+### 🔧 **Technical Excellence**
+- **Next.js 15 App Router** with server-side rendering
+- **TypeScript** for type safety and better developer experience
+- **Strapi CMS Integration** for dynamic content management
+- **Production-Ready APIs** with rate limiting and caching
+- **Error Boundaries** and comprehensive error handling
+
+---
+
+## 🛠️ Tech Stack
+
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| **Next.js** | 15.3.2 | React framework with App Router |
+| **TypeScript** | 5.5.4 | Type safety and developer experience |
+| **Tailwind CSS** | 3.4.10 | Utility-first CSS framework |
+| **Bun** | 1.1.26 | Fast package manager and runtime |
+| **Strapi** | 5.x | Headless CMS for content management |
+| **Lucide React** | 0.438.0 | Modern icon library |
+| **React Hook Form** | 7.53.0 | Form handling and validation |
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+- **Bun** (>= 1.1.0) - [Install Bun](https://bun.sh/docs/installation)
+- **Node.js** (>= 18.0.0) - For development tools
+- **Git** - For version control
+
+### 1. Clone Repository
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/c2s-admin/frontend-zweitmeinu-ng.git
+cd frontend-zweitmeinu-ng
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Install Dependencies
+```bash
+bun install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Environment Setup
+```bash
+# Copy environment variables
+cp .env.example .env.local
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Configure your Strapi API endpoint
+NEXT_PUBLIC_STRAPI_URL=https://st.zh3.de/api
+```
 
-## Learn More
+### 4. Development Server
+```bash
+bun run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+🎉 **Success!** Open [http://localhost:3000](http://localhost:3000) to see the website.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📂 Project Structure
 
-## Deploy on Vercel
+```
+src/
+├── app/                     # Next.js App Router
+│   ├── api/                 # API routes
+│   │   └── faq/            # FAQ endpoints (autocomplete, voting)
+│   ├── faq/                # FAQ page
+│   ├── globals.css         # Global styles
+│   ├── layout.tsx          # Root layout
+│   └── page.tsx            # Homepage
+├── components/             # React components
+│   ├── admin/              # Admin dashboard components
+│   ├── faq/                # FAQ-specific components
+│   ├── layout/             # Header, Footer, Navigation
+│   └── sections/           # Page sections
+├── lib/                    # Utility libraries
+│   ├── services/           # Frontend services
+│   ├── strapi/             # Strapi API integration
+│   └── utils.ts            # Utility functions
+├── types/                  # TypeScript type definitions
+└── hooks/                  # Custom React hooks
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🔌 API Endpoints
+
+### FAQ Auto-Complete
+```bash
+GET /api/faq/autocomplete?q=heart&limit=10
+```
+**Features:**
+- Medical term suggestions with synonyms
+- FAQ question matching
+- Popular search recommendations
+- Fuzzy search with highlighting
+- Rate limiting (50 req/10s)
+- Response caching (5min TTL)
+
+### FAQ Voting
+```bash
+POST /api/faq/vote
+{
+  "faqId": 123,
+  "isHelpful": true,
+  "sessionId": "optional"
+}
+```
+**Features:**
+- Optimistic UI updates
+- Rate limiting (10 votes/min)
+- Local storage persistence
+- Analytics tracking
+
+---
+
+## 🎨 Design System
+
+### Color Palette
+```css
+/* Healthcare Primary Colors */
+--healthcare-primary: #004166;
+--healthcare-primary-light: #0066a3;
+--healthcare-primary-dark: #002d4a;
+
+/* Accent Colors */
+--healthcare-accent-green: #00a86b;
+--healthcare-accent-hover: #008c59;
+
+/* Text Colors */
+--healthcare-text: #2d3748;
+--healthcare-text-muted: #718096;
+```
+
+### Typography
+- **Font Family:** Inter (System font fallbacks)
+- **Headings:** Bold, healthcare-primary color
+- **Body Text:** Regular, healthcare-text color
+- **Responsive:** Fluid typography scales
+
+### Components
+- **Buttons:** Multiple variants (primary, secondary, outline)
+- **Cards:** Elevation shadows with hover effects
+- **Forms:** Validation states and error handling
+- **Icons:** Lucide React with consistent sizing
+
+---
+
+## 🏗️ Development
+
+### Available Scripts
+```bash
+bun run dev          # Start development server
+bun run build        # Build for production
+bun run start        # Start production server
+bun run lint         # Run ESLint
+bun run format       # Format code with Biome
+bun run type-check   # TypeScript type checking
+```
+
+### Code Quality
+- **ESLint** - Code linting with Next.js rules
+- **Biome** - Fast code formatting and linting
+- **TypeScript** - Strict type checking
+- **Husky** - Git hooks for pre-commit checks
+
+### Testing
+```bash
+bun run test                    # Run all tests
+node test-autocomplete.js       # Test auto-complete API
+node test-categories.js         # Test FAQ categorization
+```
+
+---
+
+## 🚀 Deployment
+
+### Netlify (Recommended)
+```bash
+# Build command
+bun run build
+
+# Output directory
+out
+
+# Environment variables
+NEXT_PUBLIC_STRAPI_URL=https://st.zh3.de/api
+```
+
+### Vercel
+```bash
+# Auto-deployment on push to main branch
+# Configure environment variables in Vercel dashboard
+```
+
+### Manual Deployment
+```bash
+bun run build
+bun run start
+```
+
+---
+
+## 📊 Features Deep Dive
+
+### 🔍 Intelligent FAQ Search
+- **Auto-Complete:** Real-time suggestions with medical terms
+- **Fuzzy Matching:** Finds results even with typos
+- **Category Filtering:** Search within specific medical specialties
+- **Highlighting:** Visual emphasis on matching terms
+- **Analytics:** Search pattern tracking for optimization
+
+### 🏥 Medical Categories
+1. **Kardiologie** - Heart and cardiovascular medicine
+2. **Onkologie** - Cancer treatment and therapy
+3. **Gallenblase** - Gallbladder procedures
+4. **Nephrologie** - Kidney and dialysis medicine
+5. **Schilddrüse** - Thyroid conditions
+6. **Intensivmedizin** - Critical care medicine
+7. **Allgemeine Fragen** - General medical inquiries
+
+### 📱 Responsive Design
+- **Mobile-First:** Optimized for smartphones and tablets
+- **Touch-Friendly:** Large tap targets and gestures
+- **Performance:** Optimized images and lazy loading
+- **Accessibility:** WCAG 2.1 AA compliance
+
+### 🔒 Security & Performance
+- **Rate Limiting:** API protection against abuse
+- **Error Boundaries:** Graceful error handling
+- **HTTPS:** Secure data transmission
+- **Caching:** Optimized performance with smart caching
+- **SEO:** Server-side rendering and meta optimization
+
+---
+
+## 🤝 Contributing
+
+### Development Workflow
+1. **Fork** the repository
+2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
+3. **Commit** your changes (`git commit -m 'Add amazing feature'`)
+4. **Push** to the branch (`git push origin feature/amazing-feature`)
+5. **Open** a Pull Request
+
+### Code Standards
+- Follow existing code style and conventions
+- Add TypeScript types for all new code
+- Include tests for new functionality
+- Update documentation for API changes
+- Ensure mobile responsiveness
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 👥 Team
+
+**Generated with [Same](https://same.new)** - AI-powered development platform
+
+- 🤖 **AI Development:** Same Platform
+- 🎨 **Design System:** Custom Healthcare theme
+- 🏥 **Medical Expertise:** Healthcare domain knowledge
+- 💻 **Technology:** Modern web development stack
+
+---
+
+## 📞 Support
+
+- 📧 **Email:** kontakt@zweitmeinung.ng
+- 📱 **Phone:** +49 800 80 44 100
+- 🌐 **Website:** [zweitmeinung.ng](https://zweitmeinung.ng)
+- 💬 **Support:** Available 24/7 for medical emergencies
+
+---
+
+## 🔗 Links
+
+- 🚀 **Live Demo:** [frontend-zweitmeinu-ng.netlify.app](https://frontend-zweitmeinu-ng.netlify.app)
+- 📚 **Documentation:** [Same Docs](https://docs.same.new)
+- 🎯 **Next.js Docs:** [nextjs.org/docs](https://nextjs.org/docs)
+- 🎨 **Tailwind CSS:** [tailwindcss.com](https://tailwindcss.com)
+- 📝 **Strapi CMS:** [strapi.io](https://strapi.io)
+
+---
+
+<div align="center">
+  <p><strong>Built with ❤️ for better healthcare</strong></p>
+  <p>Empowering patients with expert medical second opinions</p>
+</div>
