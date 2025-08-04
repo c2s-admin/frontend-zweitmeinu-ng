@@ -2,10 +2,11 @@ import { strapiClient } from './client'
 import type { SiteConfiguration, StrapiResponse } from '@/types/strapi'
 import type { RealSiteConfiguration } from '@/types/strapi-real'
 import { convertRealSiteToExpected } from '@/types/strapi-real'
+import { logger } from '@/lib/logger'
 
 export async function getSiteConfig(): Promise<SiteConfiguration | null> {
   try {
-    console.log('🔍 Fetching site configuration for zweitmeinu-ng...')
+    logger.info('Fetching site configuration for zweitmeinu-ng...')
 
     // Get site configuration for zweitmeinu-ng with proper population
     const response = await strapiClient.get<StrapiResponse<RealSiteConfiguration[]>>(
@@ -15,18 +16,18 @@ export async function getSiteConfig(): Promise<SiteConfiguration | null> {
       }
     )
 
-    console.log('📊 Site config API response:', response)
+    logger.info('Site config API response:', response)
 
     // Debug: Log all fields of zweitmeinu-ng site
     const debugSite = response.data?.find((site: RealSiteConfiguration) =>
       site.siteIdentifier === 'zweitmeinu-ng'
     )
     if (debugSite) {
-      console.log('🔍 Available fields in zweitmeinu-ng:', Object.keys(debugSite))
+      logger.info('Available fields in zweitmeinu-ng:', Object.keys(debugSite))
       if (debugSite.openingHours) {
-        console.log('✅ openingHours found:', debugSite.openingHours)
+        logger.info('openingHours found:', debugSite.openingHours)
       } else {
-        console.log('❌ openingHours NOT found in site config')
+        logger.warn('openingHours NOT found in site config')
       }
     }
 
@@ -36,40 +37,40 @@ export async function getSiteConfig(): Promise<SiteConfiguration | null> {
     ) || null
 
     if (!realSiteConfig) {
-      console.warn('⚠️ No site configuration found for zweitmeinu-ng')
-      console.log('Available sites:', response.data?.map((site: RealSiteConfiguration) => site.siteIdentifier))
-      console.log('🔄 Using fallback configuration')
+      logger.warn('No site configuration found for zweitmeinu-ng')
+      logger.info('Available sites:', response.data?.map((site: RealSiteConfiguration) => site.siteIdentifier))
+      logger.warn('Using fallback configuration')
       return getFallbackSiteConfig()
     }
 
-    console.log('✅ Found site config:', realSiteConfig.siteName)
+    logger.info('Found site config:', realSiteConfig.siteName)
 
     // Convert real data structure to expected format
     const convertedSiteConfig = convertRealSiteToExpected(realSiteConfig) as SiteConfiguration
 
-    console.log('🔄 Converted site config:', convertedSiteConfig)
+    logger.info('Converted site config:', convertedSiteConfig)
 
     // Validate converted site configuration
     if (!validateSiteConfig(convertedSiteConfig)) {
-      console.error('❌ Invalid site configuration data after conversion')
-      console.log('🔄 Using fallback configuration')
+      logger.error('Invalid site configuration data after conversion')
+      logger.warn('Using fallback configuration')
       return getFallbackSiteConfig()
     }
 
-    console.log('✅ Site configuration validated successfully')
+    logger.info('Site configuration validated successfully')
     return convertedSiteConfig
   } catch (error) {
-    console.error('💥 Failed to fetch site config:', error)
+    logger.error({ err: error }, 'Failed to fetch site config')
 
     // Return fallback configuration in case of error
-    console.log('🔄 Using fallback configuration due to error')
+    logger.warn('Using fallback configuration due to error')
     return getFallbackSiteConfig()
   }
 }
 
 export function validateSiteConfig(config: unknown): config is SiteConfiguration {
   if (!config || typeof config !== 'object') {
-    console.error('❌ Site config is not an object:', config)
+    logger.error('Site config is not an object:', config)
     return false
   }
 
@@ -79,7 +80,7 @@ export function validateSiteConfig(config: unknown): config is SiteConfiguration
   const hasAttributes = configObj.attributes && typeof configObj.attributes === 'object'
 
   if (!hasId || !hasAttributes) {
-    console.error('❌ Site config missing id or attributes:', { hasId, hasAttributes })
+    logger.error('Site config missing id or attributes:', { hasId, hasAttributes })
     return false
   }
 
@@ -88,7 +89,7 @@ export function validateSiteConfig(config: unknown): config is SiteConfiguration
   const hasSiteName = typeof attributes.siteName === 'string'
 
   if (!hasSiteIdentifier || !hasSiteName) {
-    console.error('❌ Site config missing required attributes:', {
+    logger.error('Site config missing required attributes:', {
       hasSiteIdentifier,
       hasSiteName,
       siteIdentifier: attributes.siteIdentifier,
@@ -97,12 +98,12 @@ export function validateSiteConfig(config: unknown): config is SiteConfiguration
     return false
   }
 
-  console.log('✅ Site config validation passed')
+  logger.info('Site config validation passed')
   return true
 }
 
 export function getFallbackSiteConfig(): SiteConfiguration {
-  console.log('🔄 Creating fallback site configuration')
+  logger.info('Creating fallback site configuration')
 
   return {
     id: 11,
@@ -165,18 +166,18 @@ export async function getCachedSiteConfig(): Promise<SiteConfiguration | null> {
 
   // Prüfe ob Cache noch gültig ist
   if (cachedSiteConfig && (now - cacheTimestamp) < CACHE_DURATION) {
-    console.log('📋 Using cached site config')
+    logger.info('Using cached site config')
     return cachedSiteConfig
   }
 
   // Lade neue Konfiguration
-  console.log('🔄 Loading fresh site config')
+  logger.info('Loading fresh site config')
   const config = await getSiteConfig()
 
   if (config) {
     cachedSiteConfig = config
     cacheTimestamp = now
-    console.log('💾 Site config cached successfully')
+    logger.info('Site config cached successfully')
   }
 
   return config

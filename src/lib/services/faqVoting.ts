@@ -3,6 +3,8 @@
 // FAQ Voting Service
 // Handles all voting-related operations with optimistic updates, error handling, and local storage
 
+import { logger } from '@/lib/logger'
+
 export interface VoteRequest {
   faqId: number
   isHelpful: boolean
@@ -55,7 +57,7 @@ export function getUserVoteStatus(): UserVoteStatus {
     const stored = localStorage.getItem(VOTE_STORAGE_KEY)
     return stored ? JSON.parse(stored) : {}
   } catch (error) {
-    console.error('Error reading vote status from localStorage:', error)
+    logger.error({ err: error }, 'Error reading vote status from localStorage')
     return {}
   }
 }
@@ -67,7 +69,7 @@ export function saveUserVoteStatus(voteStatus: UserVoteStatus): void {
   try {
     localStorage.setItem(VOTE_STORAGE_KEY, JSON.stringify(voteStatus))
   } catch (error) {
-    console.error('Error saving vote status to localStorage:', error)
+    logger.error({ err: error }, 'Error saving vote status to localStorage')
   }
 }
 
@@ -143,12 +145,12 @@ export async function submitVote(
 
     // Success - keep the optimistic update
     onSuccess?.(result)
-    console.log('✅ Vote submitted successfully:', result)
+    logger.info('Vote submitted successfully:', result)
 
     return result
 
   } catch (error) {
-    console.error('Error submitting vote:', error)
+    logger.error({ err: error }, 'Error submitting vote')
 
     // Revert optimistic update on error
     const currentVotes = getUserVoteStatus()
@@ -177,7 +179,7 @@ export async function getVoteStats(faqId: number): Promise<VoteStats | null> {
     })
 
     if (!response.ok) {
-      console.error('Failed to fetch vote stats:', response.statusText)
+      logger.error(`Failed to fetch vote stats: ${response.statusText}`)
       return null
     }
 
@@ -185,7 +187,7 @@ export async function getVoteStats(faqId: number): Promise<VoteStats | null> {
     return result.success ? result.data : null
 
   } catch (error) {
-    console.error('Error fetching vote stats:', error)
+    logger.error({ err: error }, 'Error fetching vote stats')
     return null
   }
 }
@@ -233,7 +235,7 @@ export function trackVotePattern(faqId: number, isHelpful: boolean, category?: s
     sessionId: getSessionId()
   }
 
-  console.log('📊 Vote Analytics:', voteEvent)
+  logger.info('Vote Analytics:', voteEvent)
 
   // You can send this to your analytics service:
   // analytics.track('faq_vote', voteEvent)

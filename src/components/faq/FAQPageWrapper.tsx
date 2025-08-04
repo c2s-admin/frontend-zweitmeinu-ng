@@ -18,6 +18,7 @@ import type { DynamicZoneSection } from '@/types/strapi'
 import { FAQHeroSection } from './FAQHeroSection'
 import { FAQCategoriesGrid } from './FAQCategoriesGrid'
 import { FAQAccordion } from './FAQAccordion'
+import { logger } from '@/lib/logger'
 import { FAQCTASection } from './FAQCTASection'
 import { FAQSearchResults } from './FAQSearchResults'
 import { FAQCategorizationInfo } from './FAQCategorizationInfo'
@@ -105,7 +106,7 @@ export function FAQPageWrapper({ initialData }: FAQPageWrapperProps) {
         }
       }, 100)
     } catch (error) {
-      console.error('Search error:', error)
+      logger.error({ err: error }, 'Search error')
       setSearchResults({
         results: [],
         total: 0,
@@ -143,7 +144,7 @@ export function FAQPageWrapper({ initialData }: FAQPageWrapperProps) {
     }
 
     try {
-      console.log(`🔄 Loading FAQs for category: ${categorySlug}`)
+      logger.info(`Loading FAQs for category: ${categorySlug}`)
       const categoryFAQs = await getFAQsByCategory(categorySlug, 15) // Load more per category
 
       setCategorizedFAQs(prev => ({
@@ -153,7 +154,7 @@ export function FAQPageWrapper({ initialData }: FAQPageWrapperProps) {
 
       return categoryFAQs
     } catch (error) {
-      console.error(`Error loading FAQs for category ${categorySlug}:`, error)
+      logger.error({ err: error }, `Error loading FAQs for category ${categorySlug}`)
       return []
     }
   }, [categorizedFAQs])
@@ -167,7 +168,7 @@ export function FAQPageWrapper({ initialData }: FAQPageWrapperProps) {
       setCategorizationStats(stats)
       setCategorizationQuality(quality)
 
-      console.log('🚀 FAQ Categorization Analysis completed:', {
+      logger.info('FAQ Categorization Analysis completed:', {
         stats,
         quality
       })

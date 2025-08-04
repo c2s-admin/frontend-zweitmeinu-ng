@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { logger } from "@/lib/logger";
 
 const STRAPI_ORIGIN = (process.env.NEXT_PUBLIC_STRAPI_URL || "").replace(
   /\/api$/,
@@ -272,7 +273,7 @@ export function Footer({ siteConfig }: FooterProps) {
                             onClick={() => {
                               if (link.action === "openCookieSettings") {
                                 // Handle cookie settings
-                                console.log("Open cookie settings");
+                                logger.info("Open cookie settings");
                               }
                             }}
                           >

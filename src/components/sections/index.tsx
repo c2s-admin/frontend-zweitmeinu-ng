@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic'
 import type { DynamicZoneSection, HeroSection, MedicalSpecialtiesGrid, TextBlock, ServicesGrid, TestimonialsSection, NewsSection, FAQSection, ContactForm, StatsSection, TeamSection, CTASection } from '@/types/strapi'
 import type { RealHeroCarousel } from '@/types/strapi-real'
 import type { SectionComponentType, SectionComponents } from '@/types/sections'
+import { logger } from '@/lib/logger'
 
 // Loading components for better performance
 const LoadingHero = () => (
@@ -65,15 +66,15 @@ export const sectionComponents = {
 
 export function renderSection(section: DynamicZoneSection, index?: number) {
   // Validate section data
-  if (!isValidSection(section)) {
-    console.warn(`⚠️ Invalid section data:`, section)
-    return null
-  }
+    if (!isValidSection(section)) {
+      logger.warn(`Invalid section data:`, section)
+      return null
+    }
 
   const Component = sectionComponents[section.__component as SectionComponentType]
 
-  if (!Component) {
-    console.warn(`Unknown section component: ${section.__component}`)
+    if (!Component) {
+      logger.warn(`Unknown section component: ${section.__component}`)
 
     // Fallback component für unbekannte Sections
     return (
@@ -109,7 +110,7 @@ export function renderSection(section: DynamicZoneSection, index?: number) {
       </div>
     )
   } catch (error) {
-    console.error(`Error rendering section ${section.__component}:`, error)
+      logger.error({ err: error }, `Error rendering section ${section.__component}`)
     return (
       <div key={`error-${uniqueKey}`} className="section-padding bg-red-50">
         <div className="container-custom text-center">
@@ -158,23 +159,21 @@ export function getFirstSectionByType<T extends DynamicZoneSection>(
 
 // Debug function to list all section types in a page
 export function debugSectionTypes(sections: DynamicZoneSection[]): void {
-  if (process.env.NODE_ENV === 'development') {
-    const types = sections.map(section => section.__component)
-    const uniqueTypes = [...new Set(types)]
+    if (process.env.NODE_ENV === 'development') {
+      const types = sections.map(section => section.__component)
+      const uniqueTypes = [...new Set(types)]
 
-    console.group('🔍 Debug: Section Types')
-    console.log('Total sections:', sections.length)
-    console.log('Unique types:', uniqueTypes)
-    console.log('All types:', types)
+      logger.info('Debug: Section Types')
+      logger.info(`Total sections: ${sections.length}`)
+      logger.info(`Unique types: ${uniqueTypes}`)
+      logger.info(`All types: ${types}`)
 
-    // Check for duplicate IDs
-    const ids = sections.map(section => section.id)
-    const duplicateIds = ids.filter((id, index) => ids.indexOf(id) !== index)
-    if (duplicateIds.length > 0) {
-      console.warn('⚠️ Duplicate section IDs found:', duplicateIds)
+      // Check for duplicate IDs
+      const ids = sections.map(section => section.id)
+      const duplicateIds = ids.filter((id, index) => ids.indexOf(id) !== index)
+      if (duplicateIds.length > 0) {
+        logger.warn('Duplicate section IDs found:', duplicateIds)
+      }
     }
-
-    console.groupEnd()
-  }
 }
 

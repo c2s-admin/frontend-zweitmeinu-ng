@@ -26,6 +26,7 @@ import {
   trackVotePattern,
   type VoteResponse
 } from '@/lib/services/faqVoting'
+import { logger } from '@/lib/logger'
 
 interface FAQAccordionProps {
   category: FAQCategory
@@ -182,7 +183,7 @@ export function FAQAccordion({ category, faqs }: FAQAccordionProps) {
         }
       )
     } catch (error) {
-      console.error('Vote submission failed:', error)
+      logger.error({ err: error }, 'Vote submission failed')
       setVoteErrors(prev => ({
         ...prev,
         [faqId]: 'Ein unerwarteter Fehler ist aufgetreten.'

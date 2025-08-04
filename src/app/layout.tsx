@@ -3,6 +3,7 @@ import "./globals.css";
 import { getCachedSiteConfig } from "@/lib/strapi/site-config";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { logger } from "@/lib/logger";
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || "";
 const STRAPI_ORIGIN = STRAPI_URL.replace(/\/api$/, "");
@@ -15,9 +16,9 @@ export async function generateMetadata(): Promise<Metadata> {
 
   try {
     siteConfig = await getCachedSiteConfig();
-  } catch (error) {
-    console.error("Error loading site config for metadata:", error);
-  }
+    } catch (error) {
+      logger.error({ err: error }, "Error loading site config for metadata");
+    }
 
   const siteAttributes = siteConfig?.attributes;
   const iconUrl = siteAttributes?.favicon?.data?.attributes?.url
@@ -47,9 +48,9 @@ export default async function RootLayout({
 
   try {
     siteConfig = await getCachedSiteConfig();
-  } catch (error) {
-    console.error("💥 Error loading site config in layout:", error);
-  }
+    } catch (error) {
+      logger.error({ err: error }, "Error loading site config in layout");
+    }
 
   // Fallback site config if Strapi fails
   const fallbackSiteConfig = {
