@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import {
   BarChart3,
   TrendingUp,
@@ -60,7 +60,7 @@ export function FAQVoteAnalytics({ faqs, categories, className }: FAQVoteAnalyti
   const [timeRange, setTimeRange] = useState<'24h' | '7d' | '30d' | 'all'>('7d')
 
   // Calculate analytics from FAQ data
-  const calculateAnalytics = (): VoteAnalytics => {
+  const calculateAnalytics = useCallback((): VoteAnalytics => {
     let totalVotes = 0
     let helpfulVotes = 0
     let notHelpfulVotes = 0
@@ -153,7 +153,7 @@ export function FAQVoteAnalytics({ faqs, categories, className }: FAQVoteAnalyti
       categoryStats,
       recentVotes
     }
-  }
+  }, [faqs, categories])
 
   // Load analytics on component mount
   useEffect(() => {
@@ -163,7 +163,7 @@ export function FAQVoteAnalytics({ faqs, categories, className }: FAQVoteAnalyti
       setAnalytics(analyticsData)
       setIsLoading(false)
     }, 500)
-  }, [faqs, categories, timeRange])
+  }, [calculateAnalytics, timeRange])
 
   const handleRefresh = async () => {
     setRefreshing(true)
