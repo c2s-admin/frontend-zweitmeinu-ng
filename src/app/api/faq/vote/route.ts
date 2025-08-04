@@ -72,7 +72,7 @@ function getClientIP(request: NextRequest): string {
 }
 
 // Validate vote request
-function validateVoteRequest(data: unknown): { valid: boolean; error?: string } {
+export function validateVoteRequest(data: unknown): { valid: boolean; error?: string } {
   if (!data || typeof data !== "object") {
     return { valid: false, error: "Invalid request body" };
   }
