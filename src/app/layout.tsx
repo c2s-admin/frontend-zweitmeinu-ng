@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { getSiteConfig } from "@/lib/strapi/site-config";
+import { getCachedSiteConfig } from "@/lib/strapi/site-config";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 
@@ -15,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
   let siteConfig = null;
 
   try {
-    siteConfig = await getSiteConfig();
+    siteConfig = await getCachedSiteConfig();
   } catch (error) {
     console.error("Error loading site config for metadata:", error);
   }
@@ -47,12 +47,7 @@ export default async function RootLayout({
   let siteConfig = null;
 
   try {
-    console.log("🔧 Loading site configuration for layout...");
-    siteConfig = await getSiteConfig();
-    console.log(
-      "✅ Site config loaded for layout:",
-      siteConfig ? "SUCCESS" : "FAILED",
-    );
+    siteConfig = await getCachedSiteConfig();
   } catch (error) {
     console.error("💥 Error loading site config in layout:", error);
   }
