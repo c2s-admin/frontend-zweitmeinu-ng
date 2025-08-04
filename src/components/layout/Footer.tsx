@@ -1,8 +1,13 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import Link from 'next/link'
-import Image from 'next/image'
+import { useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+
+const STRAPI_ORIGIN = (process.env.NEXT_PUBLIC_STRAPI_URL || "").replace(
+  /\/api$/,
+  "",
+);
 import {
   Mail,
   Phone,
@@ -20,76 +25,92 @@ import {
   Star,
   Award,
   Badge,
-  Cookie
-} from 'lucide-react'
-import { cn } from '@/lib/utils'
-import type { SiteConfiguration } from '@/types/strapi'
+  Cookie,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import type { SiteConfiguration } from "@/types/strapi";
 
 interface FooterProps {
-  siteConfig: SiteConfiguration['attributes']
+  siteConfig: SiteConfiguration["attributes"];
 }
 
 export function Footer({ siteConfig }: FooterProps) {
-  const [email, setEmail] = useState('')
-  const [isSubscribing, setIsSubscribing] = useState(false)
-  const [subscriptionStatus, setSubscriptionStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [email, setEmail] = useState("");
+  const [isSubscribing, setIsSubscribing] = useState(false);
+  const [subscriptionStatus, setSubscriptionStatus] = useState<
+    "idle" | "success" | "error"
+  >("idle");
 
-  const currentYear = new Date().getFullYear()
+  const currentYear = new Date().getFullYear();
 
   const handleNewsletterSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!email || isSubscribing) return
+    e.preventDefault();
+    if (!email || isSubscribing) return;
 
-    setIsSubscribing(true)
+    setIsSubscribing(true);
 
     // Simulate API call
     setTimeout(() => {
-      setIsSubscribing(false)
-      setSubscriptionStatus('success')
-      setEmail('')
-      setTimeout(() => setSubscriptionStatus('idle'), 5000)
-    }, 1000)
-  }
+      setIsSubscribing(false);
+      setSubscriptionStatus("success");
+      setEmail("");
+      setTimeout(() => setSubscriptionStatus("idle"), 5000);
+    }, 1000);
+  };
 
   // Helper function to get icon component by name
   const getIcon = (iconName?: string) => {
     switch (iconName?.toLowerCase()) {
-      case 'heart': return <Heart className="w-4 h-4" />
-      case 'ribbon': return <Award className="w-4 h-4" />
-      case 'hospital': return <Shield className="w-4 h-4" />
-      case 'scalpel': return <Badge className="w-4 h-4" />
-      case 'x-ray': return <CheckCircle2 className="w-4 h-4" />
-      case 'user-doctor': return <Shield className="w-4 h-4" />
-      case 'cookie': return <Cookie className="w-4 h-4" />
-      case 'facebook': return <Facebook className="w-5 h-5" />
-      case 'linkedin': return <Linkedin className="w-5 h-5" />
-      case 'twitter': return <Twitter className="w-5 h-5" />
-      case 'youtube': return <Youtube className="w-5 h-5" />
-      default: return <ChevronRight className="w-4 h-4" />
+      case "heart":
+        return <Heart className="w-4 h-4" />;
+      case "ribbon":
+        return <Award className="w-4 h-4" />;
+      case "hospital":
+        return <Shield className="w-4 h-4" />;
+      case "scalpel":
+        return <Badge className="w-4 h-4" />;
+      case "x-ray":
+        return <CheckCircle2 className="w-4 h-4" />;
+      case "user-doctor":
+        return <Shield className="w-4 h-4" />;
+      case "cookie":
+        return <Cookie className="w-4 h-4" />;
+      case "facebook":
+        return <Facebook className="w-5 h-5" />;
+      case "linkedin":
+        return <Linkedin className="w-5 h-5" />;
+      case "twitter":
+        return <Twitter className="w-5 h-5" />;
+      case "youtube":
+        return <Youtube className="w-5 h-5" />;
+      default:
+        return <ChevronRight className="w-4 h-4" />;
     }
-  }
+  };
 
   // Use Strapi footer data or fallback
-  const footerData = siteConfig.footer
-  const footerStyle = footerData?.style || {}
+  const footerData = siteConfig.footer;
+  const footerStyle = footerData?.style || {};
 
   if (!footerData) {
     // Fallback to simple footer if no Strapi data
     return (
       <footer className="bg-healthcare-primary-dark text-white py-8">
         <div className="container-custom text-center">
-          <p>&copy; {currentYear} {siteConfig.siteName}. Alle Rechte vorbehalten.</p>
+          <p>
+            &copy; {currentYear} {siteConfig.siteName}. Alle Rechte vorbehalten.
+          </p>
         </div>
       </footer>
-    )
+    );
   }
 
   return (
     <footer
       className="text-white relative"
       style={{
-        backgroundColor: footerStyle.backgroundColor || '#004166',
-        color: footerStyle.textColor || '#ffffff'
+        backgroundColor: footerStyle.backgroundColor || "#004166",
+        color: footerStyle.textColor || "#ffffff",
       }}
     >
       {/* Emergency Banner */}
@@ -98,12 +119,14 @@ export function Footer({ siteConfig }: FooterProps) {
           className="w-full py-3 text-center"
           style={{
             backgroundColor: footerData.emergencyBanner.backgroundColor,
-            color: footerData.emergencyBanner.textColor
+            color: footerData.emergencyBanner.textColor,
           }}
         >
           <div className="container-custom">
             <div className="flex items-center justify-center gap-4">
-              <span className="font-medium">{footerData.emergencyBanner.text}</span>
+              <span className="font-medium">
+                {footerData.emergencyBanner.text}
+              </span>
               <a
                 href={`tel:${footerData.emergencyBanner.phone}`}
                 className="px-4 py-2 bg-white/20 rounded-lg font-semibold hover:bg-white/30 transition-colors"
@@ -119,27 +142,30 @@ export function Footer({ siteConfig }: FooterProps) {
       <div
         className="relative"
         style={{
-          paddingTop: footerStyle.padding?.top || '64px',
-          paddingBottom: footerStyle.padding?.bottom || '32px'
+          paddingTop: footerStyle.padding?.top || "64px",
+          paddingBottom: footerStyle.padding?.bottom || "32px",
         }}
       >
         <div className="container-custom">
-
           {/* Bottom Section (Brand + Description) */}
           {footerData.bottomSection && (
             <div className="mb-12 lg:mb-16">
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-
                 {/* Logo & Description */}
                 <div className="lg:col-span-2">
                   {footerData.bottomSection.logo?.enabled && (
                     <div className="flex items-center gap-4 mb-6">
                       {siteConfig.logo?.data ? (
                         <Image
-                          src={siteConfig.logo.data.attributes.formats?.medium?.url ?
-                            `https://st.zh3.de${siteConfig.logo.data.attributes.formats.medium.url}` :
-                            siteConfig.logo.data.attributes.url}
-                          alt={siteConfig.logo.data.attributes.alternativeText || siteConfig.siteName}
+                          src={
+                            siteConfig.logo.data.attributes.formats?.medium?.url
+                              ? `${STRAPI_ORIGIN}${siteConfig.logo.data.attributes.formats.medium.url}`
+                              : siteConfig.logo.data.attributes.url
+                          }
+                          alt={
+                            siteConfig.logo.data.attributes.alternativeText ||
+                            siteConfig.siteName
+                          }
                           width={60}
                           height={60}
                           className="filter brightness-0 invert max-h-14 w-auto"
@@ -147,7 +173,7 @@ export function Footer({ siteConfig }: FooterProps) {
                       ) : (
                         <div className="w-14 h-14 bg-white rounded-lg flex items-center justify-center">
                           <span className="text-healthcare-primary font-bold text-xl">
-                            {siteConfig.siteName?.charAt(0) || 'Z'}
+                            {siteConfig.siteName?.charAt(0) || "Z"}
                           </span>
                         </div>
                       )}
@@ -155,7 +181,7 @@ export function Footer({ siteConfig }: FooterProps) {
                       {/* Site Name and Tagline */}
                       <div className="flex flex-col">
                         <div className="text-white font-bold text-2xl leading-tight">
-                          {siteConfig.siteName || 'zweitmeinung.ng'}
+                          {siteConfig.siteName || "zweitmeinung.ng"}
                         </div>
                         {siteConfig.tagline && (
                           <div className="text-gray-300 text-base leading-tight">
@@ -175,12 +201,17 @@ export function Footer({ siteConfig }: FooterProps) {
                   {/* Trust Badges */}
                   {footerData.bottomSection.trustBadges?.enabled && (
                     <div className="grid grid-cols-2 gap-3 mb-6">
-                      {footerData.bottomSection.trustBadges.items.map((badge, index) => (
-                        <div key={index} className="flex items-center gap-2 text-sm text-gray-300">
-                          <CheckCircle2 className="w-4 h-4 text-healthcare-accent-green flex-shrink-0" />
-                          <span>{badge}</span>
-                        </div>
-                      ))}
+                      {footerData.bottomSection.trustBadges.items.map(
+                        (badge, index) => (
+                          <div
+                            key={index}
+                            className="flex items-center gap-2 text-sm text-gray-300"
+                          >
+                            <CheckCircle2 className="w-4 h-4 text-healthcare-accent-green flex-shrink-0" />
+                            <span>{badge}</span>
+                          </div>
+                        ),
+                      )}
                     </div>
                   )}
                 </div>
@@ -192,12 +223,17 @@ export function Footer({ siteConfig }: FooterProps) {
                       Zertifizierungen
                     </h4>
                     <div className="flex flex-wrap gap-4 lg:justify-end">
-                      {footerData.bottomSection.certifications.items.map((cert, index) => (
-                        <div key={index} className="flex items-center gap-2 text-sm text-gray-300">
-                          <Shield className="w-4 h-4 text-healthcare-accent-green" />
-                          <span>{cert.name}</span>
-                        </div>
-                      ))}
+                      {footerData.bottomSection.certifications.items.map(
+                        (cert, index) => (
+                          <div
+                            key={index}
+                            className="flex items-center gap-2 text-sm text-gray-300"
+                          >
+                            <Shield className="w-4 h-4 text-healthcare-accent-green" />
+                            <span>{cert.name}</span>
+                          </div>
+                        ),
+                      )}
                     </div>
                   </div>
                 )}
@@ -209,7 +245,7 @@ export function Footer({ siteConfig }: FooterProps) {
           {footerData.columns && footerData.columns.length > 0 && (
             <div
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12"
-              style={{ columnGap: footerStyle.columnGap || '48px' }}
+              style={{ columnGap: footerStyle.columnGap || "48px" }}
             >
               {footerData.columns.map((column, index) => (
                 <div key={column.id || index}>
@@ -219,17 +255,24 @@ export function Footer({ siteConfig }: FooterProps) {
                   <ul className="space-y-3">
                     {column.links.map((link, linkIndex) => (
                       <li key={linkIndex}>
-                        {link.type === 'action' ? (
+                        {link.type === "action" ? (
                           <button
                             className={cn(
                               "flex items-center gap-2 transition-colors duration-300 hover:translate-x-1 text-left w-full",
-                              link.style === 'link-primary' ? 'text-healthcare-accent-green font-medium' : 'text-gray-300 hover:text-white'
+                              link.style === "link-primary"
+                                ? "text-healthcare-accent-green font-medium"
+                                : "text-gray-300 hover:text-white",
                             )}
-                            style={{ color: link.style === 'link-primary' ? footerStyle.linkColor : undefined }}
+                            style={{
+                              color:
+                                link.style === "link-primary"
+                                  ? footerStyle.linkColor
+                                  : undefined,
+                            }}
                             onClick={() => {
-                              if (link.action === 'openCookieSettings') {
+                              if (link.action === "openCookieSettings") {
                                 // Handle cookie settings
-                                console.log('Open cookie settings')
+                                console.log("Open cookie settings");
                               }
                             }}
                           >
@@ -239,8 +282,8 @@ export function Footer({ siteConfig }: FooterProps) {
                               <span
                                 className="ml-auto px-2 py-1 text-xs rounded-full font-medium"
                                 style={{
-                                  backgroundColor: link.badgeColor || '#B3AF09',
-                                  color: '#000'
+                                  backgroundColor: link.badgeColor || "#B3AF09",
+                                  color: "#000",
                                 }}
                               >
                                 {link.badge}
@@ -252,11 +295,26 @@ export function Footer({ siteConfig }: FooterProps) {
                             href={link.url}
                             className={cn(
                               "flex items-center gap-2 transition-colors duration-300 hover:translate-x-1",
-                              link.style === 'link-primary' ? 'text-healthcare-accent-green font-medium' : 'text-gray-300 hover:text-white'
+                              link.style === "link-primary"
+                                ? "text-healthcare-accent-green font-medium"
+                                : "text-gray-300 hover:text-white",
                             )}
-                            style={{ color: link.style === 'link-primary' ? footerStyle.linkColor : undefined }}
-                            target={link.type === 'external' || link.openInNewTab ? '_blank' : undefined}
-                            rel={link.type === 'external' || link.openInNewTab ? 'noopener noreferrer' : undefined}
+                            style={{
+                              color:
+                                link.style === "link-primary"
+                                  ? footerStyle.linkColor
+                                  : undefined,
+                            }}
+                            target={
+                              link.type === "external" || link.openInNewTab
+                                ? "_blank"
+                                : undefined
+                            }
+                            rel={
+                              link.type === "external" || link.openInNewTab
+                                ? "noopener noreferrer"
+                                : undefined
+                            }
                           >
                             {link.icon && getIcon(link.icon)}
                             <span>{link.label}</span>
@@ -264,8 +322,8 @@ export function Footer({ siteConfig }: FooterProps) {
                               <span
                                 className="ml-auto px-2 py-1 text-xs rounded-full font-medium"
                                 style={{
-                                  backgroundColor: link.badgeColor || '#B3AF09',
-                                  color: '#000'
+                                  backgroundColor: link.badgeColor || "#B3AF09",
+                                  color: "#000",
                                 }}
                               >
                                 {link.badge}
@@ -287,34 +345,42 @@ export function Footer({ siteConfig }: FooterProps) {
       {(footerData.socialMedia?.enabled || footerData.newsletter?.enabled) && (
         <div
           className="border-t py-8"
-          style={{ borderColor: footerStyle.borderColor || 'rgba(255, 255, 255, 0.1)' }}
+          style={{
+            borderColor: footerStyle.borderColor || "rgba(255, 255, 255, 0.1)",
+          }}
         >
           <div className="container-custom">
             <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
-
               {/* Social Media */}
-              {footerData.socialMedia?.enabled && footerData.socialMedia.platforms.length > 0 && (
-                <div className="flex items-center gap-4">
-                  <span className="text-gray-400 text-sm">{footerData.socialMedia.title}:</span>
-                  <div className="flex items-center gap-3">
-                    {footerData.socialMedia.platforms.map((platform, index) => (
-                      <a
-                        key={index}
-                        href={platform.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-10 h-10 bg-healthcare-primary/50 rounded-full flex items-center justify-center hover:bg-healthcare-accent-green transition-colors duration-300"
-                        style={{
-                          '--hover-color': platform.color,
-                        } as React.CSSProperties}
-                        aria-label={platform.name}
-                      >
-                        {getIcon(platform.icon)}
-                      </a>
-                    ))}
+              {footerData.socialMedia?.enabled &&
+                footerData.socialMedia.platforms.length > 0 && (
+                  <div className="flex items-center gap-4">
+                    <span className="text-gray-400 text-sm">
+                      {footerData.socialMedia.title}:
+                    </span>
+                    <div className="flex items-center gap-3">
+                      {footerData.socialMedia.platforms.map(
+                        (platform, index) => (
+                          <a
+                            key={index}
+                            href={platform.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-10 h-10 bg-healthcare-primary/50 rounded-full flex items-center justify-center hover:bg-healthcare-accent-green transition-colors duration-300"
+                            style={
+                              {
+                                "--hover-color": platform.color,
+                              } as React.CSSProperties
+                            }
+                            aria-label={platform.name}
+                          >
+                            {getIcon(platform.icon)}
+                          </a>
+                        ),
+                      )}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
               {/* Newsletter */}
               {footerData.newsletter?.enabled && (
@@ -343,16 +409,16 @@ export function Footer({ siteConfig }: FooterProps) {
                       disabled={isSubscribing || !email}
                       className="px-4 py-2 bg-healthcare-accent-green hover:bg-healthcare-accent-hover disabled:opacity-50 text-white rounded-r-md transition-colors duration-300"
                     >
-                      {isSubscribing ? '...' : footerData.newsletter.buttonText}
+                      {isSubscribing ? "..." : footerData.newsletter.buttonText}
                     </button>
                   </form>
 
-                  {subscriptionStatus === 'success' && (
+                  {subscriptionStatus === "success" && (
                     <div className="text-green-400 text-xs mt-1">
                       {footerData.newsletter.successMessage}
                     </div>
                   )}
-                  {subscriptionStatus === 'error' && (
+                  {subscriptionStatus === "error" && (
                     <div className="text-red-400 text-xs mt-1">
                       {footerData.newsletter.errorMessage}
                     </div>
@@ -367,12 +433,15 @@ export function Footer({ siteConfig }: FooterProps) {
       {/* Copyright */}
       <div
         className="border-t py-6"
-        style={{ borderColor: footerStyle.borderColor || 'rgba(255, 255, 255, 0.1)' }}
+        style={{
+          borderColor: footerStyle.borderColor || "rgba(255, 255, 255, 0.1)",
+        }}
       >
         <div className="container-custom">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-400">
             <div>
-              {footerData.copyright?.text || `© ${currentYear} ${siteConfig.siteName}. Alle Rechte vorbehalten.`}
+              {footerData.copyright?.text ||
+                `© ${currentYear} ${siteConfig.siteName}. Alle Rechte vorbehalten.`}
             </div>
 
             <div className="flex items-center gap-4">
@@ -381,8 +450,10 @@ export function Footer({ siteConfig }: FooterProps) {
                   key={index}
                   href={link.url}
                   className="hover:text-white transition-colors"
-                  target={link.type === 'external' ? '_blank' : undefined}
-                  rel={link.type === 'external' ? 'noopener noreferrer' : undefined}
+                  target={link.type === "external" ? "_blank" : undefined}
+                  rel={
+                    link.type === "external" ? "noopener noreferrer" : undefined
+                  }
                 >
                   {link.label}
                 </Link>
@@ -395,5 +466,5 @@ export function Footer({ siteConfig }: FooterProps) {
         </div>
       </div>
     </footer>
-  )
+  );
 }

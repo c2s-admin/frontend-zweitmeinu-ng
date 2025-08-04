@@ -1,5 +1,5 @@
 // Test FAQ Category Relations
-const BASE_URL = 'https://st.zh3.de/api'
+const BASE_URL = process.env.STRAPI_API_URL || process.env.NEXT_PUBLIC_STRAPI_URL || ''
 
 async function testFAQCategories() {
   console.log('🔍 Testing FAQ Category Relations...\n')

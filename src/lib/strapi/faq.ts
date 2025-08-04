@@ -1,541 +1,687 @@
-import type { StrapiResponse } from '@/types/strapi'
-import type { Page } from '@/types/strapi'
+import type { StrapiResponse } from "@/types/strapi";
+import type { Page } from "@/types/strapi";
 
-const BASE_URL = 'https://st.zh3.de/api'
+const BASE_URL = process.env.NEXT_PUBLIC_STRAPI_URL || "";
 
 // FAQ Data Types
 export interface FAQCategory {
-  id: number
-  documentId: string
-  name: string
-  slug: string
-  description: string
-  icon: string
-  color: string
-  order: number
-  createdAt: string
-  updatedAt: string
-  publishedAt: string
+  id: number;
+  documentId: string;
+  name: string;
+  slug: string;
+  description: string;
+  icon: string;
+  color: string;
+  order: number;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
 }
 
 export interface FAQ {
-  id: number
-  documentId: string
-  question: string
-  slug: string
-  answer: string
-  shortAnswer?: string
-  tags?: string[]
-  priority: 'low' | 'medium' | 'high' | 'featured'
-  helpfulCount: number
-  notHelpfulCount: number
-  videoUrl?: string
-  lastUpdated?: string
-  attachments?: any
-  seo?: any
-  createdAt: string
-  updatedAt: string
-  publishedAt: string
-  category?: FAQCategory
-  relatedServices?: any[]
-  relatedExperts?: any[]
-  relatedFaqs?: any[]
+  id: number;
+  documentId: string;
+  question: string;
+  slug: string;
+  answer: string;
+  shortAnswer?: string;
+  tags?: string[];
+  priority: "low" | "medium" | "high" | "featured";
+  helpfulCount: number;
+  notHelpfulCount: number;
+  videoUrl?: string;
+  lastUpdated?: string;
+  attachments?: any;
+  seo?: any;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+  category?: FAQCategory;
+  relatedServices?: any[];
+  relatedExperts?: any[];
+  relatedFaqs?: any[];
 }
 
 export interface FAQPage {
-  id: number
-  documentId: string
-  title: string
-  slug: string
-  sections: any[]
-  seo?: any
-  createdAt: string
-  updatedAt: string
-  publishedAt: string
+  id: number;
+  documentId: string;
+  title: string;
+  slug: string;
+  sections: any[];
+  seo?: any;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
 }
 
 // Search Types
 export interface FAQSearchResult extends FAQ {
-  score: number
-  matchType: 'question' | 'answer' | 'both'
-  highlightedQuestion?: string
-  highlightedAnswer?: string
+  score: number;
+  matchType: "question" | "answer" | "both";
+  highlightedQuestion?: string;
+  highlightedAnswer?: string;
 }
 
 export interface FAQSearchOptions {
-  term: string
-  categories?: string[]
-  priority?: string[]
-  limit?: number
-  includeAnswers?: boolean
+  term: string;
+  categories?: string[];
+  priority?: string[];
+  limit?: number;
+  includeAnswers?: boolean;
 }
 
 export interface FAQSearchResponse {
-  results: FAQSearchResult[]
-  total: number
-  searchTerm: string
-  suggestions?: string[]
-  categories: { [key: string]: number }
+  results: FAQSearchResult[];
+  total: number;
+  searchTerm: string;
+  suggestions?: string[];
+  categories: { [key: string]: number };
 }
 
 // Enhanced Categorization Strategy Types
 export interface CategorizationStats {
-  totalFAQs: number
-  strapiRelations: number
-  keywordBased: number
-  uncategorized: number
-  method: 'hybrid' | 'relations-only' | 'keywords-only'
-  confidence: number
-  apiHealth: 'healthy' | 'degraded' | 'failed'
-  cacheHits: number
-  processingTime: number
-  categoryDistribution: { [key: string]: number }
+  totalFAQs: number;
+  strapiRelations: number;
+  keywordBased: number;
+  uncategorized: number;
+  method: "hybrid" | "relations-only" | "keywords-only";
+  confidence: number;
+  apiHealth: "healthy" | "degraded" | "failed";
+  cacheHits: number;
+  processingTime: number;
+  categoryDistribution: { [key: string]: number };
 }
 
 export interface CategorizationQuality {
-  overallScore: number
-  relationsCoverage: number
-  keywordAccuracy: number
-  categoryCoverage: number
-  recommendations: string[]
+  overallScore: number;
+  relationsCoverage: number;
+  keywordAccuracy: number;
+  categoryCoverage: number;
+  recommendations: string[];
 }
 
 // Enhanced caching system
 interface CachedCategorizationResult {
-  faqId: number
-  categorySlug: string | null
-  method: 'relations' | 'keywords'
-  confidence: number
-  timestamp: number
-  ttl: number
+  faqId: number;
+  categorySlug: string | null;
+  method: "relations" | "keywords";
+  confidence: number;
+  timestamp: number;
+  ttl: number;
 }
 
 // Cache for categorization results (5 minutes TTL)
-const CATEGORIZATION_CACHE = new Map<number, CachedCategorizationResult>()
-const CACHE_TTL = 5 * 60 * 1000 // 5 minutes
+const CATEGORIZATION_CACHE = new Map<number, CachedCategorizationResult>();
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
 // Enhanced Category Keywords Mapping with confidence scores
 const CATEGORY_KEYWORDS = {
-  'zweitmeinung-gallenblase': {
-    primary: ['gallenblase', 'gallenstein', 'cholezystektomie'],
-    secondary: ['gallen', 'gallensteine', 'gallenblasenentfernung', 'gallenkolik', 'cholangitis'],
-    confidence: 0.9
+  "zweitmeinung-gallenblase": {
+    primary: ["gallenblase", "gallenstein", "cholezystektomie"],
+    secondary: [
+      "gallen",
+      "gallensteine",
+      "gallenblasenentfernung",
+      "gallenkolik",
+      "cholangitis",
+    ],
+    confidence: 0.9,
   },
-  'zweitmeinung-nephrologie': {
-    primary: ['niere', 'dialyse', 'niereninsuffizienz'],
-    secondary: ['nieren', 'nierenerkrankung', 'nephro', 'transplantation', 'hämodialyse', 'peritonealdialyse', 'nierenversagen'],
-    confidence: 0.85
+  "zweitmeinung-nephrologie": {
+    primary: ["niere", "dialyse", "niereninsuffizienz"],
+    secondary: [
+      "nieren",
+      "nierenerkrankung",
+      "nephro",
+      "transplantation",
+      "hämodialyse",
+      "peritonealdialyse",
+      "nierenversagen",
+    ],
+    confidence: 0.85,
   },
-  'zweitmeinung-kardiologie': {
-    primary: ['herz', 'herzinfarkt', 'bypass'],
-    secondary: ['kardio', 'katheter', 'herzkatheter', 'stent', 'koronararterien', 'angioplastie', 'herzrhythmus', 'schrittmacher'],
-    confidence: 0.9
+  "zweitmeinung-kardiologie": {
+    primary: ["herz", "herzinfarkt", "bypass"],
+    secondary: [
+      "kardio",
+      "katheter",
+      "herzkatheter",
+      "stent",
+      "koronararterien",
+      "angioplastie",
+      "herzrhythmus",
+      "schrittmacher",
+    ],
+    confidence: 0.9,
   },
-  'zweitmeinung-onkologie': {
-    primary: ['krebs', 'tumor', 'chemotherapie'],
-    secondary: ['onko', 'chemo', 'bestrahlung', 'strahlentherapie', 'karzinom', 'metastasen', 'biopsie', 'malignom', 'zytostatika'],
-    confidence: 0.95
+  "zweitmeinung-onkologie": {
+    primary: ["krebs", "tumor", "chemotherapie"],
+    secondary: [
+      "onko",
+      "chemo",
+      "bestrahlung",
+      "strahlentherapie",
+      "karzinom",
+      "metastasen",
+      "biopsie",
+      "malignom",
+      "zytostatika",
+    ],
+    confidence: 0.95,
   },
-  'zweitmeinung-intensivmedizin': {
-    primary: ['intensiv', 'intensivstation', 'beatmung'],
-    secondary: ['notfall', 'reanimation', 'sepsis', 'schock', 'koma', 'icu', 'lebenserhaltung', 'organversagen'],
-    confidence: 0.8
+  "zweitmeinung-intensivmedizin": {
+    primary: ["intensiv", "intensivstation", "beatmung"],
+    secondary: [
+      "notfall",
+      "reanimation",
+      "sepsis",
+      "schock",
+      "koma",
+      "icu",
+      "lebenserhaltung",
+      "organversagen",
+    ],
+    confidence: 0.8,
   },
-  'zweitmeinung-schilddruese': {
-    primary: ['schilddrüse', 'thyroid', 'thyreoidektomie'],
-    secondary: ['schild', 'struma', 'schilddrüsenknoten', 'tsh', 'hyperthyreose', 'hypothyreose', 'autonomie'],
-    confidence: 0.85
+  "zweitmeinung-schilddruese": {
+    primary: ["schilddrüse", "thyroid", "thyreoidektomie"],
+    secondary: [
+      "schild",
+      "struma",
+      "schilddrüsenknoten",
+      "tsh",
+      "hyperthyreose",
+      "hypothyreose",
+      "autonomie",
+    ],
+    confidence: 0.85,
   },
-  'allgemeine-fragen-zur-zweitmeinung': {
-    primary: ['zweitmeinung', 'gutachten', 'experten'],
-    secondary: ['ablauf', 'kosten', 'verfahren', 'beratung', 'meinung', 'einschätzung', 'diagnose', 'behandlung', 'therapie'],
-    confidence: 0.7
-  }
-}
+  "allgemeine-fragen-zur-zweitmeinung": {
+    primary: ["zweitmeinung", "gutachten", "experten"],
+    secondary: [
+      "ablauf",
+      "kosten",
+      "verfahren",
+      "beratung",
+      "meinung",
+      "einschätzung",
+      "diagnose",
+      "behandlung",
+      "therapie",
+    ],
+    confidence: 0.7,
+  },
+};
 
 // API Functions
 export async function getFAQPage(): Promise<FAQPage | null> {
   try {
-    const response = await fetch(`${BASE_URL}/pages?filters[slug][$eq]=faq&populate=*`, {
-      headers: {
-        'Content-Type': 'application/json',
+    const response = await fetch(
+      `${BASE_URL}/pages?filters[slug][$eq]=faq&populate=*`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        cache: "no-store",
       },
-      cache: 'no-store'
-    })
+    );
 
     if (!response.ok) {
-      console.error('Failed to fetch FAQ page:', response.statusText)
-      return null
+      console.error("Failed to fetch FAQ page:", response.statusText);
+      return null;
     }
 
-    const data: StrapiResponse<FAQPage[]> = await response.json()
-    console.log('✅ FAQ Page loaded:', data.data?.[0]?.title)
+    const data: StrapiResponse<FAQPage[]> = await response.json();
+    console.log("✅ FAQ Page loaded:", data.data?.[0]?.title);
 
-    return data.data?.[0] || null
+    return data.data?.[0] || null;
   } catch (error) {
-    console.error('Error fetching FAQ page:', error)
-    return null
+    console.error("Error fetching FAQ page:", error);
+    return null;
   }
 }
 
 export async function getFAQCategories(): Promise<FAQCategory[]> {
   try {
-    const response = await fetch(`${BASE_URL}/faq-categories?sort=order:asc&populate=*`, {
-      headers: {
-        'Content-Type': 'application/json',
+    const response = await fetch(
+      `${BASE_URL}/faq-categories?sort=order:asc&populate=*`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        cache: "no-store",
       },
-      cache: 'no-store'
-    })
+    );
 
     if (!response.ok) {
-      console.error('Failed to fetch FAQ categories:', response.statusText)
-      return []
+      console.error("Failed to fetch FAQ categories:", response.statusText);
+      return [];
     }
 
-    const data: StrapiResponse<FAQCategory[]> = await response.json()
-    console.log('✅ FAQ Categories loaded:', data.data?.length)
+    const data: StrapiResponse<FAQCategory[]> = await response.json();
+    console.log("✅ FAQ Categories loaded:", data.data?.length);
 
-    return data.data || []
+    return data.data || [];
   } catch (error) {
-    console.error('Error fetching FAQ categories:', error)
-    return []
+    console.error("Error fetching FAQ categories:", error);
+    return [];
   }
 }
 
 export async function getFAQs(limit = 25): Promise<FAQ[]> {
   try {
-    const response = await fetch(`${BASE_URL}/faqs?sort=priority:desc,helpfulCount:desc&pagination[limit]=${limit}&populate=*`, {
-      headers: {
-        'Content-Type': 'application/json',
+    const response = await fetch(
+      `${BASE_URL}/faqs?sort=priority:desc,helpfulCount:desc&pagination[limit]=${limit}&populate=*`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        cache: "no-store",
       },
-      cache: 'no-store'
-    })
+    );
 
     if (!response.ok) {
-      console.error('Failed to fetch FAQs:', response.statusText)
-      return []
+      console.error("Failed to fetch FAQs:", response.statusText);
+      return [];
     }
 
-    const data: StrapiResponse<FAQ[]> = await response.json()
-    console.log('✅ FAQs loaded:', data.data?.length)
+    const data: StrapiResponse<FAQ[]> = await response.json();
+    console.log("✅ FAQs loaded:", data.data?.length);
 
-    return data.data || []
+    return data.data || [];
   } catch (error) {
-    console.error('Error fetching FAQs:', error)
-    return []
+    console.error("Error fetching FAQs:", error);
+    return [];
   }
 }
 
-export async function getFAQsByCategory(categorySlug: string, limit = 10): Promise<FAQ[]> {
-  const startTime = Date.now()
+export async function getFAQsByCategory(
+  categorySlug: string,
+  limit = 10,
+): Promise<FAQ[]> {
+  const startTime = Date.now();
 
   try {
     // Enhanced Strapi category relations test with detailed logging
-    console.log(`🔍 Enhanced category test for ${categorySlug}...`)
+    console.log(`🔍 Enhanced category test for ${categorySlug}...`);
 
     // Try comprehensive Strapi filter approaches
     const filterApproaches = [
-      { query: `filters[category][slug][$eq]=${categorySlug}`, description: 'by category slug exact match' },
-      { query: `filters[category][documentId][$eq]=${categorySlug}`, description: 'by category documentId' },
-      { query: `filters[category][name][$containsi]=${categorySlug.replace(/[-_]/g, ' ')}`, description: 'by category name contains' },
-      { query: `filters[category][id][$in]=${categorySlug}`, description: 'by category ID (if numeric)' }
-    ]
+      {
+        query: `filters[category][slug][$eq]=${categorySlug}`,
+        description: "by category slug exact match",
+      },
+      {
+        query: `filters[category][documentId][$eq]=${categorySlug}`,
+        description: "by category documentId",
+      },
+      {
+        query: `filters[category][name][$containsi]=${categorySlug.replace(/[-_]/g, " ")}`,
+        description: "by category name contains",
+      },
+      {
+        query: `filters[category][id][$in]=${categorySlug}`,
+        description: "by category ID (if numeric)",
+      },
+    ];
 
-    let strapiFilteredFAQs: FAQ[] = []
-    let successfulMethod = ''
+    let strapiFilteredFAQs: FAQ[] = [];
+    let successfulMethod = "";
 
     for (const approach of filterApproaches) {
       try {
-        console.log(`   🔎 Trying: ${approach.description}...`)
-        const response = await fetch(`${BASE_URL}/faqs?${approach.query}&sort=priority:desc,helpfulCount:desc&pagination[limit]=${limit}&populate=category`, {
-          headers: { 'Content-Type': 'application/json' },
-          cache: 'no-store',
-          signal: AbortSignal.timeout(5000)
-        })
+        console.log(`   🔎 Trying: ${approach.description}...`);
+        const response = await fetch(
+          `${BASE_URL}/faqs?${approach.query}&sort=priority:desc,helpfulCount:desc&pagination[limit]=${limit}&populate=category`,
+          {
+            headers: { "Content-Type": "application/json" },
+            cache: "no-store",
+            signal: AbortSignal.timeout(5000),
+          },
+        );
 
         if (response.ok) {
-          const data: StrapiResponse<FAQ[]> = await response.json()
+          const data: StrapiResponse<FAQ[]> = await response.json();
           if (data.data && data.data.length > 0) {
-            strapiFilteredFAQs = data.data
-            successfulMethod = approach.description
-            console.log(`   ✅ SUCCESS via ${approach.description}: ${strapiFilteredFAQs.length} FAQs found`)
+            strapiFilteredFAQs = data.data;
+            successfulMethod = approach.description;
+            console.log(
+              `   ✅ SUCCESS via ${approach.description}: ${strapiFilteredFAQs.length} FAQs found`,
+            );
 
             // Log the category relations found
             strapiFilteredFAQs.forEach((faq, i) => {
               if (faq.category) {
-                console.log(`     FAQ ${i + 1}: ${faq.category.name} (${faq.category.slug})`)
+                console.log(
+                  `     FAQ ${i + 1}: ${faq.category.name} (${faq.category.slug})`,
+                );
               }
-            })
-            break
+            });
+            break;
           } else {
-            console.log(`     ⚪ No results via ${approach.description}`)
+            console.log(`     ⚪ No results via ${approach.description}`);
           }
         } else {
-          console.log(`     ❌ Failed via ${approach.description}: ${response.status}`)
+          console.log(
+            `     ❌ Failed via ${approach.description}: ${response.status}`,
+          );
         }
       } catch (error) {
-        console.log(`     ⚠️ Error via ${approach.description}: ${error instanceof Error ? error.message : 'Unknown error'}`)
+        console.log(
+          `     ⚠️ Error via ${approach.description}: ${error instanceof Error ? error.message : "Unknown error"}`,
+        );
       }
     }
 
     // If Strapi relations worked, use them
     if (strapiFilteredFAQs.length > 0) {
-      const processingTime = Date.now() - startTime
-      console.log(`🎯 API Relations SUCCESS for ${categorySlug}: ${strapiFilteredFAQs.length} FAQs (${processingTime}ms) via ${successfulMethod}`)
-      return strapiFilteredFAQs
+      const processingTime = Date.now() - startTime;
+      console.log(
+        `🎯 API Relations SUCCESS for ${categorySlug}: ${strapiFilteredFAQs.length} FAQs (${processingTime}ms) via ${successfulMethod}`,
+      );
+      return strapiFilteredFAQs;
     }
 
     // Enhanced fallback to keyword-based filtering
-    console.log(`🔄 API relations failed for ${categorySlug}, using enhanced keyword categorization...`)
+    console.log(
+      `🔄 API relations failed for ${categorySlug}, using enhanced keyword categorization...`,
+    );
 
-    const allFAQs = await getFAQs(100) // Get more FAQs
-    const categoryKeywords = CATEGORY_KEYWORDS[categorySlug as keyof typeof CATEGORY_KEYWORDS]
+    const allFAQs = await getFAQs(100); // Get more FAQs
+    const categoryKeywords =
+      CATEGORY_KEYWORDS[categorySlug as keyof typeof CATEGORY_KEYWORDS];
 
     if (!categoryKeywords) {
-      console.warn(`❌ No keywords defined for category: ${categorySlug}`)
-      return []
+      console.warn(`❌ No keywords defined for category: ${categorySlug}`);
+      return [];
     }
 
-    const { primary, secondary, confidence } = categoryKeywords
-    const keywordFilteredFAQs: Array<FAQ & { matchScore: number }> = []
+    const { primary, secondary, confidence } = categoryKeywords;
+    const keywordFilteredFAQs: Array<FAQ & { matchScore: number }> = [];
 
-    allFAQs.forEach(faq => {
-      const text = `${faq.question} ${faq.answer}`.toLowerCase()
-      let score = 0
+    allFAQs.forEach((faq) => {
+      const text = `${faq.question} ${faq.answer}`.toLowerCase();
+      let score = 0;
 
       // Enhanced keyword matching
-      primary.forEach(keyword => {
+      primary.forEach((keyword) => {
         if (text.includes(keyword.toLowerCase())) {
-          score += 3
+          score += 3;
         }
-      })
+      });
 
-      secondary.forEach(keyword => {
+      secondary.forEach((keyword) => {
         if (text.includes(keyword.toLowerCase())) {
-          score += 1
+          score += 1;
         }
-      })
+      });
 
       if (score > 0) {
-        keywordFilteredFAQs.push({ ...faq, matchScore: score })
-        console.log(`   🔤 Keyword match: FAQ ${faq.id} score=${score}`)
+        keywordFilteredFAQs.push({ ...faq, matchScore: score });
+        console.log(`   🔤 Keyword match: FAQ ${faq.id} score=${score}`);
       }
-    })
+    });
 
     // Sort by match score, then priority, then helpful count
     const sortedFAQs = keywordFilteredFAQs
       .sort((a, b) => {
-        if (a.matchScore !== b.matchScore) return b.matchScore - a.matchScore
+        if (a.matchScore !== b.matchScore) return b.matchScore - a.matchScore;
 
-        const priorityOrder = { featured: 4, high: 3, medium: 2, low: 1 }
-        const aPriority = priorityOrder[a.priority]
-        const bPriority = priorityOrder[b.priority]
+        const priorityOrder = { featured: 4, high: 3, medium: 2, low: 1 };
+        const aPriority = priorityOrder[a.priority];
+        const bPriority = priorityOrder[b.priority];
 
-        if (aPriority !== bPriority) return bPriority - aPriority
-        return b.helpfulCount - a.helpfulCount
+        if (aPriority !== bPriority) return bPriority - aPriority;
+        return b.helpfulCount - a.helpfulCount;
       })
       .slice(0, limit)
-      .map(({ matchScore, ...faq }) => faq) // Remove matchScore from final result
+      .map(({ matchScore, ...faq }) => faq); // Remove matchScore from final result
 
-    const processingTime = Date.now() - startTime
-    console.log(`✅ Keyword categorization for ${categorySlug}: ${sortedFAQs.length} FAQs (${processingTime}ms, confidence: ${confidence})`)
+    const processingTime = Date.now() - startTime;
+    console.log(
+      `✅ Keyword categorization for ${categorySlug}: ${sortedFAQs.length} FAQs (${processingTime}ms, confidence: ${confidence})`,
+    );
 
-    return sortedFAQs
+    return sortedFAQs;
   } catch (error) {
-    console.error('Error fetching FAQs by category:', error)
-    return []
+    console.error("Error fetching FAQs by category:", error);
+    return [];
   }
 }
 
 // Search Functions
-export async function searchFAQs(searchTerm: string, limit = 20): Promise<FAQ[]> {
+export async function searchFAQs(
+  searchTerm: string,
+  limit = 20,
+): Promise<FAQ[]> {
   try {
-    const encodedSearch = encodeURIComponent(searchTerm)
-    const response = await fetch(`${BASE_URL}/faqs?filters[question][$containsi]=${encodedSearch}&sort=priority:desc,helpfulCount:desc&pagination[limit]=${limit}&populate=*`, {
-      headers: {
-        'Content-Type': 'application/json',
+    const encodedSearch = encodeURIComponent(searchTerm);
+    const response = await fetch(
+      `${BASE_URL}/faqs?filters[question][$containsi]=${encodedSearch}&sort=priority:desc,helpfulCount:desc&pagination[limit]=${limit}&populate=*`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        cache: "no-store",
       },
-      cache: 'no-store'
-    })
+    );
 
     if (!response.ok) {
-      console.error('Failed to search FAQs:', response.statusText)
-      return []
+      console.error("Failed to search FAQs:", response.statusText);
+      return [];
     }
 
-    const data: StrapiResponse<FAQ[]> = await response.json()
-    console.log('✅ FAQ search results:', data.data?.length, 'for term:', searchTerm)
+    const data: StrapiResponse<FAQ[]> = await response.json();
+    console.log(
+      "✅ FAQ search results:",
+      data.data?.length,
+      "for term:",
+      searchTerm,
+    );
 
-    return data.data || []
+    return data.data || [];
   } catch (error) {
-    console.error('Error searching FAQs:', error)
-    return []
+    console.error("Error searching FAQs:", error);
+    return [];
   }
 }
 
-export async function advancedFAQSearch(options: FAQSearchOptions): Promise<FAQSearchResponse> {
+export async function advancedFAQSearch(
+  options: FAQSearchOptions,
+): Promise<FAQSearchResponse> {
   try {
-    const { term, categories, priority, limit = 20, includeAnswers = true } = options
+    const {
+      term,
+      categories,
+      priority,
+      limit = 20,
+      includeAnswers = true,
+    } = options;
 
-    const encodedTerm = encodeURIComponent(term)
-    const questionQuery = `filters[question][$containsi]=${encodedTerm}`
+    const encodedTerm = encodeURIComponent(term);
+    const questionQuery = `filters[question][$containsi]=${encodedTerm}`;
 
-    const questionResponse = await fetch(`${BASE_URL}/faqs?${questionQuery}&sort=priority:desc,helpfulCount:desc&pagination[limit]=${limit}&populate=*`, {
-      headers: {
-        'Content-Type': 'application/json',
+    const questionResponse = await fetch(
+      `${BASE_URL}/faqs?${questionQuery}&sort=priority:desc,helpfulCount:desc&pagination[limit]=${limit}&populate=*`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        cache: "no-store",
       },
-      cache: 'no-store'
-    })
+    );
 
-    let questionResults: FAQ[] = []
+    let questionResults: FAQ[] = [];
     if (questionResponse.ok) {
-      const questionData: StrapiResponse<FAQ[]> = await questionResponse.json()
-      questionResults = questionData.data || []
+      const questionData: StrapiResponse<FAQ[]> = await questionResponse.json();
+      questionResults = questionData.data || [];
     }
 
-    let answerResults: FAQ[] = []
+    let answerResults: FAQ[] = [];
     if (includeAnswers) {
-      const answerQuery = `filters[answer][$containsi]=${encodedTerm}`
-      const answerResponse = await fetch(`${BASE_URL}/faqs?${answerQuery}&sort=priority:desc,helpfulCount:desc&pagination[limit]=${limit}&populate=*`, {
-        headers: {
-          'Content-Type': 'application/json',
+      const answerQuery = `filters[answer][$containsi]=${encodedTerm}`;
+      const answerResponse = await fetch(
+        `${BASE_URL}/faqs?${answerQuery}&sort=priority:desc,helpfulCount:desc&pagination[limit]=${limit}&populate=*`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          cache: "no-store",
         },
-        cache: 'no-store'
-      })
+      );
 
       if (answerResponse.ok) {
-        const answerData: StrapiResponse<FAQ[]> = await answerResponse.json()
-        answerResults = answerData.data || []
+        const answerData: StrapiResponse<FAQ[]> = await answerResponse.json();
+        answerResults = answerData.data || [];
       }
     }
 
-    const allResults = new Map<number, FAQSearchResult>()
+    const allResults = new Map<number, FAQSearchResult>();
 
-    questionResults.forEach(faq => {
+    questionResults.forEach((faq) => {
       const searchResult: FAQSearchResult = {
         ...faq,
-        score: calculateSearchScore(faq, term, 'question'),
-        matchType: 'question',
+        score: calculateSearchScore(faq, term, "question"),
+        matchType: "question",
         highlightedQuestion: highlightText(faq.question, term),
-        highlightedAnswer: faq.answer
-      }
-      allResults.set(faq.id, searchResult)
-    })
+        highlightedAnswer: faq.answer,
+      };
+      allResults.set(faq.id, searchResult);
+    });
 
-    answerResults.forEach(faq => {
+    answerResults.forEach((faq) => {
       if (allResults.has(faq.id)) {
-        const existing = allResults.get(faq.id)!
-        existing.matchType = 'both'
-        existing.score = Math.max(existing.score, calculateSearchScore(faq, term, 'answer'))
-        existing.highlightedAnswer = highlightText(faq.answer, term)
+        const existing = allResults.get(faq.id)!;
+        existing.matchType = "both";
+        existing.score = Math.max(
+          existing.score,
+          calculateSearchScore(faq, term, "answer"),
+        );
+        existing.highlightedAnswer = highlightText(faq.answer, term);
       } else {
         const searchResult: FAQSearchResult = {
           ...faq,
-          score: calculateSearchScore(faq, term, 'answer'),
-          matchType: 'answer',
+          score: calculateSearchScore(faq, term, "answer"),
+          matchType: "answer",
           highlightedQuestion: faq.question,
-          highlightedAnswer: highlightText(faq.answer, term)
-        }
-        allResults.set(faq.id, searchResult)
+          highlightedAnswer: highlightText(faq.answer, term),
+        };
+        allResults.set(faq.id, searchResult);
       }
-    })
+    });
 
     const sortedResults = Array.from(allResults.values()).sort((a, b) => {
-      if (a.score !== b.score) return b.score - a.score
+      if (a.score !== b.score) return b.score - a.score;
       if (a.priority !== b.priority) {
-        const priorityOrder = { featured: 4, high: 3, medium: 2, low: 1 }
-        return priorityOrder[b.priority] - priorityOrder[a.priority]
+        const priorityOrder = { featured: 4, high: 3, medium: 2, low: 1 };
+        return priorityOrder[b.priority] - priorityOrder[a.priority];
       }
-      return b.helpfulCount - a.helpfulCount
-    })
+      return b.helpfulCount - a.helpfulCount;
+    });
 
-    const categoryDistribution: { [key: string]: number } = {}
-    sortedResults.forEach(result => {
-      const matchedCategory = intelligentCategorizeFrequentlyAskedQuestion(result)
+    const categoryDistribution: { [key: string]: number } = {};
+    sortedResults.forEach((result) => {
+      const matchedCategory =
+        intelligentCategorizeFrequentlyAskedQuestion(result);
       if (matchedCategory) {
-        categoryDistribution[matchedCategory] = (categoryDistribution[matchedCategory] || 0) + 1
+        categoryDistribution[matchedCategory] =
+          (categoryDistribution[matchedCategory] || 0) + 1;
       }
-    })
+    });
 
-    const suggestions = generateSearchSuggestions(term, sortedResults)
+    const suggestions = generateSearchSuggestions(term, sortedResults);
 
-    console.log('✅ Advanced FAQ search completed:', {
+    console.log("✅ Advanced FAQ search completed:", {
       term,
       totalResults: sortedResults.length,
       questionMatches: questionResults.length,
-      answerMatches: answerResults.length
-    })
+      answerMatches: answerResults.length,
+    });
 
     return {
       results: sortedResults.slice(0, limit),
       total: sortedResults.length,
       searchTerm: term,
       suggestions,
-      categories: categoryDistribution
-    }
+      categories: categoryDistribution,
+    };
   } catch (error) {
-    console.error('Error in advanced FAQ search:', error)
+    console.error("Error in advanced FAQ search:", error);
     return {
       results: [],
       total: 0,
       searchTerm: options.term,
       suggestions: [],
-      categories: {}
-    }
+      categories: {},
+    };
   }
 }
 
 // Enhanced categorization analysis with detailed metrics
-export function analyzeCategorizationStrategy(faqs: FAQ[]): CategorizationStats {
-  const startTime = Date.now()
-  let strapiRelations = 0
-  let keywordBased = 0
-  let uncategorized = 0
-  const cacheHits = CATEGORIZATION_CACHE.size
-  const categoryDistribution: { [key: string]: number } = {}
+export function analyzeCategorizationStrategy(
+  faqs: FAQ[],
+): CategorizationStats {
+  const startTime = Date.now();
+  let strapiRelations = 0;
+  let keywordBased = 0;
+  let uncategorized = 0;
+  const cacheHits = CATEGORIZATION_CACHE.size;
+  const categoryDistribution: { [key: string]: number } = {};
 
-  let relationQuality = 0
-  let totalFAQsChecked = 0
+  let relationQuality = 0;
+  let totalFAQsChecked = 0;
 
-  faqs.forEach(faq => {
-    totalFAQsChecked++
+  faqs.forEach((faq) => {
+    totalFAQsChecked++;
 
     // Enhanced API relation detection
     if (faq.category && faq.category.slug && faq.category.name) {
-      strapiRelations++
-      relationQuality += 1.0
-      categoryDistribution[faq.category.slug] = (categoryDistribution[faq.category.slug] || 0) + 1
-      console.log(`🎯 API Relation: FAQ ${faq.id} → ${faq.category.name} (${faq.category.slug})`)
+      strapiRelations++;
+      relationQuality += 1.0;
+      categoryDistribution[faq.category.slug] =
+        (categoryDistribution[faq.category.slug] || 0) + 1;
+      console.log(
+        `🎯 API Relation: FAQ ${faq.id} → ${faq.category.name} (${faq.category.slug})`,
+      );
     } else {
-      const keywordResult = categorizeByKeywordsEnhanced(faq)
+      const keywordResult = categorizeByKeywordsEnhanced(faq);
       if (keywordResult) {
-        keywordBased++
-        relationQuality += keywordResult.confidence
-        categoryDistribution[keywordResult.category] = (categoryDistribution[keywordResult.category] || 0) + 1
-        console.log(`🔤 Keyword Match: FAQ ${faq.id} → ${keywordResult.category} (confidence: ${keywordResult.confidence.toFixed(2)})`)
+        keywordBased++;
+        relationQuality += keywordResult.confidence;
+        categoryDistribution[keywordResult.category] =
+          (categoryDistribution[keywordResult.category] || 0) + 1;
+        console.log(
+          `🔤 Keyword Match: FAQ ${faq.id} → ${keywordResult.category} (confidence: ${keywordResult.confidence.toFixed(2)})`,
+        );
       } else {
-        uncategorized++
-        console.log(`⚠️ Uncategorized: FAQ ${faq.id} - "${faq.question.substring(0, 50)}..."`)
+        uncategorized++;
+        console.log(
+          `⚠️ Uncategorized: FAQ ${faq.id} - "${faq.question.substring(0, 50)}..."`,
+        );
       }
     }
-  })
+  });
 
-  let method: 'hybrid' | 'relations-only' | 'keywords-only'
+  let method: "hybrid" | "relations-only" | "keywords-only";
   if (strapiRelations > 0 && keywordBased > 0) {
-    method = 'hybrid'
+    method = "hybrid";
   } else if (strapiRelations > 0) {
-    method = 'relations-only'
+    method = "relations-only";
   } else {
-    method = 'keywords-only'
+    method = "keywords-only";
   }
 
-  const confidence = totalFAQsChecked > 0 ? relationQuality / totalFAQsChecked : 0
-  const strapiCoverage = strapiRelations / faqs.length
-  const apiHealth: 'healthy' | 'degraded' | 'failed' =
-    strapiCoverage > 0.8 ? 'healthy' :
-    strapiCoverage > 0.3 ? 'degraded' : 'failed'
+  const confidence =
+    totalFAQsChecked > 0 ? relationQuality / totalFAQsChecked : 0;
+  const strapiCoverage = strapiRelations / faqs.length;
+  const apiHealth: "healthy" | "degraded" | "failed" =
+    strapiCoverage > 0.8
+      ? "healthy"
+      : strapiCoverage > 0.3
+        ? "degraded"
+        : "failed";
 
-  const processingTime = Date.now() - startTime
+  const processingTime = Date.now() - startTime;
 
   const stats: CategorizationStats = {
     totalFAQs: faqs.length,
@@ -547,68 +693,89 @@ export function analyzeCategorizationStrategy(faqs: FAQ[]): CategorizationStats 
     apiHealth,
     cacheHits,
     processingTime,
-    categoryDistribution
-  }
+    categoryDistribution,
+  };
 
-  console.log('📊 Enhanced Categorization Strategy Analysis:')
-  console.log(`   📡 Strapi API Relations: ${strapiRelations}/${faqs.length} (${Math.round(strapiCoverage * 100)}%)`)
-  console.log(`   🔤 Keyword-based: ${keywordBased}/${faqs.length} (${Math.round((keywordBased / faqs.length) * 100)}%)`)
-  console.log(`   ❓ Uncategorized: ${uncategorized}/${faqs.length} (${Math.round((uncategorized / faqs.length) * 100)}%)`)
-  console.log(`   🎯 Overall Confidence: ${Math.round(confidence * 100)}%`)
-  console.log(`   🏥 API Health: ${apiHealth}`)
-  console.log(`   ⚡ Processing Time: ${processingTime}ms`)
-  console.log(`   💾 Cache Efficiency: ${cacheHits} entries`)
+  console.log("📊 Enhanced Categorization Strategy Analysis:");
+  console.log(
+    `   📡 Strapi API Relations: ${strapiRelations}/${faqs.length} (${Math.round(strapiCoverage * 100)}%)`,
+  );
+  console.log(
+    `   🔤 Keyword-based: ${keywordBased}/${faqs.length} (${Math.round((keywordBased / faqs.length) * 100)}%)`,
+  );
+  console.log(
+    `   ❓ Uncategorized: ${uncategorized}/${faqs.length} (${Math.round((uncategorized / faqs.length) * 100)}%)`,
+  );
+  console.log(`   🎯 Overall Confidence: ${Math.round(confidence * 100)}%`);
+  console.log(`   🏥 API Health: ${apiHealth}`);
+  console.log(`   ⚡ Processing Time: ${processingTime}ms`);
+  console.log(`   💾 Cache Efficiency: ${cacheHits} entries`);
 
   if (strapiCoverage === 0) {
-    console.log('💡 Recommendation: FAQ category relations are not set up in Strapi. Consider:')
-    console.log('   1. Setting up category relations in Strapi CMS')
-    console.log('   2. Current keyword-based system provides good coverage')
+    console.log(
+      "💡 Recommendation: FAQ category relations are not set up in Strapi. Consider:",
+    );
+    console.log("   1. Setting up category relations in Strapi CMS");
+    console.log("   2. Current keyword-based system provides good coverage");
   } else if (strapiCoverage < 0.5) {
-    console.log('💡 Recommendation: Partial Strapi relations detected. Consider:')
-    console.log('   1. Completing category assignments in Strapi')
-    console.log('   2. Hybrid approach working well')
+    console.log(
+      "💡 Recommendation: Partial Strapi relations detected. Consider:",
+    );
+    console.log("   1. Completing category assignments in Strapi");
+    console.log("   2. Hybrid approach working well");
   } else {
-    console.log('✅ Excellent: High API relation coverage detected!')
+    console.log("✅ Excellent: High API relation coverage detected!");
   }
 
-  return stats
+  return stats;
 }
 
 // Enhanced intelligent categorization
-export function intelligentCategorizeFrequentlyAskedQuestion(faq: FAQ): string | null {
-  const cached = CATEGORIZATION_CACHE.get(faq.id)
+export function intelligentCategorizeFrequentlyAskedQuestion(
+  faq: FAQ,
+): string | null {
+  const cached = CATEGORIZATION_CACHE.get(faq.id);
   if (cached && Date.now() - cached.timestamp < cached.ttl) {
-    console.log(`💾 Cache hit for FAQ ${faq.id}: ${cached.categorySlug} (${cached.method})`)
-    return cached.categorySlug
+    console.log(
+      `💾 Cache hit for FAQ ${faq.id}: ${cached.categorySlug} (${cached.method})`,
+    );
+    return cached.categorySlug;
   }
 
-  let categorySlug: string | null = null
-  let method: 'relations' | 'keywords' = 'relations'
-  let confidence = 0
+  let categorySlug: string | null = null;
+  let method: "relations" | "keywords" = "relations";
+  let confidence = 0;
 
   // PRIMARY: Enhanced Strapi category relation detection
   if (faq.category && faq.category.slug && faq.category.name) {
-    const categoryValid = faq.category.slug.length > 0 && faq.category.name.length > 0
+    const categoryValid =
+      faq.category.slug.length > 0 && faq.category.name.length > 0;
     if (categoryValid) {
-      categorySlug = faq.category.slug
-      method = 'relations'
-      confidence = 1.0
-      console.log(`🎯 Strong API relation for FAQ ${faq.id}: ${categorySlug}`)
+      categorySlug = faq.category.slug;
+      method = "relations";
+      confidence = 1.0;
+      console.log(`🎯 Strong API relation for FAQ ${faq.id}: ${categorySlug}`);
     }
   }
 
   // FALLBACK: Enhanced keyword-based categorization
   if (!categorySlug) {
-    const keywordResult = categorizeByKeywordsEnhanced(faq)
+    const keywordResult = categorizeByKeywordsEnhanced(faq);
     if (keywordResult && keywordResult.confidence > 0.4) {
-      categorySlug = keywordResult.category
-      method = 'keywords'
-      confidence = keywordResult.confidence
-      console.log(`🔤 Keyword categorization for FAQ ${faq.id}: ${categorySlug} (confidence: ${confidence.toFixed(2)})`)
+      categorySlug = keywordResult.category;
+      method = "keywords";
+      confidence = keywordResult.confidence;
+      console.log(
+        `🔤 Keyword categorization for FAQ ${faq.id}: ${categorySlug} (confidence: ${confidence.toFixed(2)})`,
+      );
     } else if (keywordResult) {
-      console.log(`⚠️ Low confidence keyword match for FAQ ${faq.id}: ${keywordResult.category} (${keywordResult.confidence.toFixed(2)}) - skipping`)
+      console.log(
+        `⚠️ Low confidence keyword match for FAQ ${faq.id}: ${keywordResult.category} (${keywordResult.confidence.toFixed(2)}) - skipping`,
+      );
     } else {
-      console.log(`❌ No categorization possible for FAQ ${faq.id}: "${faq.question.substring(0, 50)}..."`)
+      console.log(
+        `❌ No categorization possible for FAQ ${faq.id}: "${faq.question.substring(0, 50)}..."`,
+      );
     }
   }
 
@@ -619,101 +786,149 @@ export function intelligentCategorizeFrequentlyAskedQuestion(faq: FAQ): string |
       method,
       confidence,
       timestamp: Date.now(),
-      ttl: CACHE_TTL
-    })
+      ttl: CACHE_TTL,
+    });
   }
 
-  return categorySlug
+  return categorySlug;
 }
 
-function categorizeByKeywordsEnhanced(faq: FAQ): { category: string; confidence: number } | null {
-  const text = `${faq.question} ${faq.answer}`.toLowerCase()
-  let bestMatch: { category: string; confidence: number } | null = null
+function categorizeByKeywordsEnhanced(
+  faq: FAQ,
+): { category: string; confidence: number } | null {
+  const text = `${faq.question} ${faq.answer}`.toLowerCase();
+  let bestMatch: { category: string; confidence: number } | null = null;
 
   for (const [categorySlug, keywords] of Object.entries(CATEGORY_KEYWORDS)) {
-    const { primary, secondary, confidence: baseConfidence } = keywords
-    let score = 0
-    let matchDetails: string[] = []
+    const { primary, secondary, confidence: baseConfidence } = keywords;
+    let score = 0;
+    let matchDetails: string[] = [];
 
-    primary.forEach(keyword => {
-      const keywordLower = keyword.toLowerCase()
+    primary.forEach((keyword) => {
+      const keywordLower = keyword.toLowerCase();
       if (text.includes(keywordLower)) {
-        score += 3
-        matchDetails.push(`primary:${keyword}`)
-      } else if (text.includes(keywordLower.substring(0, Math.min(5, keywordLower.length)))) {
-        score += 1
-        matchDetails.push(`partial:${keyword}`)
+        score += 3;
+        matchDetails.push(`primary:${keyword}`);
+      } else if (
+        text.includes(
+          keywordLower.substring(0, Math.min(5, keywordLower.length)),
+        )
+      ) {
+        score += 1;
+        matchDetails.push(`partial:${keyword}`);
       }
-    })
+    });
 
-    secondary.forEach(keyword => {
-      const keywordLower = keyword.toLowerCase()
+    secondary.forEach((keyword) => {
+      const keywordLower = keyword.toLowerCase();
       if (text.includes(keywordLower)) {
-        score += 1
-        matchDetails.push(`secondary:${keyword}`)
+        score += 1;
+        matchDetails.push(`secondary:${keyword}`);
       }
-    })
+    });
 
     if (score > 0) {
-      const maxPossibleScore = (primary.length * 3) + secondary.length
-      const rawConfidence = score / maxPossibleScore
-      const finalConfidence = Math.min(baseConfidence * rawConfidence * 1.2, 1.0)
+      const maxPossibleScore = primary.length * 3 + secondary.length;
+      const rawConfidence = score / maxPossibleScore;
+      const finalConfidence = Math.min(
+        baseConfidence * rawConfidence * 1.2,
+        1.0,
+      );
 
-      console.log(`🔍 Category ${categorySlug}: score=${score}, matches=[${matchDetails.join(', ')}], confidence=${finalConfidence.toFixed(3)}`)
+      console.log(
+        `🔍 Category ${categorySlug}: score=${score}, matches=[${matchDetails.join(", ")}], confidence=${finalConfidence.toFixed(3)}`,
+      );
 
       if (!bestMatch || finalConfidence > bestMatch.confidence) {
-        bestMatch = { category: categorySlug, confidence: finalConfidence }
+        bestMatch = { category: categorySlug, confidence: finalConfidence };
       }
     }
   }
 
-  return bestMatch
+  return bestMatch;
 }
 
-export function analyzeCategorizationQuality(faqs: FAQ[], categories: FAQCategory[]): CategorizationQuality {
-  const stats = analyzeCategorizationStrategy(faqs)
-  const recommendations: string[] = []
+export function analyzeCategorizationQuality(
+  faqs: FAQ[],
+  categories: FAQCategory[],
+): CategorizationQuality {
+  const stats = analyzeCategorizationStrategy(faqs);
+  const recommendations: string[] = [];
 
-  const relationsCoverage = stats.strapiRelations / stats.totalFAQs
-  const categoryCoverage = Object.keys(stats.categoryDistribution).length / categories.length
-  const keywordAccuracy = stats.keywordBased / (stats.keywordBased + stats.uncategorized)
-  const overallEfficiency = (stats.strapiRelations + stats.keywordBased) / stats.totalFAQs
+  const relationsCoverage = stats.strapiRelations / stats.totalFAQs;
+  const categoryCoverage =
+    Object.keys(stats.categoryDistribution).length / categories.length;
+  const keywordAccuracy =
+    stats.keywordBased / (stats.keywordBased + stats.uncategorized);
+  const overallEfficiency =
+    (stats.strapiRelations + stats.keywordBased) / stats.totalFAQs;
 
-  const overallScore = (relationsCoverage * 0.4) + (overallEfficiency * 0.3) + (categoryCoverage * 0.2) + (keywordAccuracy * 0.1)
+  const overallScore =
+    relationsCoverage * 0.4 +
+    overallEfficiency * 0.3 +
+    categoryCoverage * 0.2 +
+    keywordAccuracy * 0.1;
 
   if (relationsCoverage === 0) {
-    recommendations.push('🚨 Critical: No Strapi category relations found - set up FAQ categories in CMS')
-    recommendations.push('📝 Action: Assign FAQs to categories in Strapi admin panel')
-    recommendations.push('⚡ Current: Keyword system provides good fallback coverage')
+    recommendations.push(
+      "🚨 Critical: No Strapi category relations found - set up FAQ categories in CMS",
+    );
+    recommendations.push(
+      "📝 Action: Assign FAQs to categories in Strapi admin panel",
+    );
+    recommendations.push(
+      "⚡ Current: Keyword system provides good fallback coverage",
+    );
   } else if (relationsCoverage < 0.3) {
-    recommendations.push('📈 Improvement: Only partial Strapi relations - complete category assignments')
-    recommendations.push('🔄 Hybrid approach working - gradually transition to API-based')
+    recommendations.push(
+      "📈 Improvement: Only partial Strapi relations - complete category assignments",
+    );
+    recommendations.push(
+      "🔄 Hybrid approach working - gradually transition to API-based",
+    );
   } else if (relationsCoverage < 0.7) {
-    recommendations.push('✨ Good progress: Majority using API relations - finish remaining assignments')
+    recommendations.push(
+      "✨ Good progress: Majority using API relations - finish remaining assignments",
+    );
   }
 
   if (categoryCoverage < 0.8) {
-    const missingCategories = categories.length - Object.keys(stats.categoryDistribution).length
-    recommendations.push(`📁 Content gap: ${missingCategories} categories have no FAQs - review content distribution`)
+    const missingCategories =
+      categories.length - Object.keys(stats.categoryDistribution).length;
+    recommendations.push(
+      `📁 Content gap: ${missingCategories} categories have no FAQs - review content distribution`,
+    );
   }
 
   if (stats.uncategorized > stats.totalFAQs * 0.1) {
-    recommendations.push('🔧 Enhancement: Improve keyword mappings to reduce uncategorized FAQs')
-    recommendations.push('📖 Consider: Add more medical synonyms to CATEGORY_KEYWORDS')
+    recommendations.push(
+      "🔧 Enhancement: Improve keyword mappings to reduce uncategorized FAQs",
+    );
+    recommendations.push(
+      "📖 Consider: Add more medical synonyms to CATEGORY_KEYWORDS",
+    );
   }
 
-  if (stats.apiHealth === 'failed' && stats.keywordBased === 0) {
-    recommendations.push('🆘 Critical: Both API and keyword systems failing - check system health')
+  if (stats.apiHealth === "failed" && stats.keywordBased === 0) {
+    recommendations.push(
+      "🆘 Critical: Both API and keyword systems failing - check system health",
+    );
   }
 
   if (stats.cacheHits / stats.totalFAQs < 0.3) {
-    recommendations.push('⚡ Performance: Consider longer cache TTL for better performance')
+    recommendations.push(
+      "⚡ Performance: Consider longer cache TTL for better performance",
+    );
   }
 
   if (overallScore > 0.8) {
-    recommendations.push('🎉 Excellent: Categorization system performing optimally!')
+    recommendations.push(
+      "🎉 Excellent: Categorization system performing optimally!",
+    );
   } else if (overallScore > 0.6) {
-    recommendations.push('👍 Good: System working well with room for improvement')
+    recommendations.push(
+      "👍 Good: System working well with room for improvement",
+    );
   }
 
   return {
@@ -721,158 +936,208 @@ export function analyzeCategorizationQuality(faqs: FAQ[], categories: FAQCategor
     relationsCoverage,
     keywordAccuracy,
     categoryCoverage,
-    recommendations
-  }
+    recommendations,
+  };
 }
 
 // Utility Functions
-function calculateSearchScore(faq: FAQ, searchTerm: string, matchType: 'question' | 'answer'): number {
-  let score = 0
-  const term = searchTerm.toLowerCase()
+function calculateSearchScore(
+  faq: FAQ,
+  searchTerm: string,
+  matchType: "question" | "answer",
+): number {
+  let score = 0;
+  const term = searchTerm.toLowerCase();
 
-  if (matchType === 'question') {
-    score += 100
+  if (matchType === "question") {
+    score += 100;
   } else {
-    score += 50
+    score += 50;
   }
 
-  const text = (matchType === 'question' ? faq.question : faq.answer).toLowerCase()
+  const text = (
+    matchType === "question" ? faq.question : faq.answer
+  ).toLowerCase();
   if (text.includes(term)) {
-    score += 50
+    score += 50;
   }
 
-  const words = term.split(' ')
-  words.forEach(word => {
+  const words = term.split(" ");
+  words.forEach((word) => {
     if (word.length > 2 && text.includes(word)) {
-      score += 10
+      score += 10;
     }
-  })
+  });
 
-  const priorityBonus = { featured: 30, high: 20, medium: 10, low: 0 }
-  score += priorityBonus[faq.priority]
+  const priorityBonus = { featured: 30, high: 20, medium: 10, low: 0 };
+  score += priorityBonus[faq.priority];
 
-  score += Math.min(faq.helpfulCount * 2, 20)
+  score += Math.min(faq.helpfulCount * 2, 20);
 
-  if (matchType === 'question' && faq.question.length < 100) {
-    score += 10
+  if (matchType === "question" && faq.question.length < 100) {
+    score += 10;
   }
 
-  return score
+  return score;
 }
 
 function highlightText(text: string, searchTerm: string): string {
-  if (!searchTerm || !text) return text
+  if (!searchTerm || !text) return text;
 
-  const words = searchTerm.toLowerCase().split(' ').filter(word => word.length > 2)
-  let highlightedText = text
+  const words = searchTerm
+    .toLowerCase()
+    .split(" ")
+    .filter((word) => word.length > 2);
+  let highlightedText = text;
 
-  words.forEach(word => {
-    const regex = new RegExp(`(${word})`, 'gi')
-    highlightedText = highlightedText.replace(regex, '<mark class="bg-healthcare-accent-green/20 text-healthcare-primary font-medium rounded px-1">$1</mark>')
-  })
+  words.forEach((word) => {
+    const regex = new RegExp(`(${word})`, "gi");
+    highlightedText = highlightedText.replace(
+      regex,
+      '<mark class="bg-healthcare-accent-green/20 text-healthcare-primary font-medium rounded px-1">$1</mark>',
+    );
+  });
 
-  return highlightedText
+  return highlightedText;
 }
 
-function generateSearchSuggestions(searchTerm: string, results: FAQSearchResult[]): string[] {
-  const suggestions: string[] = []
-  const term = searchTerm.toLowerCase()
+function generateSearchSuggestions(
+  searchTerm: string,
+  results: FAQSearchResult[],
+): string[] {
+  const suggestions: string[] = [];
+  const term = searchTerm.toLowerCase();
 
   const medicalSuggestions: { [key: string]: string[] } = {
-    'zweitmeinung': ['zweitmeinung kosten', 'zweitmeinung ablauf', 'zweitmeinung wann sinnvoll'],
-    'operation': ['operation notwendig', 'operation alternativen', 'operation vorbereitung'],
-    'behandlung': ['behandlung ablauf', 'behandlung kosten', 'behandlung dauer'],
-    'diagnose': ['diagnose unsicher', 'diagnose bestätigen', 'diagnose überprüfen'],
-    'therapie': ['therapie alternativen', 'therapie nebenwirkungen', 'therapie erfolg'],
-    'krebs': ['krebs behandlung', 'krebs zweitmeinung', 'krebs therapie'],
-    'herz': ['herz operation', 'herz katheter', 'herz bypass'],
-    'gallenblase': ['gallenblase operation', 'gallenblase steine', 'gallenblase entfernung'],
-    'schilddrüse': ['schilddrüse operation', 'schilddrüse knoten', 'schilddrüse autonomie']
-  }
+    zweitmeinung: [
+      "zweitmeinung kosten",
+      "zweitmeinung ablauf",
+      "zweitmeinung wann sinnvoll",
+    ],
+    operation: [
+      "operation notwendig",
+      "operation alternativen",
+      "operation vorbereitung",
+    ],
+    behandlung: ["behandlung ablauf", "behandlung kosten", "behandlung dauer"],
+    diagnose: [
+      "diagnose unsicher",
+      "diagnose bestätigen",
+      "diagnose überprüfen",
+    ],
+    therapie: [
+      "therapie alternativen",
+      "therapie nebenwirkungen",
+      "therapie erfolg",
+    ],
+    krebs: ["krebs behandlung", "krebs zweitmeinung", "krebs therapie"],
+    herz: ["herz operation", "herz katheter", "herz bypass"],
+    gallenblase: [
+      "gallenblase operation",
+      "gallenblase steine",
+      "gallenblase entfernung",
+    ],
+    schilddrüse: [
+      "schilddrüse operation",
+      "schilddrüse knoten",
+      "schilddrüse autonomie",
+    ],
+  };
 
-  Object.keys(medicalSuggestions).forEach(key => {
+  Object.keys(medicalSuggestions).forEach((key) => {
     if (term.includes(key)) {
-      suggestions.push(...medicalSuggestions[key])
+      suggestions.push(...medicalSuggestions[key]);
     }
-  })
+  });
 
   if (results.length > 0) {
-    const keywords = new Set<string>()
-    results.slice(0, 5).forEach(result => {
-      const words = result.question.toLowerCase().split(' ')
-      words.forEach(word => {
+    const keywords = new Set<string>();
+    results.slice(0, 5).forEach((result) => {
+      const words = result.question.toLowerCase().split(" ");
+      words.forEach((word) => {
         if (word.length > 4 && !term.includes(word)) {
-          keywords.add(word)
+          keywords.add(word);
         }
-      })
-    })
+      });
+    });
 
-    Array.from(keywords).slice(0, 3).forEach(keyword => {
-      suggestions.push(`${term} ${keyword}`)
-    })
+    Array.from(keywords)
+      .slice(0, 3)
+      .forEach((keyword) => {
+        suggestions.push(`${term} ${keyword}`);
+      });
   }
 
-  return suggestions.slice(0, 5)
+  return suggestions.slice(0, 5);
 }
 
-export function groupFAQsByCategory(faqs: FAQ[], categories: FAQCategory[]): Record<string, FAQ[]> {
-  const startTime = Date.now()
-  const grouped: Record<string, FAQ[]> = {}
+export function groupFAQsByCategory(
+  faqs: FAQ[],
+  categories: FAQCategory[],
+): Record<string, FAQ[]> {
+  const startTime = Date.now();
+  const grouped: Record<string, FAQ[]> = {};
 
-  categories.forEach(category => {
-    grouped[category.slug] = []
-  })
+  categories.forEach((category) => {
+    grouped[category.slug] = [];
+  });
 
-  const stats = analyzeCategorizationStrategy(faqs)
-  console.log(`🧠 Using categorization strategy: ${stats.method} (API Health: ${stats.apiHealth})`)
+  const stats = analyzeCategorizationStrategy(faqs);
+  console.log(
+    `🧠 Using categorization strategy: ${stats.method} (API Health: ${stats.apiHealth})`,
+  );
 
-  faqs.forEach(faq => {
-    const categorySlug = intelligentCategorizeFrequentlyAskedQuestion(faq)
+  faqs.forEach((faq) => {
+    const categorySlug = intelligentCategorizeFrequentlyAskedQuestion(faq);
     if (categorySlug && grouped[categorySlug]) {
-      grouped[categorySlug].push(faq)
+      grouped[categorySlug].push(faq);
     }
-  })
+  });
 
-  const processingTime = Date.now() - startTime
+  const processingTime = Date.now() - startTime;
 
-  console.log('📊 FAQ categorization results:')
+  console.log("📊 FAQ categorization results:");
   Object.entries(grouped).forEach(([slug, faqList]) => {
     if (faqList.length > 0) {
-      console.log(`  ✅ ${slug}: ${faqList.length} FAQs`)
+      console.log(`  ✅ ${slug}: ${faqList.length} FAQs`);
     } else {
-      console.log(`  ⚪ ${slug}: 0 FAQs`)
+      console.log(`  ⚪ ${slug}: 0 FAQs`);
     }
-  })
+  });
 
-  console.log(`⚡ Grouping completed in ${processingTime}ms`)
-  console.log(`💾 Cache efficiency: ${stats.cacheHits}/${stats.totalFAQs} entries`)
+  console.log(`⚡ Grouping completed in ${processingTime}ms`);
+  console.log(
+    `💾 Cache efficiency: ${stats.cacheHits}/${stats.totalFAQs} entries`,
+  );
 
-  const quality = analyzeCategorizationQuality(faqs, categories)
-  console.log(`🎯 Categorization Quality Score: ${Math.round(quality.overallScore * 100)}%`)
+  const quality = analyzeCategorizationQuality(faqs, categories);
+  console.log(
+    `🎯 Categorization Quality Score: ${Math.round(quality.overallScore * 100)}%`,
+  );
 
   if (quality.recommendations.length > 0) {
-    console.log('💡 Recommendations:')
-    quality.recommendations.forEach(rec => console.log(`   - ${rec}`))
+    console.log("💡 Recommendations:");
+    quality.recommendations.forEach((rec) => console.log(`   - ${rec}`));
   }
 
-  return grouped
+  return grouped;
 }
 
 export function getFAQCategoryIcon(iconName: string): string {
   const iconMap: Record<string, string> = {
-    'help-circle': 'HelpCircle',
-    'activity': 'Activity',
-    'flask-conical': 'FlaskConical',
-    'heart-pulse': 'HeartPulse',
-    'scan-face': 'ScanFace',
-    'droplet': 'Droplet',
-    'water': 'Droplets'
-  }
+    "help-circle": "HelpCircle",
+    activity: "Activity",
+    "flask-conical": "FlaskConical",
+    "heart-pulse": "HeartPulse",
+    "scan-face": "ScanFace",
+    droplet: "Droplet",
+    water: "Droplets",
+  };
 
-  return iconMap[iconName] || 'HelpCircle'
+  return iconMap[iconName] || "HelpCircle";
 }
 
 // Legacy function for backward compatibility
 export function categorizeFrequentlyAskedQuestion(faq: FAQ): string | null {
-  return intelligentCategorizeFrequentlyAskedQuestion(faq)
+  return intelligentCategorizeFrequentlyAskedQuestion(faq);
 }

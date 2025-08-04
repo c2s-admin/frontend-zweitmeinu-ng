@@ -1,10 +1,13 @@
 /** @type {import('next').NextConfig} */
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || ''
+const STRAPI_HOSTNAME = STRAPI_URL ? new URL(STRAPI_URL).hostname : ''
+
 const nextConfig = {
   images: {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'st.zh3.de',
+        hostname: STRAPI_HOSTNAME,
         port: '',
         pathname: '/uploads/**',
       },

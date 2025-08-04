@@ -5,7 +5,7 @@
  * Explores the actual data structure without assumptions
  */
 
-const baseUrl = 'https://st.zh3.de/api'
+const baseUrl = process.env.STRAPI_API_URL || process.env.NEXT_PUBLIC_STRAPI_URL || ''
 
 async function exploreStrapi() {
   console.log('🔍 Exploring Strapi Data Structure...\n')

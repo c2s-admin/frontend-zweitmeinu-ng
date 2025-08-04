@@ -85,7 +85,7 @@ bun install
 cp .env.example .env.local
 
 # Configure your Strapi API endpoint
-NEXT_PUBLIC_STRAPI_URL=https://st.zh3.de/api
+NEXT_PUBLIC_STRAPI_URL=https://your-strapi-instance/api
 ```
 
 ### 4. Development Server
@@ -224,7 +224,7 @@ bun run build
 out
 
 # Environment variables
-NEXT_PUBLIC_STRAPI_URL=https://st.zh3.de/api
+NEXT_PUBLIC_STRAPI_URL=https://your-strapi-instance/api
 ```
 
 ### Vercel

@@ -4,7 +4,7 @@
  * Get Homepage Data for Zweitmeinung
  */
 
-const baseUrl = 'https://st.zh3.de/api'
+const baseUrl = process.env.STRAPI_API_URL || process.env.NEXT_PUBLIC_STRAPI_URL || ''
 
 async function getHomepageData() {
   console.log('🏠 Getting Homepage Data for Zweitmeinung...\n')
