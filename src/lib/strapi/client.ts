@@ -1,3 +1,4 @@
+import { env } from "@/lib/env";
 import { logger } from "@/lib/logger";
 
 export class StrapiClient {
@@ -5,8 +6,7 @@ export class StrapiClient {
   private siteId = "zweitmeinu-ng"; // Updated with real site identifier
 
   constructor() {
-    this.baseUrl =
-      process.env.STRAPI_API_URL || process.env.NEXT_PUBLIC_STRAPI_URL || "";
+    this.baseUrl = env.STRAPI_API_URL || env.NEXT_PUBLIC_STRAPI_URL;
   }
 
   async get<T>(
