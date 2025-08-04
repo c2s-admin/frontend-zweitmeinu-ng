@@ -11,6 +11,7 @@ export interface ContactFormData {
   preferredContact: 'email' | 'phone' | 'both'
   consent: boolean
   newsletter?: boolean
+  captchaToken?: string
 }
 
 export interface ContactSubmission {
@@ -51,7 +52,7 @@ export interface FormErrors {
 }
 
 export interface FormFieldConfig {
-  name: keyof ContactFormData
+  name: keyof Omit<ContactFormData, 'captchaToken'>
   label: string
   type: 'text' | 'email' | 'tel' | 'select' | 'textarea' | 'checkbox'
   required: boolean
