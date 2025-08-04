@@ -238,7 +238,9 @@ export function FAQVoteAnalytics({ faqs, categories, className }: FAQVoteAnalyti
             {/* Time Range Filter */}
             <select
               value={timeRange}
-              onChange={(e) => setTimeRange(e.target.value as any)}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                setTimeRange(e.target.value as '24h' | '7d' | '30d' | 'all')
+              }
               className="px-3 py-2 border border-gray-200 rounded-lg text-sm"
             >
               <option value="24h">Letzte 24h</option>
