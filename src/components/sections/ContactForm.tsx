@@ -31,13 +31,25 @@ export default function ContactForm({
 
   const onSubmit = async (data: ContactFormData) => {
     setIsSubmitting(true);
+    setSubmitStatus("idle");
+    try {
+      const response = await fetch("/api/contact-messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
 
-    // Simulate form submission
-    setTimeout(() => {
-      setIsSubmitting(false);
+      if (!response.ok) {
+        throw new Error("Failed to submit contact message");
+      }
+
       setSubmitStatus("success");
       reset();
-    }, 2000);
+    } catch (err) {
+      setSubmitStatus("error");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
