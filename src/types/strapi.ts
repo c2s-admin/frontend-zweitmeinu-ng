@@ -397,6 +397,65 @@ export interface TextBlock extends DynamicZoneSection {
   textColor?: string
 }
 
+// Motivation Page Specific Sections
+export interface MotivationHeroSection extends DynamicZoneSection {
+  __component: 'sections.hero-section'
+  title: string
+  subtitle?: string
+  description?: string
+  backgroundType?: 'gradient' | 'image'
+  showBreadcrumb?: boolean
+  breadcrumbText?: string
+}
+
+export interface StorySection extends DynamicZoneSection {
+  __component: 'sections.story-section'
+  heading: string
+  content: string
+  image?: {
+    data: StrapiMedia
+  }
+  imagePosition: 'left' | 'right'
+  hasQuote?: boolean
+  quote?: string
+  quoteAuthor?: string
+  highlightBoxes?: HighlightBox[]
+}
+
+export interface HighlightBox {
+  id: number
+  content: string
+  type?: 'warning' | 'info' | 'error'
+  backgroundColor?: string
+  textColor?: string
+}
+
+export interface CoreValuesSection extends DynamicZoneSection {
+  __component: 'sections.core-values'
+  heading: string
+  subheading?: string
+  values: CoreValue[]
+  backgroundColor?: string
+}
+
+export interface CoreValue {
+  id: number
+  title: string
+  description?: string
+  icon?: string
+  iconColor?: string
+}
+
+export interface MissionStatementSection extends DynamicZoneSection {
+  __component: 'sections.mission-statement'
+  heading: string
+  missionText: string
+  attribution?: string
+  icon?: string
+  backgroundColor?: string
+  textColor?: string
+}
+
 // Testimonials
 export interface TestimonialsSection extends DynamicZoneSection {
   __component: 'sections.testimonials'

@@ -8,6 +8,7 @@ const STRAPI_ORIGIN = (process.env.NEXT_PUBLIC_STRAPI_URL || "").replace(
 );
 import Link from "next/link";
 import Image from "next/image";
+import { logger } from "@/lib/logger";
 import { Menu, X, Phone, ChevronDown, Mail, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { SiteConfiguration } from "@/types/strapi";
@@ -27,6 +28,11 @@ export function Header({ siteConfig }: HeaderProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<number | null>(null);
   const [logoError, setLogoError] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Helper function to get formatted opening hours with status
   const getOpeningHoursInfo = () => {
@@ -94,7 +100,7 @@ export function Header({ siteConfig }: HeaderProps) {
     };
   };
 
-  const openingInfo = getOpeningHoursInfo();
+  const openingInfo = mounted ? getOpeningHoursInfo() : null;
 
   useEffect(() => {
     // Close mobile menu when clicking outside
@@ -190,7 +196,7 @@ export function Header({ siteConfig }: HeaderProps) {
               {/* Right Side - Enhanced Opening Hours & Info */}
               <div className="hidden lg:flex items-center gap-4 text-xs">
                 {/* Enhanced Opening Hours from Strapi */}
-                {openingInfo && (
+                {mounted && openingInfo && (
                   <>
                     <div className="flex items-center gap-3">
                       {/* Status Indicator */}
@@ -248,7 +254,7 @@ export function Header({ siteConfig }: HeaderProps) {
                 </span>
 
                 {/* Debug Info */}
-                {process.env.NODE_ENV === "development" && (
+                {process.env.NODE_ENV === "development" && mounted && (
                   <>
                     <div className="text-white/60">|</div>
                     <span className="text-white/60 text-xs">
@@ -290,13 +296,13 @@ export function Header({ siteConfig }: HeaderProps) {
                     className="transition-transform duration-300 group-hover:scale-105 max-h-14 w-auto animate-pulse-slow"
                     priority
                     onError={() => {
-                      console.warn(
+                      logger.warn(
                         "Logo image failed to load, switching to text fallback",
                       );
                       setLogoError(true);
                     }}
                     onLoad={() => {
-                      console.log("Logo image loaded successfully");
+                      logger.info("Logo image loaded successfully");
                     }}
                   />
                 ) : (
@@ -335,7 +341,7 @@ export function Header({ siteConfig }: HeaderProps) {
                       onMouseEnter={() => setActiveDropdown(item.id)}
                       onMouseLeave={() => setActiveDropdown(null)}
                     >
-                      <button className="flex items-center gap-1 font-medium transition-colors duration-300 relative group text-white hover:text-healthcare-accent-green">
+                      <button type="button" className="flex items-center gap-1 font-medium transition-colors duration-300 relative group text-white hover:text-healthcare-accent-green">
                         {item.label}
                         <ChevronDown className="w-4 h-4 transition-transform duration-300 group-hover:rotate-180" />
                         <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-healthcare-primary-light transition-all duration-300 group-hover:w-full" />
@@ -393,7 +399,7 @@ export function Header({ siteConfig }: HeaderProps) {
             </div>
 
             {/* Mobile Menu Button */}
-            <button
+            <button type="button"
               onClick={(e) => {
                 e.stopPropagation();
                 setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -419,7 +425,7 @@ export function Header({ siteConfig }: HeaderProps) {
                   <div key={item.id}>
                     {item.children && item.children.length > 0 ? (
                       <div>
-                        <button
+                        <button type="button"
                           onClick={() =>
                             setActiveDropdown(
                               activeDropdown === item.id ? null : item.id,

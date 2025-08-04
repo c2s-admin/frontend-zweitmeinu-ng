@@ -65,8 +65,8 @@ export default function ContactForm({
                 <p className="text-healthcare-text-muted mb-8">
                   {successMessage}
                 </p>
-                <button
-                  onClick={() => setSubmitStatus("idle")}
+                <button type="button"
+                  onClick={() => setSubmitStatus('idle')}
                   className="btn-primary"
                 >
                   Neue Nachricht

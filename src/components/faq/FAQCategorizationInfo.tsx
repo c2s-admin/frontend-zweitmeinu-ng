@@ -64,7 +64,7 @@ export function FAQCategorizationInfo({
           </div>
         </div>
 
-        <button
+        <button type="button"
           onClick={() => setIsExpanded(!isExpanded)}
           className="flex items-center gap-1 px-3 py-1 bg-white hover:bg-gray-50 border border-gray-200 rounded-lg text-sm transition-colors"
         >

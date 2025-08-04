@@ -2,10 +2,11 @@ import { strapiClient } from './client'
 import type { Page, StrapiResponse } from '@/types/strapi'
 import type { RealPage } from '@/types/strapi-real'
 import { convertRealPageToExpected } from '@/types/strapi-real'
+import { logger } from '@/lib/logger'
 
 export async function getPageBySlug(slug: string): Promise<Page | null> {
   try {
-    console.log(`🔍 Fetching page with slug: ${slug}`)
+    logger.info(`Fetching page with slug: ${slug}`)
 
     // Define comprehensive populate parameters for all section types based on real data
     const populateParams = strapiClient.buildPopulateParams([
@@ -15,6 +16,7 @@ export async function getPageBySlug(slug: string): Promise<Page | null> {
       'sections.slides.ctaButtons',
       'sections.slides.backgroundImage',
       'sections.slides.badge',
+      'sections.image', // Added for StorySection images
       'seo'
     ])
 
@@ -31,32 +33,32 @@ export async function getPageBySlug(slug: string): Promise<Page | null> {
       }
     )
 
-    console.log(`📊 API Response:`, response)
+    logger.info('API Response:', response)
 
     const realPage = response.data?.[0] || null
 
     if (!realPage) {
-      console.warn(`⚠️ Page with slug "${slug}" not found`)
+      logger.warn(`Page with slug "${slug}" not found`)
       return null
     }
 
-    console.log(`✅ Found page:`, realPage.title)
-    console.log(`📦 Sections found:`, realPage.sections?.length || 0)
+    logger.info(`Found page: ${realPage.title}`)
+    logger.info(`Sections found: ${realPage.sections?.length || 0}`)
 
     // Convert real data structure to expected format
     const convertedPage = convertRealPageToExpected(realPage)
 
-    console.log(`🔄 Converted page:`, convertedPage)
+    logger.info('Converted page:', convertedPage)
 
     // Validate page data
     if (!validatePageData(convertedPage)) {
-      console.error('❌ Invalid page data structure after conversion')
+      logger.error('Invalid page data structure after conversion')
       return null
     }
 
     return convertedPage
   } catch (error) {
-    console.error(`💥 Failed to fetch page with slug "${slug}":`, error)
+    logger.error({ err: error }, `Failed to fetch page with slug "${slug}"`)
     return null
   }
 }
@@ -80,7 +82,7 @@ export async function getAllPages(): Promise<Page[]> {
 
     return convertedPages
   } catch (error) {
-    console.error('Failed to fetch all pages:', error)
+    logger.error({ err: error }, 'Failed to fetch all pages')
     return []
   }
 }
@@ -97,14 +99,14 @@ export async function getPageSlugs(): Promise<string[]> {
 
     return response.data?.map(page => page.slug) || []
   } catch (error) {
-    console.error('Failed to fetch page slugs:', error)
+    logger.error({ err: error }, 'Failed to fetch page slugs')
     return []
   }
 }
 
 export function validatePageData(page: unknown): page is Page {
   if (!page || typeof page !== 'object') {
-    console.error('❌ Page validation failed:', { page })
+    logger.error('Page validation failed:', { page })
     return false
   }
 
@@ -124,7 +126,7 @@ export function validatePageData(page: unknown): page is Page {
     Array.isArray(p.attributes?.sections)
 
   if (!isValid) {
-    console.error('❌ Page validation failed:', {
+    logger.error('Page validation failed:', {
       hasId: typeof p.id === 'number',
       hasSlug: typeof p.attributes?.slug === 'string',
       hasTitle: typeof p.attributes?.title === 'string',

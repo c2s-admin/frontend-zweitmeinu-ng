@@ -77,7 +77,7 @@ export function FAQCategoriesGrid({
           const questionCount = groupedFAQs[category.slug]?.length || 0
 
           return (
-            <button
+            <button type="button"
               key={category.id}
               onClick={() => handleCategoryClick(category.slug)}
               className="group bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 p-6 text-left border border-gray-100 hover:border-healthcare-accent-green/20 hover:-translate-y-1"

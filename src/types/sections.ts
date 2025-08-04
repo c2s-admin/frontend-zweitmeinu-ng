@@ -13,5 +13,10 @@ export type SectionComponentType =
   | 'sections.stats'
   | 'sections.team'
   | 'sections.cta'
+  // Motivation Page Specific Components
+  | 'sections.hero-section'
+  | 'sections.story-section'
+  | 'sections.core-values'
+  | 'sections.mission-statement'
 
 export type SectionComponents = Record<SectionComponentType, ComponentType<Record<string, unknown>>>

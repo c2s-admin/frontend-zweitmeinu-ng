@@ -1,3 +1,5 @@
+import { logger } from "@/lib/logger";
+
 export class StrapiClient {
   private baseUrl: string;
   private siteId = "zweitmeinu-ng"; // Updated with real site identifier
@@ -43,7 +45,7 @@ export class StrapiClient {
       const data = await response.json();
       return data;
     } catch (error) {
-      console.error("Strapi API Error:", error);
+      logger.error({ err: error }, "Strapi API Error");
       throw error;
     }
   }
@@ -72,7 +74,7 @@ export class StrapiClient {
       const data = (await response.json()) as T;
       return data;
     } catch (error) {
-      console.error("Strapi API Error:", error);
+      logger.error({ err: error }, "Strapi API Error");
       throw error;
     }
   }

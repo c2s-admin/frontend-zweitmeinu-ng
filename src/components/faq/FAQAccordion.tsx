@@ -26,6 +26,7 @@ import {
   trackVotePattern,
   type VoteResponse
 } from '@/lib/services/faqVoting'
+import { logger } from '@/lib/logger'
 
 interface FAQAccordionProps {
   category: FAQCategory
@@ -182,7 +183,7 @@ export function FAQAccordion({ category, faqs }: FAQAccordionProps) {
         }
       )
     } catch (error) {
-      console.error('Vote submission failed:', error)
+      logger.error({ err: error }, 'Vote submission failed')
       setVoteErrors(prev => ({
         ...prev,
         [faqId]: 'Ein unerwarteter Fehler ist aufgetreten.'
@@ -238,7 +239,7 @@ export function FAQAccordion({ category, faqs }: FAQAccordionProps) {
           return (
             <div key={faq.id} className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
               {/* Question */}
-              <button
+              <button type="button"
                 onClick={() => toggleItem(faq.id)}
                 className="w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 transition-colors rounded-xl"
               >
@@ -322,7 +323,7 @@ export function FAQAccordion({ category, faqs }: FAQAccordionProps) {
                         </div>
 
                         <div className="flex items-center gap-2 mb-3">
-                          <button
+                          <button type="button"
                             onClick={() => handleVote(faq.id, true)}
                             disabled={voteLoading[faq.id] || hasUserVoted(faq.id)}
                             className={cn(
@@ -345,7 +346,7 @@ export function FAQAccordion({ category, faqs }: FAQAccordionProps) {
                             <span>Ja ({getDisplayCounts(faq).helpfulCount})</span>
                           </button>
 
-                          <button
+                          <button type="button"
                             onClick={() => handleVote(faq.id, false)}
                             disabled={voteLoading[faq.id] || hasUserVoted(faq.id)}
                             className={cn(
@@ -405,7 +406,7 @@ export function FAQAccordion({ category, faqs }: FAQAccordionProps) {
       {/* Show More Button */}
       {faqs.length >= 8 && (
         <div className="text-center mt-8">
-          <button className="inline-flex items-center gap-2 px-6 py-3 bg-healthcare-primary hover:bg-healthcare-primary-light text-white rounded-lg transition-colors font-medium">
+          <button type="button" className="inline-flex items-center gap-2 px-6 py-3 bg-healthcare-primary hover:bg-healthcare-primary-light text-white rounded-lg transition-colors font-medium">
             Weitere Fragen anzeigen
             <ChevronDown className="w-4 h-4" />
           </button>

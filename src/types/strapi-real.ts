@@ -1,6 +1,8 @@
 // Real Strapi Data Structure (without attributes wrapper)
 // Based on actual API exploration of zweitmeinu-ng site
 
+import { logger } from "@/lib/logger";
+
 export interface StrapiResponse<T> {
   data: T;
   meta?: {
@@ -300,6 +302,91 @@ export interface RealCTAButton {
   icon?: string;
 }
 
+// Real Story Section Structure
+export interface RealStorySection extends RealDynamicZoneSection {
+  __component: "sections.story-section";
+  heading: string;
+  content: string;
+  image?: {
+    id: number;
+    documentId: string;
+    name: string;
+    alternativeText?: string;
+    caption?: string;
+    width: number;
+    height: number;
+    formats?: {
+      thumbnail?: {
+        ext: string;
+        url: string;
+        hash: string;
+        mime: string;
+        name: string;
+        path?: string;
+        size: number;
+        width: number;
+        height: number;
+        sizeInBytes: number;
+      };
+      small?: {
+        ext: string;
+        url: string;
+        hash: string;
+        mime: string;
+        name: string;
+        path?: string;
+        size: number;
+        width: number;
+        height: number;
+        sizeInBytes: number;
+      };
+      medium?: {
+        ext: string;
+        url: string;
+        hash: string;
+        mime: string;
+        name: string;
+        path?: string;
+        size: number;
+        width: number;
+        height: number;
+        sizeInBytes: number;
+      };
+      large?: {
+        ext: string;
+        url: string;
+        hash: string;
+        mime: string;
+        name: string;
+        path?: string;
+        size: number;
+        width: number;
+        height: number;
+        sizeInBytes: number;
+      };
+    };
+    hash: string;
+    ext: string;
+    mime: string;
+    size: number;
+    url: string;
+    previewUrl?: string;
+    provider: string;
+    provider_metadata?: unknown;
+    createdAt: string;
+    updatedAt: string;
+    publishedAt: string;
+  };
+  imagePosition: "left" | "right";
+  imageAlt?: string;
+  quote?: string;
+  quotePosition?: string;
+  quoteHighlight?: boolean;
+  attribution?: string;
+  sectionTitle?: string;
+  description?: string;
+}
+
 // Type guards
 export function isRealHeroCarousel(
   section: RealDynamicZoneSection,
@@ -307,11 +394,17 @@ export function isRealHeroCarousel(
   return section.__component === "sections.hero-carousel";
 }
 
+export function isRealStorySection(
+  section: RealDynamicZoneSection,
+): section is RealStorySection {
+  return section.__component === "sections.story-section";
+}
+
 // Conversion functions to transform real data to expected format
 export function convertRealSiteToExpected(
   realSite: RealSiteConfiguration,
 ): unknown {
-  console.log("🔄 Converting real site config:", realSite);
+  logger.info("🔄 Converting real site config:", realSite);
   const STRAPI_ORIGIN = (process.env.NEXT_PUBLIC_STRAPI_URL || "").replace(
     /\/api$/,
     "",
@@ -483,8 +576,8 @@ export function convertRealSiteToExpected(
 }
 
 export function convertRealPageToExpected(realPage: RealPage): unknown {
-  console.log("🔄 Converting real page:", realPage.title);
-  console.log("📦 Real sections:", realPage.sections);
+  logger.info("🔄 Converting real page:", realPage.title);
+  logger.info("📦 Real sections:", realPage.sections);
 
   // Ensure sections exist and are valid
   const validSections = (realPage.sections || []).filter(
@@ -496,14 +589,24 @@ export function convertRealPageToExpected(realPage: RealPage): unknown {
       section.id > 0,
   );
 
-  console.log("✅ Valid sections after filtering:", validSections.length);
+  logger.info("✅ Valid sections after filtering:", validSections.length);
+
+  // Convert sections to expected format based on their type
+  const convertedSections = validSections.map((section) => {
+    if (isRealStorySection(section)) {
+      console.log("🎯 Converting story section:", section.id);
+      return convertRealStorySectionToExpected(section);
+    }
+    // Add other section conversions here as needed
+    return section;
+  });
 
   return {
     id: realPage.id,
     attributes: {
       title: realPage.title,
       slug: realPage.slug,
-      sections: validSections,
+      sections: convertedSections,
       seo: realPage.seo,
       createdAt: realPage.createdAt,
       updatedAt: realPage.updatedAt,
@@ -515,7 +618,7 @@ export function convertRealPageToExpected(realPage: RealPage): unknown {
 export function convertRealHeroSlideToExpected(
   realSlide: RealHeroSlide,
 ): unknown {
-  console.log("🔄 Converting real hero slide:", realSlide.id);
+  logger.info("🔄 Converting real hero slide:", realSlide.id);
 
   return {
     id: realSlide.id,
@@ -540,38 +643,65 @@ export function convertRealHeroSlideToExpected(
   };
 }
 
+export function convertRealStorySectionToExpected(
+  realStorySection: RealStorySection,
+): unknown {
+  console.log("🔄 Converting real story section:", realStorySection.id);
+  const STRAPI_ORIGIN = (process.env.NEXT_PUBLIC_STRAPI_URL || "").replace(
+    /\/api$/,
+    "",
+  );
+
+  return {
+    ...realStorySection,
+    image: realStorySection.image
+      ? {
+          data: {
+            attributes: {
+              url: `${STRAPI_ORIGIN}${realStorySection.image.url}`,
+              alternativeText: realStorySection.image.alternativeText || realStorySection.heading,
+              width: realStorySection.image.width,
+              height: realStorySection.image.height,
+              formats: realStorySection.image.formats,
+            },
+          },
+        }
+      : undefined,
+  };
+}
+
 // Helper function to safely validate and convert sections
 export function validateAndConvertSections(
   sections: unknown[],
 ): RealDynamicZoneSection[] {
   if (!Array.isArray(sections)) {
-    console.warn("⚠️ Sections is not an array:", sections);
+    logger.warn("⚠️ Sections is not an array:", sections);
     return [];
   }
 
   return sections
     .filter((section): section is RealDynamicZoneSection => {
       if (!section || typeof section !== "object") {
-        console.warn("⚠️ Invalid section (not object):", section);
+        logger.warn("⚠️ Invalid section (not object):", section);
         return false;
       }
 
       const sectionObj = section as Record<string, unknown>;
 
       if (typeof sectionObj.__component !== "string") {
-        console.warn("⚠️ Invalid section (__component missing):", section);
+        logger.warn("⚠️ Invalid section (__component missing):", section);
         return false;
       }
 
       if (typeof sectionObj.id !== "number" || sectionObj.id <= 0) {
-        console.warn("⚠️ Invalid section (invalid id):", section);
+        logger.warn("⚠️ Invalid section (invalid id):", section);
         return false;
       }
 
       return true;
     })
     .map((section) => {
-      console.log("✅ Valid section:", section.__component, section.id);
+      logger.info("✅ Valid section:", section.__component, section.id);
       return section;
     });
 }

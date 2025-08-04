@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { getPageBySlug, getPageMetadata } from '@/lib/strapi/pages'
 import { renderSection, debugSectionTypes } from '@/components/sections'
 import type { Page, DynamicZoneSection } from '@/types/strapi'
+import { logger } from '@/lib/logger'
 
 type TwitterCardType = 'summary' | 'summary_large_image' | 'app' | 'player'
 
@@ -43,7 +44,7 @@ export async function generateMetadata(): Promise<Metadata> {
       },
     }
   } catch (error) {
-    console.error('💥 Error generating motivation metadata:', error)
+      logger.error({ err: error }, 'Error generating motivation metadata')
     return {
       title: 'Motivation',
       description: 'Warum wir uns für Ihre Gesundheit einsetzen',
@@ -51,14 +52,14 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
-export default async function MotivationPage() {
-  let pageData: Page | null = null
+  export default async function MotivationPage() {
+    let pageData: Page | null = null
 
-  try {
-    pageData = await getPageBySlug('motivation')
-  } catch (error) {
-    console.error('💥 Error loading motivation page:', error)
-  }
+    try {
+      pageData = await getPageBySlug('motivation')
+    } catch (error) {
+      logger.error({ err: error }, 'Error loading motivation page')
+    }
 
   if (!pageData) {
     notFound()
@@ -77,9 +78,9 @@ export default async function MotivationPage() {
         typeof section.id === 'number' &&
         section.id > 0
 
-      if (!isValid) {
-        console.warn('Skipping invalid section in motivation page:', section)
-      }
+        if (!isValid) {
+          logger.warn('Skipping invalid section in motivation page:', section)
+        }
 
       return isValid
     }) || []
