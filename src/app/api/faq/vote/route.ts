@@ -2,13 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { validateVoteRequest } from "@/lib/faq/validateVoteRequest";
 import { logger } from "@/lib/logger";
+import { redis } from "@/lib/redis";
 
 const STRAPI_BASE_URL =
   process.env.STRAPI_API_URL || process.env.NEXT_PUBLIC_STRAPI_URL || "";
 
-// Rate limiting store (in production, use Redis or database)
-const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
-const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
+const RATE_LIMIT_WINDOW = 60; // 1 minute in seconds
 const RATE_LIMIT_MAX_REQUESTS = 10; // 10 votes per minute per IP
 
 // Vote request interface
@@ -36,33 +35,16 @@ interface FAQData {
   notHelpfulCount?: number;
 }
 
-// Rate limiting function
-function checkRateLimit(clientIP: string): boolean {
-  const now = Date.now();
-  const clientData = rateLimitStore.get(clientIP);
+// Rate limiting function using Redis
+async function checkRateLimit(clientIP: string): Promise<boolean> {
+  const key = `faq_vote:${clientIP}`;
+  const requestCount = await redis.incr(key);
 
-  if (!clientData) {
-    rateLimitStore.set(clientIP, {
-      count: 1,
-      resetTime: now + RATE_LIMIT_WINDOW,
-    });
-    return true;
+  if (requestCount === 1) {
+    await redis.expire(key, RATE_LIMIT_WINDOW);
   }
 
-  if (now > clientData.resetTime) {
-    rateLimitStore.set(clientIP, {
-      count: 1,
-      resetTime: now + RATE_LIMIT_WINDOW,
-    });
-    return true;
-  }
-
-  if (clientData.count >= RATE_LIMIT_MAX_REQUESTS) {
-    return false;
-  }
-
-  clientData.count++;
-  return true;
+  return requestCount <= RATE_LIMIT_MAX_REQUESTS;
 }
 
 // Get client IP address
@@ -141,7 +123,7 @@ export async function POST(
     const clientIP = getClientIP(request);
 
     // Check rate limit
-    if (!checkRateLimit(clientIP)) {
+    if (!(await checkRateLimit(clientIP))) {
       return NextResponse.json(
         {
           success: false,

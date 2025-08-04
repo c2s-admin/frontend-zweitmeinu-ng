@@ -1,6 +1,7 @@
 import { describe, test, expect } from "bun:test";
 import { NextRequest } from "next/server";
 import { POST, GET } from "../app/api/faq/vote/route";
+import { redis } from "@/lib/redis";
 import { validateVoteRequest } from "@/lib/faq/validateVoteRequest";
 
 // Tests for validateVoteRequest
@@ -80,7 +81,7 @@ describe("POST /api/faq/vote", () => {
     expect(json.error).toBe("Invalid vote value");
   });
 
-  test("rate limits requests exceeding 10 per minute", async () => {
+  test("rate limits requests exceeding 10 per minute with parallel requests", async () => {
     const originalFetch = globalThis.fetch;
     globalThis.fetch = async () =>
       new Response(
@@ -91,27 +92,37 @@ describe("POST /api/faq/vote", () => {
         },
       );
 
+    await redis.flushall();
+
     const makeRequest = () =>
-      new NextRequest(baseUrl, {
-        method: "POST",
-        body: JSON.stringify({ faqId: 1, isHelpful: true }),
-        headers: {
-          "content-type": "application/json",
-          "x-forwarded-for": "9.9.9.9",
-        },
-      });
+      POST(
+        new NextRequest(baseUrl, {
+          method: "POST",
+          body: JSON.stringify({ faqId: 1, isHelpful: true }),
+          headers: {
+            "content-type": "application/json",
+            "x-forwarded-for": "9.9.9.9",
+          },
+        }),
+      );
 
-    for (let i = 0; i < 10; i++) {
-      const res = await POST(makeRequest());
-      expect(res.status).toBe(200);
-    }
+    const responses = await Promise.all(
+      Array.from({ length: 11 }, () => makeRequest()),
+    );
 
-    const res = await POST(makeRequest());
-    expect(res.status).toBe(429);
-    const json = (await res.json()) as { error?: string };
+    const successCount = responses.filter((r) => r.status === 200).length;
+    const rateLimited = responses.filter((r) => r.status === 429).length;
+
+    expect(successCount).toBe(10);
+    expect(rateLimited).toBe(1);
+
+    const json = (await responses.find((r) => r.status === 429)!.json()) as {
+      error?: string;
+    };
     expect(json.error).toBe("Rate limit exceeded");
 
     globalThis.fetch = originalFetch;
+    await redis.flushall();
   });
 });
 
