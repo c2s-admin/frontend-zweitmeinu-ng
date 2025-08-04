@@ -404,7 +404,7 @@ export function isRealStorySection(
 export function convertRealSiteToExpected(
   realSite: RealSiteConfiguration,
 ): unknown {
-  logger.info("🔄 Converting real site config:", realSite);
+  logger.info({ realSite }, "🔄 Converting real site config");
   const STRAPI_ORIGIN = (process.env.NEXT_PUBLIC_STRAPI_URL || "").replace(
     /\/api$/,
     "",
@@ -452,11 +452,11 @@ export function convertRealSiteToExpected(
               realSite.navigation.mainNavigation?.map(
                 (
                   item: {
-                    id: string
-                    label: string
-                    url: string
-                    type?: string
-                    subItems?: Array<{ label: string; url: string }>
+                    id: string;
+                    label: string;
+                    url: string;
+                    type?: string;
+                    subItems?: Array<{ label: string; url: string }>;
                   },
                   index: number,
                 ) => ({
@@ -466,7 +466,10 @@ export function convertRealSiteToExpected(
                   isExternal: item.type === "external",
                   children:
                     item.subItems?.map(
-                      (subItem: { label: string; url: string }, subIndex: number) => ({
+                      (
+                        subItem: { label: string; url: string },
+                        subIndex: number,
+                      ) => ({
                         id: subIndex + 1,
                         label: subItem.label,
                         href: subItem.url,
@@ -497,7 +500,12 @@ export function convertRealSiteToExpected(
               regular: realSite.openingHours.hours?.reduce(
                 (
                   acc: Record<string, string>,
-                  hour: { day: string; isClosed?: boolean; openTime?: string; closeTime?: string },
+                  hour: {
+                    day: string;
+                    isClosed?: boolean;
+                    openTime?: string;
+                    closeTime?: string;
+                  },
                 ) => {
                   const dayKey = hour.day.toLowerCase();
                   acc[dayKey] = hour.isClosed
@@ -576,8 +584,8 @@ export function convertRealSiteToExpected(
 }
 
 export function convertRealPageToExpected(realPage: RealPage): unknown {
-  logger.info("🔄 Converting real page:", realPage.title);
-  logger.info("📦 Real sections:", realPage.sections);
+  logger.info({ title: realPage.title }, "🔄 Converting real page");
+  logger.info({ sections: realPage.sections }, "📦 Real sections");
 
   // Ensure sections exist and are valid
   const validSections = (realPage.sections || []).filter(
@@ -589,12 +597,15 @@ export function convertRealPageToExpected(realPage: RealPage): unknown {
       section.id > 0,
   );
 
-  logger.info("✅ Valid sections after filtering:", validSections.length);
+  logger.info(
+    { count: validSections.length },
+    "✅ Valid sections after filtering",
+  );
 
   // Convert sections to expected format based on their type
   const convertedSections = validSections.map((section) => {
     if (isRealStorySection(section)) {
-      console.log("🎯 Converting story section:", section.id);
+      logger.info({ id: section.id }, "🎯 Converting story section");
       return convertRealStorySectionToExpected(section);
     }
     // Add other section conversions here as needed
@@ -618,7 +629,7 @@ export function convertRealPageToExpected(realPage: RealPage): unknown {
 export function convertRealHeroSlideToExpected(
   realSlide: RealHeroSlide,
 ): unknown {
-  logger.info("🔄 Converting real hero slide:", realSlide.id);
+  logger.info({ id: realSlide.id }, "🔄 Converting real hero slide");
 
   return {
     id: realSlide.id,
@@ -646,7 +657,7 @@ export function convertRealHeroSlideToExpected(
 export function convertRealStorySectionToExpected(
   realStorySection: RealStorySection,
 ): unknown {
-  console.log("🔄 Converting real story section:", realStorySection.id);
+  logger.info({ id: realStorySection.id }, "🔄 Converting real story section");
   const STRAPI_ORIGIN = (process.env.NEXT_PUBLIC_STRAPI_URL || "").replace(
     /\/api$/,
     "",
@@ -659,7 +670,9 @@ export function convertRealStorySectionToExpected(
           data: {
             attributes: {
               url: `${STRAPI_ORIGIN}${realStorySection.image.url}`,
-              alternativeText: realStorySection.image.alternativeText || realStorySection.heading,
+              alternativeText:
+                realStorySection.image.alternativeText ||
+                realStorySection.heading,
               width: realStorySection.image.width,
               height: realStorySection.image.height,
               formats: realStorySection.image.formats,
@@ -675,33 +688,36 @@ export function validateAndConvertSections(
   sections: unknown[],
 ): RealDynamicZoneSection[] {
   if (!Array.isArray(sections)) {
-    logger.warn("⚠️ Sections is not an array:", sections);
+    logger.warn({ sections }, "⚠️ Sections is not an array");
     return [];
   }
 
   return sections
     .filter((section): section is RealDynamicZoneSection => {
       if (!section || typeof section !== "object") {
-        logger.warn("⚠️ Invalid section (not object):", section);
+        logger.warn({ section }, "⚠️ Invalid section (not object)");
         return false;
       }
 
       const sectionObj = section as Record<string, unknown>;
 
       if (typeof sectionObj.__component !== "string") {
-        logger.warn("⚠️ Invalid section (__component missing):", section);
+        logger.warn({ section }, "⚠️ Invalid section (__component missing)");
         return false;
       }
 
       if (typeof sectionObj.id !== "number" || sectionObj.id <= 0) {
-        logger.warn("⚠️ Invalid section (invalid id):", section);
+        logger.warn({ section }, "⚠️ Invalid section (invalid id)");
         return false;
       }
 
       return true;
     })
     .map((section) => {
-      logger.info("✅ Valid section:", section.__component, section.id);
+      logger.info(
+        { component: section.__component, id: section.id },
+        "✅ Valid section",
+      );
       return section;
     });
 }
