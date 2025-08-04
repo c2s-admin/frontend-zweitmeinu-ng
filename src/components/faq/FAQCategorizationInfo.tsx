@@ -17,14 +17,12 @@ import type { CategorizationStats, CategorizationQuality } from '@/lib/strapi/fa
 interface FAQCategorizationInfoProps {
   stats: CategorizationStats
   quality: CategorizationQuality
-  totalCategories: number
   className?: string
 }
 
 export function FAQCategorizationInfo({
   stats,
   quality,
-  totalCategories,
   className
 }: FAQCategorizationInfoProps) {
   const [isExpanded, setIsExpanded] = useState(false)

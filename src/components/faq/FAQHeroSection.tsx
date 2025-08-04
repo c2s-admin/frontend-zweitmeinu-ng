@@ -49,7 +49,7 @@ export function FAQHeroSection({
   const debouncedSearchTerm = useDebounce(localSearchTerm, 300)
 
   // Auto-complete service
-  const { getSuggestions, clearCache, cancelPendingRequests } = useFAQAutoComplete({
+  const { getSuggestions, cancelPendingRequests } = useFAQAutoComplete({
     maxResults: 8,
     minQueryLength: 2,
     debounceMs: 250
@@ -320,7 +320,7 @@ export function FAQHeroSection({
                               </div>
 
                               {/* Suggestions */}
-                              {suggestions.map((suggestion, index) => {
+              {suggestions.map((suggestion) => {
                                 const globalIndex = autoCompleteResults.suggestions.findIndex(s => s.id === suggestion.id)
                                 const isSelected = globalIndex === selectedSuggestionIndex
 

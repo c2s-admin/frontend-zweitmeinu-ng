@@ -38,8 +38,6 @@ export default function HeroCarousel({
   showDots = true,
   showArrows = true,
   pauseOnHover = true,
-  infiniteLoop = true,
-  id,
 }: RealHeroCarousel) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPlaying, setIsPlaying] = useState(autoplay);
@@ -204,7 +202,7 @@ export default function HeroCarousel({
 
             {/* Title */}
             <h1 className="mb-8 animate-slide-up">
-              {currentSlideData.titleLines?.map((line, idx) => (
+              {currentSlideData.titleLines?.map((line) => (
                 <span
                   key={line.id}
                   className={cn(

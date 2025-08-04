@@ -4,7 +4,6 @@ import { useState, useCallback, useEffect } from 'react'
 import {
   groupFAQsByCategory,
   advancedFAQSearch,
-  getFAQsByCategory,
   analyzeCategorizationStrategy,
   analyzeCategorizationQuality,
   type FAQSearchResponse,
@@ -67,9 +66,6 @@ export function FAQPageWrapper({ initialData }: FAQPageWrapperProps) {
   const [searchResults, setSearchResults] = useState<FAQSearchResponse | null>(null)
   const [isSearching, setIsSearching] = useState(false)
   const [isSearchMode, setIsSearchMode] = useState(false)
-
-  // Category-specific FAQ state
-  const [categorizedFAQs, setCategorizedFAQs] = useState<Record<string, FAQ[]>>({})
 
   // Categorization analytics state
   const [categorizationStats, setCategorizationStats] = useState<CategorizationStats | null>(null)
@@ -136,28 +132,6 @@ export function FAQPageWrapper({ initialData }: FAQPageWrapperProps) {
       heroSection.scrollIntoView({ behavior: 'smooth' })
     }
   }, [])
-
-  // Load category-specific FAQs when needed
-  const loadCategoryFAQs = useCallback(async (categorySlug: string) => {
-    if (categorizedFAQs[categorySlug]) {
-      return categorizedFAQs[categorySlug] // Already loaded
-    }
-
-    try {
-      logger.info(`Loading FAQs for category: ${categorySlug}`)
-      const categoryFAQs = await getFAQsByCategory(categorySlug, 15) // Load more per category
-
-      setCategorizedFAQs(prev => ({
-        ...prev,
-        [categorySlug]: categoryFAQs
-      }))
-
-      return categoryFAQs
-    } catch (error) {
-      logger.error({ err: error }, `Error loading FAQs for category ${categorySlug}`)
-      return []
-    }
-  }, [categorizedFAQs])
 
   // Analyze categorization strategy on component mount
   useEffect(() => {
@@ -237,7 +211,6 @@ export function FAQPageWrapper({ initialData }: FAQPageWrapperProps) {
                     <FAQCategorizationInfo
                       stats={categorizationStats}
                       quality={categorizationQuality}
-                      totalCategories={categories.length}
                     />
                   </div>
                 )}
@@ -402,7 +375,6 @@ export function FAQPageWrapper({ initialData }: FAQPageWrapperProps) {
       {/* FAQ CTA Section - Always visible */}
       {ctaSection && (
         <FAQCTASection
-          icon={ctaSection.icon}
           iconColor={ctaSection.iconColor ?? ''}
           title={ctaSection.title}
           description={ctaSection.description ?? ''}

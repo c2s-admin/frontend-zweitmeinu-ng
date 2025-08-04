@@ -15,7 +15,6 @@ export default function ContactForm({
   fields = [],
   submitButtonText = "Nachricht senden",
   successMessage = "Vielen Dank! Ihre Nachricht wurde erfolgreich gesendet.",
-  errorMessage = "Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
 }: ContactFormType) {
   const {
     register,
@@ -51,7 +50,7 @@ export default function ContactForm({
 
       setSubmitStatus("success");
       reset();
-    } catch (err) {
+    } catch {
       setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);

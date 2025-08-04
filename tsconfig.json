@@ -14,6 +14,8 @@
     "jsx": "preserve",
     "jsxImportSource": "same-runtime/dist",
     "incremental": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "plugins": [
       {
         "name": "next"

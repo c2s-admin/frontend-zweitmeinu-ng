@@ -326,7 +326,6 @@ export function FAQSearchResults({
             <div className="space-y-4">
               {results.map((result) => {
                 const isOpen = openItems.has(result.id)
-                const userVote = userVotes[result.id]
 
                 return (
                   <div key={result.id} className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow">

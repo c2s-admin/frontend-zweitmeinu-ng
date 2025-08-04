@@ -4,7 +4,6 @@ export default function Testimonials({
   title,
   subtitle,
   testimonials = [],
-  layout = 'grid'
 }: TestimonialsSectionType) {
   return (
     <section className="section-padding bg-white">

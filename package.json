@@ -6,7 +6,7 @@
     "dev": "next dev -H 0.0.0.0 --turbopack",
     "build": "npm run ts:generate-types && next build",
     "start": "next start",
-    "lint": "bunx tsc --noEmit && next lint",
+    "lint": "bunx tsc --noEmit --noUnusedLocals --noUnusedParameters && next lint",
     "format": "bunx biome format --write",
     "test": "bun test src/__tests__",
     "test:e2e": "playwright test",

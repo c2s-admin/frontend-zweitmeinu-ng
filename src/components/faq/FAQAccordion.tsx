@@ -234,7 +234,6 @@ export function FAQAccordion({ category, faqs }: FAQAccordionProps) {
       <div className="space-y-4">
         {faqs.map((faq) => {
           const isOpen = openItems.has(faq.id)
-          const userVote = userVotes[faq.id]
 
           return (
             <div key={faq.id} className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
