@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { headers } from "next/headers";
+import { validateVoteRequest, VoteRequest } from "./validation";
 
 const STRAPI_BASE_URL =
   process.env.STRAPI_API_URL || process.env.NEXT_PUBLIC_STRAPI_URL || "";
@@ -8,13 +8,6 @@ const STRAPI_BASE_URL =
 const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
 const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
 const RATE_LIMIT_MAX_REQUESTS = 10; // 10 votes per minute per IP
-
-// Vote request interface
-interface VoteRequest {
-  faqId: number;
-  isHelpful: boolean;
-  sessionId?: string;
-}
 
 // Vote response interface
 interface VoteResponse {
@@ -69,25 +62,6 @@ function getClientIP(request: NextRequest): string {
   const real = request.headers.get("x-real-ip");
   const ip = forwarded?.split(",")[0] || real || "unknown";
   return ip;
-}
-
-// Validate vote request
-export function validateVoteRequest(data: unknown): { valid: boolean; error?: string } {
-  if (!data || typeof data !== "object") {
-    return { valid: false, error: "Invalid request body" };
-  }
-
-  const req = data as Partial<VoteRequest>;
-
-  if (typeof req.faqId !== "number" || req.faqId <= 0) {
-    return { valid: false, error: "Invalid FAQ ID" };
-  }
-
-  if (typeof req.isHelpful !== "boolean") {
-    return { valid: false, error: "Invalid vote value" };
-  }
-
-  return { valid: true };
 }
 
 // Fetch current FAQ data from Strapi

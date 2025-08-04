@@ -1,10 +1,7 @@
 import { describe, test, expect } from "bun:test";
 import { NextRequest } from "next/server";
-import {
-  validateVoteRequest,
-  POST,
-  GET,
-} from "../app/api/faq/vote/route";
+import { validateVoteRequest } from "../app/api/faq/vote/validation";
+import { POST, GET } from "../app/api/faq/vote/route";
 
 // Tests for validateVoteRequest
 

@@ -6,10 +6,9 @@ import { Footer } from "@/components/layout/Footer";
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || "";
 const STRAPI_ORIGIN = STRAPI_URL.replace(/\/api$/, "");
-const DEFAULT_FAVICON = new URL(
-  "uploads/favicon_af3459ec0b.ico",
-  STRAPI_ORIGIN,
-).toString();
+const DEFAULT_FAVICON = STRAPI_ORIGIN
+  ? new URL("uploads/favicon_af3459ec0b.ico", STRAPI_ORIGIN).toString()
+  : "/favicon.ico";
 
 export async function generateMetadata(): Promise<Metadata> {
   let siteConfig = null;
