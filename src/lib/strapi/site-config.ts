@@ -116,8 +116,9 @@ export function getFallbackSiteConfig(): SiteConfiguration {
           { id: 1, label: 'Home', href: '/' },
           { id: 2, label: 'Zweitmeinung', href: '/zweitmeinung' },
           { id: 3, label: 'Fachbereiche', href: '/fachbereiche' },
-          { id: 4, label: 'Über uns', href: '/ueber-uns' },
-          { id: 5, label: 'Kontakt', href: '/kontakt' },
+          { id: 4, label: 'Motivation', href: '/motivation' },
+          { id: 5, label: 'Über uns', href: '/ueber-uns' },
+          { id: 6, label: 'Kontakt', href: '/kontakt' },
         ],
         footer: [
           {
