@@ -29,13 +29,10 @@ import {
   Cookie,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { SiteConfiguration } from "@/types/strapi";
+import { useSiteConfig } from "@/hooks/useSiteConfig";
 
-interface FooterProps {
-  siteConfig: SiteConfiguration["attributes"];
-}
-
-export function Footer({ siteConfig }: FooterProps) {
+export function Footer() {
+  const { siteConfig } = useSiteConfig();
   const [email, setEmail] = useState("");
   const [isSubscribing, setIsSubscribing] = useState(false);
   const [subscriptionStatus, setSubscriptionStatus] = useState<
@@ -43,6 +40,8 @@ export function Footer({ siteConfig }: FooterProps) {
   >("idle");
 
   const currentYear = new Date().getFullYear();
+
+  if (!siteConfig) return null;
 
   const handleNewsletterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

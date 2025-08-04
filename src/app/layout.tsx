@@ -4,6 +4,7 @@ import { getCachedSiteConfig } from "@/lib/strapi/site-config";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { logger } from "@/lib/logger";
+import { SWRConfig } from "swr";
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || "";
 const STRAPI_ORIGIN = STRAPI_URL.replace(/\/api$/, "");
@@ -122,13 +123,15 @@ export default async function RootLayout({
         <meta name="theme-color" content="#004166" />
       </head>
       <body className="min-h-screen flex flex-col antialiased">
-        {/* Dynamic Header from Strapi */}
-        <Header siteConfig={siteAttributes} />
+        <SWRConfig value={{ fallback: { "site-config": siteAttributes } }}>
+          {/* Dynamic Header from Strapi */}
+          <Header />
 
-        <main className="flex-grow">{children}</main>
+          <main className="flex-grow">{children}</main>
 
-        {/* Dynamic Footer from Strapi */}
-        <Footer siteConfig={siteAttributes} />
+          {/* Dynamic Footer from Strapi */}
+          <Footer />
+        </SWRConfig>
       </body>
     </html>
   );

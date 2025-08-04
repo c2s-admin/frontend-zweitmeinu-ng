@@ -11,7 +11,7 @@ import Image from "next/image";
 import { logger } from "@/lib/logger";
 import { Menu, X, Phone, ChevronDown, Mail, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { SiteConfiguration } from "@/types/strapi";
+import { useSiteConfig } from "@/hooks/useSiteConfig";
 
 interface TopBarContentItem {
   type: string;
@@ -20,11 +20,8 @@ interface TopBarContentItem {
   icon?: string;
 }
 
-interface HeaderProps {
-  siteConfig: SiteConfiguration["attributes"];
-}
-
-export function Header({ siteConfig }: HeaderProps) {
+export function Header() {
+  const { siteConfig } = useSiteConfig();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<number | null>(null);
   const [logoError, setLogoError] = useState(false);
@@ -33,6 +30,21 @@ export function Header({ siteConfig }: HeaderProps) {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    // Close mobile menu when clicking outside
+    const handleClickOutside = () => {
+      setIsMobileMenuOpen(false);
+      setActiveDropdown(null);
+    };
+
+    if (isMobileMenuOpen) {
+      document.addEventListener("click", handleClickOutside);
+      return () => document.removeEventListener("click", handleClickOutside);
+    }
+  }, [isMobileMenuOpen]);
+
+  if (!siteConfig) return null;
 
   // Helper function to get formatted opening hours with status
   const getOpeningHoursInfo = () => {
@@ -101,19 +113,6 @@ export function Header({ siteConfig }: HeaderProps) {
   };
 
   const openingInfo = mounted ? getOpeningHoursInfo() : null;
-
-  useEffect(() => {
-    // Close mobile menu when clicking outside
-    const handleClickOutside = () => {
-      setIsMobileMenuOpen(false);
-      setActiveDropdown(null);
-    };
-
-    if (isMobileMenuOpen) {
-      document.addEventListener("click", handleClickOutside);
-      return () => document.removeEventListener("click", handleClickOutside);
-    }
-  }, [isMobileMenuOpen]);
 
   const emergencyPhone =
     siteConfig.contact?.emergencyHotline || siteConfig.contact?.phone;
