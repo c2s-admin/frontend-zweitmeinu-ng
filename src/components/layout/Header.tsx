@@ -12,6 +12,13 @@ import { Menu, X, Phone, ChevronDown, Mail, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { SiteConfiguration } from "@/types/strapi";
 
+interface TopBarContentItem {
+  type: string;
+  content: string;
+  style?: string;
+  icon?: string;
+}
+
 interface HeaderProps {
   siteConfig: SiteConfiguration["attributes"];
 }
@@ -123,7 +130,8 @@ export function Header({ siteConfig }: HeaderProps) {
             <div className="flex items-center justify-center md:justify-between">
               {/* Left Side - Contact Info */}
               <div className="flex items-center gap-6 flex-wrap justify-center md:justify-start">
-                {siteConfig.topBar.content?.map((item: any, index: number) => (
+                {siteConfig.topBar.content?.map(
+                  (item: TopBarContentItem, index: number) => (
                   <div key={index}>
                     {item.type === "phone" && (
                       <a

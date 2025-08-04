@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { MEDICAL_DICTIONARY } from "@/lib/medical-dictionary";
+import type { FAQ } from "@/lib/strapi/faq";
 
 const STRAPI_BASE_URL =
   process.env.STRAPI_API_URL || process.env.NEXT_PUBLIC_STRAPI_URL || "";
@@ -220,9 +221,9 @@ async function getFAQSuggestions(
     }
 
     const data = await response.json();
-    const faqs = data.data || [];
+    const faqs: FAQ[] = data.data || [];
 
-    return faqs.map((faq: any, index: number) => ({
+    return faqs.map((faq, index) => ({
       id: `faq-${faq.id}`,
       text: faq.question,
       type: "faq" as const,

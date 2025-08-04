@@ -103,6 +103,7 @@ export function renderSection(section: DynamicZoneSection, index?: number) {
     // Simple component rendering with type assertion
     return (
       <div key={uniqueKey}>
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
         <Component {...(section as any)} />
       </div>
     )
