@@ -2,6 +2,9 @@ import SimplePage from './page-simple'
 import { getPageBySlug, getPageMetadata } from '@/lib/strapi/pages'
 import { renderSection, debugSectionTypes } from '@/components/sections'
 import type { Metadata } from 'next'
+import type { Page, DynamicZoneSection } from '@/types/strapi'
+
+type TwitterCardType = 'summary' | 'summary_large_image' | 'app' | 'player'
 
 export async function generateMetadata(): Promise<Metadata> {
   try {
@@ -26,7 +29,7 @@ export async function generateMetadata(): Promise<Metadata> {
         images: metadata.ogImage ? [metadata.ogImage] : undefined,
       },
       twitter: {
-        card: metadata.twitterCard as any,
+        card: metadata.twitterCard as TwitterCardType,
         title: metadata.ogTitle,
         description: metadata.ogDescription,
         images: metadata.ogImage ? [metadata.ogImage] : undefined,
@@ -49,7 +52,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  let pageData = null
+  let pageData: Page | null = null
 
   try {
     console.log('🏠 Loading homepage data...')
@@ -185,26 +188,30 @@ export default async function HomePage() {
   }
 
   // Ensure sections exist and are valid
-  const validSections = pageData.attributes.sections?.filter((section: any) => {
-    const isValid = section &&
-                   typeof section === 'object' &&
-                   section.__component &&
-                   typeof section.id === 'number' &&
-                   section.id > 0
+  const validSections =
+    pageData.attributes.sections?.filter(
+      (section): section is DynamicZoneSection => {
+        const isValid =
+          section !== null &&
+          typeof section === 'object' &&
+          typeof section.__component === 'string' &&
+          typeof section.id === 'number' &&
+          section.id > 0
 
-    if (!isValid) {
-      console.warn('⚠️ Invalid section found:', section)
-    }
+        if (!isValid) {
+          console.warn('⚠️ Invalid section found:', section)
+        }
 
-    return isValid
-  }) || []
+        return isValid
+      }
+    ) || []
 
   console.log(`✅ Rendering ${validSections.length} valid sections`)
 
   return (
     <>
       {/* Render Dynamic Sections from Strapi */}
-      {validSections.map((section: any, index: number) => {
+      {validSections.map((section, index) => {
         try {
           return renderSection(section, index)
         } catch (error) {

@@ -240,11 +240,11 @@ export function trackVotePattern(faqId: number, isHelpful: boolean, category?: s
 }
 
 // Validation helpers
-export function isValidFaqId(faqId: any): faqId is number {
+export function isValidFaqId(faqId: unknown): faqId is number {
   return typeof faqId === 'number' && faqId > 0 && Number.isInteger(faqId)
 }
 
-export function isValidVoteValue(isHelpful: any): isHelpful is boolean {
+export function isValidVoteValue(isHelpful: unknown): isHelpful is boolean {
   return typeof isHelpful === 'boolean'
 }
 
