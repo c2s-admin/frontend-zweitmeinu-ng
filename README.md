@@ -87,6 +87,9 @@ cp .env.example .env.local
 
 # Configure your Strapi API endpoint
 NEXT_PUBLIC_STRAPI_URL=https://your-strapi-instance/api
+# hCaptcha configuration (optional)
+NEXT_PUBLIC_HCAPTCHA_SITE_KEY=your-hcaptcha-site-key
+HCAPTCHA_SECRET_KEY=your-hcaptcha-secret
 ```
 
 The frontend builds image and favicon URLs by replacing the `/api` segment of
@@ -157,6 +160,14 @@ POST /api/faq/vote
 - Rate limiting (10 votes/min)
 - Local storage persistence
 - Analytics tracking
+
+### Contact Messages
+```bash
+POST /api/contact-messages
+```
+**Features:**
+- hCaptcha verification (when configured)
+- Rate limiting (5 messages/hour)
 
 ---
 

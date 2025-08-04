@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Send } from "lucide-react";
 import { useForm, Controller } from "react-hook-form";
 import type { RegisterOptions } from "react-hook-form";
 import type { ContactForm as ContactFormType } from "@/types/strapi";
 import type { ContactFormData, FormFieldConfig } from "@/types/contact";
 import getValidationRules from "@/lib/contact/validation";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
 
 export default function ContactForm({
   title,
@@ -28,15 +29,20 @@ export default function ContactForm({
   const [submitStatus, setSubmitStatus] = useState<
     "idle" | "success" | "error"
   >("idle");
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const hcaptchaRef = useRef<HCaptcha>(null);
+  const hcaptchaSiteKey = process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY;
 
   const onSubmit = async (data: ContactFormData) => {
+    if (hcaptchaSiteKey && !captchaToken) return;
     setIsSubmitting(true);
     setSubmitStatus("idle");
     try {
+      const payload = { ...data, captchaToken };
       const response = await fetch("/api/contact-messages", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
@@ -49,6 +55,8 @@ export default function ContactForm({
       setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);
+      setCaptchaToken(null);
+      hcaptchaRef.current?.resetCaptcha();
     }
   };
 
@@ -161,9 +169,19 @@ export default function ContactForm({
                   );
                 })}
 
+                {hcaptchaSiteKey && (
+                  <HCaptcha
+                    sitekey={hcaptchaSiteKey}
+                    onVerify={setCaptchaToken}
+                    onExpire={() => setCaptchaToken(null)}
+                    ref={hcaptchaRef}
+                  />
+                )}
                 <button
                   type="submit"
-                  disabled={isSubmitting}
+                  disabled={
+                    isSubmitting || (hcaptchaSiteKey ? !captchaToken : false)
+                  }
                   className="btn-primary w-full flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? (
