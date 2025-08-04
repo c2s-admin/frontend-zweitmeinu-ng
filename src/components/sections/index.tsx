@@ -2,7 +2,6 @@ import React from 'react'
 import dynamic from 'next/dynamic'
 import type { DynamicZoneSection, HeroSection, MedicalSpecialtiesGrid, TextBlock, ServicesGrid, TestimonialsSection, NewsSection, FAQSection, ContactForm, StatsSection, TeamSection, CTASection } from '@/types/strapi'
 import type { RealHeroCarousel } from '@/types/strapi-real'
-// Section component type definitions are centralized in '@/types/sections'
 import type { SectionComponentType, SectionComponents } from '@/types/sections'
 
 // Loading components for better performance

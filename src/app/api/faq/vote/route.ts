@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { headers } from "next/headers";
 import { validateVoteRequest } from "@/lib/faq/validateVoteRequest";
 
 const STRAPI_BASE_URL =
