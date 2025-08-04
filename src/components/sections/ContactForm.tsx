@@ -3,7 +3,9 @@
 import { useState } from "react";
 import { Send } from "lucide-react";
 import { useForm, Controller } from "react-hook-form";
+import type { RegisterOptions } from "react-hook-form";
 import type { ContactForm as ContactFormType } from "@/types/strapi";
+import type { ContactFormData, FormFieldConfig } from "@/types/contact";
 import getValidationRules from "@/lib/contact/validation";
 
 export default function ContactForm({
@@ -20,14 +22,14 @@ export default function ContactForm({
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<Record<string, unknown>>();
+  } = useForm<ContactFormData>();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<
     "idle" | "success" | "error"
   >("idle");
 
-  const onSubmit = async (data: Record<string, unknown>) => {
+  const onSubmit = async (data: ContactFormData) => {
     setIsSubmitting(true);
 
     // Simulate form submission
@@ -75,15 +77,22 @@ export default function ContactForm({
             ) : (
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 {fields.map((field) => {
-                  const rules = getValidationRules(field);
-                  const error = errors[field.name as string];
+                  const fieldConfig = {
+                    ...field,
+                    name: field.name as keyof ContactFormData,
+                    required: field.required ?? false,
+                  } as FormFieldConfig;
+                  const rules = getValidationRules(
+                    fieldConfig,
+                  ) as RegisterOptions<ContactFormData, keyof ContactFormData>;
+                  const error = errors[fieldConfig.name];
                   const baseClasses =
                     "w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:border-transparent";
                   const className = `${baseClasses} ${error ? "border-red-500 focus:ring-red-500" : "border-healthcare-border focus:ring-healthcare-primary-light"}`;
                   return (
                     <div key={field.id}>
                       <label
-                        htmlFor={field.name}
+                        htmlFor={fieldConfig.name}
                         className="block text-sm font-medium text-healthcare-primary mb-2"
                       >
                         {field.label}
@@ -94,23 +103,24 @@ export default function ContactForm({
 
                       {field.type === "textarea" ? (
                         <textarea
-                          id={field.name}
+                          id={fieldConfig.name}
                           placeholder={field.placeholder}
                           rows={4}
                           className={className}
-                          {...register(field.name as string, rules)}
+                          {...register(fieldConfig.name, rules)}
                         />
                       ) : field.type === "select" ? (
                         <Controller
-                          name={field.name as string}
+                          name={fieldConfig.name}
                           control={control}
                           defaultValue=""
                           rules={rules}
                           render={({ field: ctrl }) => (
                             <select
                               {...ctrl}
-                              id={field.name}
+                              id={fieldConfig.name}
                               className={className}
+                              value={ctrl.value as string}
                             >
                               <option value="">Bitte wählen...</option>
                               {field.options?.map((option) => (
@@ -124,10 +134,10 @@ export default function ContactForm({
                       ) : (
                         <input
                           type={field.type}
-                          id={field.name}
+                          id={fieldConfig.name}
                           placeholder={field.placeholder}
                           className={className}
-                          {...register(field.name as string, rules)}
+                          {...register(fieldConfig.name, rules)}
                         />
                       )}
                       {error && (
