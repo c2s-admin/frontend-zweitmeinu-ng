@@ -302,11 +302,102 @@ export interface RealCTAButton {
   icon?: string;
 }
 
+// Real Story Section Structure
+export interface RealStorySection extends RealDynamicZoneSection {
+  __component: "sections.story-section";
+  heading: string;
+  content: string;
+  image?: {
+    id: number;
+    documentId: string;
+    name: string;
+    alternativeText?: string;
+    caption?: string;
+    width: number;
+    height: number;
+    formats?: {
+      thumbnail?: {
+        ext: string;
+        url: string;
+        hash: string;
+        mime: string;
+        name: string;
+        path?: string;
+        size: number;
+        width: number;
+        height: number;
+        sizeInBytes: number;
+      };
+      small?: {
+        ext: string;
+        url: string;
+        hash: string;
+        mime: string;
+        name: string;
+        path?: string;
+        size: number;
+        width: number;
+        height: number;
+        sizeInBytes: number;
+      };
+      medium?: {
+        ext: string;
+        url: string;
+        hash: string;
+        mime: string;
+        name: string;
+        path?: string;
+        size: number;
+        width: number;
+        height: number;
+        sizeInBytes: number;
+      };
+      large?: {
+        ext: string;
+        url: string;
+        hash: string;
+        mime: string;
+        name: string;
+        path?: string;
+        size: number;
+        width: number;
+        height: number;
+        sizeInBytes: number;
+      };
+    };
+    hash: string;
+    ext: string;
+    mime: string;
+    size: number;
+    url: string;
+    previewUrl?: string;
+    provider: string;
+    provider_metadata?: unknown;
+    createdAt: string;
+    updatedAt: string;
+    publishedAt: string;
+  };
+  imagePosition: "left" | "right";
+  imageAlt?: string;
+  quote?: string;
+  quotePosition?: string;
+  quoteHighlight?: boolean;
+  attribution?: string;
+  sectionTitle?: string;
+  description?: string;
+}
+
 // Type guards
 export function isRealHeroCarousel(
   section: RealDynamicZoneSection,
 ): section is RealHeroCarousel {
   return section.__component === "sections.hero-carousel";
+}
+
+export function isRealStorySection(
+  section: RealDynamicZoneSection,
+): section is RealStorySection {
+  return section.__component === "sections.story-section";
 }
 
 // Conversion functions to transform real data to expected format
@@ -500,12 +591,22 @@ export function convertRealPageToExpected(realPage: RealPage): unknown {
 
   logger.info("✅ Valid sections after filtering:", validSections.length);
 
+  // Convert sections to expected format based on their type
+  const convertedSections = validSections.map((section) => {
+    if (isRealStorySection(section)) {
+      console.log("🎯 Converting story section:", section.id);
+      return convertRealStorySectionToExpected(section);
+    }
+    // Add other section conversions here as needed
+    return section;
+  });
+
   return {
     id: realPage.id,
     attributes: {
       title: realPage.title,
       slug: realPage.slug,
-      sections: validSections,
+      sections: convertedSections,
       seo: realPage.seo,
       createdAt: realPage.createdAt,
       updatedAt: realPage.updatedAt,
@@ -539,6 +640,33 @@ export function convertRealHeroSlideToExpected(
     backgroundImage: realSlide.backgroundImage,
     overlayOpacity: realSlide.overlayOpacity,
     ctaButtons: realSlide.ctaButtons || [],
+  };
+}
+
+export function convertRealStorySectionToExpected(
+  realStorySection: RealStorySection,
+): unknown {
+  console.log("🔄 Converting real story section:", realStorySection.id);
+  const STRAPI_ORIGIN = (process.env.NEXT_PUBLIC_STRAPI_URL || "").replace(
+    /\/api$/,
+    "",
+  );
+
+  return {
+    ...realStorySection,
+    image: realStorySection.image
+      ? {
+          data: {
+            attributes: {
+              url: `${STRAPI_ORIGIN}${realStorySection.image.url}`,
+              alternativeText: realStorySection.image.alternativeText || realStorySection.heading,
+              width: realStorySection.image.width,
+              height: realStorySection.image.height,
+              formats: realStorySection.image.formats,
+            },
+          },
+        }
+      : undefined,
   };
 }
 

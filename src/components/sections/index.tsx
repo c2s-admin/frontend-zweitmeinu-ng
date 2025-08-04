@@ -1,6 +1,6 @@
 import React from 'react'
 import dynamic from 'next/dynamic'
-import type { DynamicZoneSection, HeroSection, MedicalSpecialtiesGrid, TextBlock, ServicesGrid, TestimonialsSection, NewsSection, FAQSection, ContactForm, StatsSection, TeamSection, CTASection } from '@/types/strapi'
+import type { DynamicZoneSection, HeroSection, MedicalSpecialtiesGrid, TextBlock, ServicesGrid, TestimonialsSection, NewsSection, FAQSection, ContactForm, StatsSection, TeamSection, CTASection, MotivationHeroSection, StorySection, CoreValuesSection, MissionStatementSection } from '@/types/strapi'
 import type { RealHeroCarousel } from '@/types/strapi-real'
 import type { SectionComponentType, SectionComponents } from '@/types/sections'
 import { logger } from '@/lib/logger'
@@ -61,6 +61,19 @@ export const sectionComponents = {
   }),
   'sections.cta': dynamic<CTASection>(() => import('./CTASection'), {
     loading: LoadingSmall
+  }),
+  // Motivation Page Specific Components
+  'sections.hero-section': dynamic<MotivationHeroSection>(() => import('./MotivationHero'), {
+    loading: LoadingHero
+  }),
+  'sections.story-section': dynamic<StorySection>(() => import('./StorySection'), {
+    loading: LoadingSection
+  }),
+  'sections.core-values': dynamic<CoreValuesSection>(() => import('./CoreValues'), {
+    loading: LoadingSection
+  }),
+  'sections.mission-statement': dynamic<MissionStatementSection>(() => import('./MissionStatement'), {
+    loading: LoadingSection
   }),
 } as unknown as SectionComponents
 

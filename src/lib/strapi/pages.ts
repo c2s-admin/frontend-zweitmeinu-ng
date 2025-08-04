@@ -16,6 +16,7 @@ export async function getPageBySlug(slug: string): Promise<Page | null> {
       'sections.slides.ctaButtons',
       'sections.slides.backgroundImage',
       'sections.slides.badge',
+      'sections.image', // Added for StorySection images
       'seo'
     ])
 

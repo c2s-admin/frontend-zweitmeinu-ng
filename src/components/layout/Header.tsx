@@ -28,6 +28,11 @@ export function Header({ siteConfig }: HeaderProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<number | null>(null);
   const [logoError, setLogoError] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Helper function to get formatted opening hours with status
   const getOpeningHoursInfo = () => {
@@ -95,7 +100,7 @@ export function Header({ siteConfig }: HeaderProps) {
     };
   };
 
-  const openingInfo = getOpeningHoursInfo();
+  const openingInfo = mounted ? getOpeningHoursInfo() : null;
 
   useEffect(() => {
     // Close mobile menu when clicking outside
@@ -191,7 +196,7 @@ export function Header({ siteConfig }: HeaderProps) {
               {/* Right Side - Enhanced Opening Hours & Info */}
               <div className="hidden lg:flex items-center gap-4 text-xs">
                 {/* Enhanced Opening Hours from Strapi */}
-                {openingInfo && (
+                {mounted && openingInfo && (
                   <>
                     <div className="flex items-center gap-3">
                       {/* Status Indicator */}
@@ -249,7 +254,7 @@ export function Header({ siteConfig }: HeaderProps) {
                 </span>
 
                 {/* Debug Info */}
-                {process.env.NODE_ENV === "development" && (
+                {process.env.NODE_ENV === "development" && mounted && (
                   <>
                     <div className="text-white/60">|</div>
                     <span className="text-white/60 text-xs">
