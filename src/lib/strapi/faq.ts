@@ -1,5 +1,10 @@
-import type { StrapiResponse } from "@/types/strapi";
-import type { Page } from "@/types/strapi";
+import type {
+  StrapiResponse,
+  Page,
+  SEOComponent,
+  StrapiMedia,
+  Service,
+} from "@/types/strapi";
 
 const BASE_URL = process.env.NEXT_PUBLIC_STRAPI_URL || "";
 
@@ -31,15 +36,15 @@ export interface FAQ {
   notHelpfulCount: number;
   videoUrl?: string;
   lastUpdated?: string;
-  attachments?: any;
-  seo?: any;
+  attachments?: StrapiMedia[];
+  seo?: SEOComponent;
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
   category?: FAQCategory;
-  relatedServices?: any[];
-  relatedExperts?: any[];
-  relatedFaqs?: any[];
+  relatedServices?: Service[];
+  relatedExperts?: Expert[];
+  relatedFaqs?: FAQ[];
 }
 
 export interface FAQPage {
@@ -47,8 +52,8 @@ export interface FAQPage {
   documentId: string;
   title: string;
   slug: string;
-  sections: any[];
-  seo?: any;
+  sections: Page["attributes"]["sections"];
+  seo?: SEOComponent;
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
@@ -76,6 +81,13 @@ export interface FAQSearchResponse {
   searchTerm: string;
   suggestions?: string[];
   categories: { [key: string]: number };
+}
+
+export interface Expert {
+  id: number;
+  documentId: string;
+  name: string;
+  slug: string;
 }
 
 // Enhanced Categorization Strategy Types
@@ -802,7 +814,7 @@ function categorizeByKeywordsEnhanced(
   for (const [categorySlug, keywords] of Object.entries(CATEGORY_KEYWORDS)) {
     const { primary, secondary, confidence: baseConfidence } = keywords;
     let score = 0;
-    let matchDetails: string[] = [];
+    const matchDetails: string[] = [];
 
     primary.forEach((keyword) => {
       const keywordLower = keyword.toLowerCase();
