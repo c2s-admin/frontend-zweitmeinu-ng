@@ -23,7 +23,7 @@ const eslintConfig = [
       "@typescript-eslint/no-explicit-any": "warn",
       "react/no-unescaped-entities": "off",
       "@next/next/no-img-element": "off",
-      "jsx-a11y/alt-text": "off",
+      "jsx-a11y/alt-text": "warn",
     },
   },
 ];
