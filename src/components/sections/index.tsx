@@ -1,6 +1,8 @@
 import React from 'react'
 import dynamic from 'next/dynamic'
-import type { DynamicZoneSection } from '@/types/strapi'
+import type { DynamicZoneSection, HeroSection, MedicalSpecialtiesGrid, TextBlock, ServicesGrid, TestimonialsSection, NewsSection, FAQSection, ContactForm, StatsSection, TeamSection, CTASection } from '@/types/strapi'
+import type { RealHeroCarousel } from '@/types/strapi-real'
+import type { SectionComponentType, SectionComponents } from '@/types/sections'
 
 // Loading components for better performance
 const LoadingHero = () => (
@@ -23,43 +25,43 @@ const LoadingSmall = () => (
 
 // Simplified dynamic loading
 export const sectionComponents = {
-  'sections.hero': dynamic(() => import('./HeroSection'), {
+  'sections.hero': dynamic<HeroSection>(() => import('./HeroSection'), {
     loading: LoadingHero
   }),
-  'sections.hero-carousel': dynamic(() => import('./HeroCarousel'), {
+  'sections.hero-carousel': dynamic<RealHeroCarousel>(() => import('./HeroCarousel'), {
     loading: LoadingHero
   }),
-  'sections.medical-specialties-grid': dynamic(() => import('./MedicalSpecialtiesGrid'), {
+  'sections.medical-specialties-grid': dynamic<MedicalSpecialtiesGrid>(() => import('./MedicalSpecialtiesGrid'), {
     loading: LoadingSection
   }),
-  'sections.text-block': dynamic(() => import('./TextBlock'), {
+  'sections.text-block': dynamic<TextBlock>(() => import('./TextBlock'), {
     loading: LoadingSmall
   }),
-  'sections.services-grid': dynamic(() => import('./ServicesGrid'), {
+  'sections.services-grid': dynamic<ServicesGrid>(() => import('./ServicesGrid'), {
     loading: LoadingSection
   }),
-  'sections.testimonials': dynamic(() => import('./Testimonials'), {
+  'sections.testimonials': dynamic<TestimonialsSection>(() => import('./Testimonials'), {
     loading: LoadingSection
   }),
-  'sections.news': dynamic(() => import('./NewsSection'), {
+  'sections.news': dynamic<NewsSection>(() => import('./NewsSection'), {
     loading: LoadingSection
   }),
-  'sections.faq': dynamic(() => import('./FAQSection'), {
+  'sections.faq': dynamic<FAQSection>(() => import('./FAQSection'), {
     loading: LoadingSection
   }),
-  'sections.contact-form': dynamic(() => import('./ContactForm'), {
+  'sections.contact-form': dynamic<ContactForm>(() => import('./ContactForm'), {
     loading: LoadingSection
   }),
-  'sections.stats': dynamic(() => import('./StatsSection'), {
+  'sections.stats': dynamic<StatsSection>(() => import('./StatsSection'), {
     loading: LoadingSection
   }),
-  'sections.team': dynamic(() => import('./TeamSection'), {
+  'sections.team': dynamic<TeamSection>(() => import('./TeamSection'), {
     loading: LoadingSection
   }),
-  'sections.cta': dynamic(() => import('./CTASection'), {
+  'sections.cta': dynamic<CTASection>(() => import('./CTASection'), {
     loading: LoadingSmall
   }),
-}
+} as unknown as SectionComponents
 
 export function renderSection(section: DynamicZoneSection, index?: number) {
   // Validate section data
@@ -68,7 +70,7 @@ export function renderSection(section: DynamicZoneSection, index?: number) {
     return null
   }
 
-  const Component = sectionComponents[section.__component as keyof typeof sectionComponents]
+  const Component = sectionComponents[section.__component as SectionComponentType]
 
   if (!Component) {
     console.warn(`Unknown section component: ${section.__component}`)
@@ -103,8 +105,7 @@ export function renderSection(section: DynamicZoneSection, index?: number) {
     // Simple component rendering with type assertion
     return (
       <div key={uniqueKey}>
-        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-        <Component {...(section as any)} />
+        <Component {...(section as unknown as Record<string, unknown>)} />
       </div>
     )
   } catch (error) {
@@ -177,5 +178,3 @@ export function debugSectionTypes(sections: DynamicZoneSection[]): void {
   }
 }
 
-// Export type definitions for components
-export type SectionComponentType = keyof typeof sectionComponents

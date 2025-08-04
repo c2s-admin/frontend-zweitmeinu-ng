@@ -510,6 +510,45 @@ export interface FormField {
   }>
 }
 
+// Stats Section
+export interface StatsSection extends DynamicZoneSection {
+  __component: 'sections.stats'
+  title?: string
+  subtitle?: string
+  stats?: Array<{
+    id: number
+    number: string
+    label: string
+    icon?: string
+  }>
+}
+
+// Team Section
+export interface TeamSection extends DynamicZoneSection {
+  __component: 'sections.team'
+  title?: string
+  subtitle?: string
+  teamMembers?: Array<{
+    id: number
+    name: string
+    position: string
+    bio?: string
+    image?: {
+      data: StrapiMedia
+    }
+  }>
+}
+
+// CTA Section
+export interface CTASection extends DynamicZoneSection {
+  __component: 'sections.cta'
+  title?: string
+  subtitle?: string
+  description?: string
+  ctaButtons?: CTAButton[]
+  backgroundColor?: string
+}
+
 // Utility types for type guards
 export type AnyStrapiSection =
   | HeroSection
@@ -521,3 +560,6 @@ export type AnyStrapiSection =
   | NewsSection
   | FAQSection
   | ContactForm
+  | StatsSection
+  | TeamSection
+  | CTASection

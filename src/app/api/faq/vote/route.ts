@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { validateVoteRequest, VoteRequest } from "./validation";
+import { validateVoteRequest } from "@/lib/faq/validateVoteRequest";
 
 const STRAPI_BASE_URL =
   process.env.STRAPI_API_URL || process.env.NEXT_PUBLIC_STRAPI_URL || "";
@@ -8,6 +8,13 @@ const STRAPI_BASE_URL =
 const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
 const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
 const RATE_LIMIT_MAX_REQUESTS = 10; // 10 votes per minute per IP
+
+// Vote request interface
+interface VoteRequest {
+  faqId: number;
+  isHelpful: boolean;
+  sessionId?: string;
+}
 
 // Vote response interface
 interface VoteResponse {
