@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { validateVoteRequest } from "@/lib/faq/validateVoteRequest";
+import { logger } from "@/lib/logger";
 
 const STRAPI_BASE_URL =
   process.env.STRAPI_API_URL || process.env.NEXT_PUBLIC_STRAPI_URL || "";
@@ -89,7 +90,7 @@ async function getCurrentFAQData(faqId: number): Promise<FAQData | null> {
     const data = await response.json();
     return (data.data as FAQData) ?? null;
   } catch (error) {
-    console.error("Error fetching FAQ data:", error);
+    logger.error({ err: error }, "Error fetching FAQ data");
     throw error;
   }
 }
@@ -115,13 +116,13 @@ async function updateFAQVotes(
     });
 
     if (!response.ok) {
-      console.error(`Failed to update FAQ votes: ${response.statusText}`);
+      logger.error(`Failed to update FAQ votes: ${response.statusText}`);
       return false;
     }
 
     return true;
   } catch (error) {
-    console.error("Error updating FAQ votes:", error);
+    logger.error({ err: error }, "Error updating FAQ votes");
     return false;
   }
 }
@@ -213,8 +214,8 @@ export async function POST(
     }
 
     // Log vote for analytics
-    console.log(
-      `📊 FAQ Vote: FAQ ${faqId} - ${isHelpful ? "Helpful" : "Not Helpful"} - IP: ${clientIP}`,
+    logger.info(
+      `FAQ Vote: FAQ ${faqId} - ${isHelpful ? "Helpful" : "Not Helpful"} - IP: ${clientIP}`,
     );
 
     // Return success response
@@ -232,7 +233,7 @@ export async function POST(
       { status: 200 },
     );
   } catch (error) {
-    console.error("Error in FAQ vote API:", error);
+    logger.error({ err: error }, "Error in FAQ vote API");
 
     return NextResponse.json(
       {
@@ -291,7 +292,7 @@ export async function GET(
       { status: 200 },
     );
   } catch (error) {
-    console.error("Error getting FAQ vote stats:", error);
+    logger.error({ err: error }, "Error getting FAQ vote stats");
 
     return NextResponse.json<VoteResponse>(
       { success: false, error: "Internal server error" },

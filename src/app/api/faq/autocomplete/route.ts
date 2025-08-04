@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { MEDICAL_DICTIONARY } from "@/lib/medical-dictionary";
 import type { FAQ } from "@/lib/strapi/faq";
+import { logger } from "@/lib/logger";
 
 const STRAPI_BASE_URL =
   process.env.STRAPI_API_URL || process.env.NEXT_PUBLIC_STRAPI_URL || "";
@@ -233,7 +234,7 @@ async function getFAQSuggestions(
       score: 0.9 - index * 0.1, // Decreasing score based on order
     }));
   } catch (error) {
-    console.error("Error fetching FAQ suggestions:", error);
+    logger.error({ err: error }, "Error fetching FAQ suggestions");
     return [];
   }
 }
@@ -323,13 +324,13 @@ export async function GET(
     });
 
     // Log for analytics
-    console.log(
-      `🔍 Auto-complete: "${query}" -> ${uniqueSuggestions.length} suggestions (${response.processingTime}ms)`,
+    logger.info(
+      `Auto-complete: "${query}" -> ${uniqueSuggestions.length} suggestions (${response.processingTime}ms)`,
     );
 
     return NextResponse.json(response);
   } catch (error) {
-    console.error("Error in auto-complete API:", error);
+    logger.error({ err: error }, "Error in auto-complete API");
 
     return NextResponse.json(
       {

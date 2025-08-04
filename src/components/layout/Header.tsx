@@ -8,6 +8,7 @@ const STRAPI_ORIGIN = (process.env.NEXT_PUBLIC_STRAPI_URL || "").replace(
 );
 import Link from "next/link";
 import Image from "next/image";
+import { logger } from "@/lib/logger";
 import { Menu, X, Phone, ChevronDown, Mail, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { SiteConfiguration } from "@/types/strapi";
@@ -290,13 +291,13 @@ export function Header({ siteConfig }: HeaderProps) {
                     className="transition-transform duration-300 group-hover:scale-105 max-h-14 w-auto animate-pulse-slow"
                     priority
                     onError={() => {
-                      console.warn(
+                      logger.warn(
                         "Logo image failed to load, switching to text fallback",
                       );
                       setLogoError(true);
                     }}
                     onLoad={() => {
-                      console.log("Logo image loaded successfully");
+                      logger.info("Logo image loaded successfully");
                     }}
                   />
                 ) : (

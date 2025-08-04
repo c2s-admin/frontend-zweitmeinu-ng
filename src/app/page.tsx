@@ -3,6 +3,7 @@ import { getPageBySlug, getPageMetadata } from '@/lib/strapi/pages'
 import { renderSection, debugSectionTypes } from '@/components/sections'
 import type { Metadata } from 'next'
 import type { Page, DynamicZoneSection } from '@/types/strapi'
+import { logger } from '@/lib/logger'
 
 type TwitterCardType = 'summary' | 'summary_large_image' | 'app' | 'player'
 
@@ -43,7 +44,7 @@ export async function generateMetadata(): Promise<Metadata> {
       },
     }
   } catch (error) {
-    console.error('💥 Error generating homepage metadata:', error)
+      logger.error({ err: error }, 'Error generating homepage metadata')
     return {
       title: 'Startseite',
       description: 'Willkommen bei Zweitmeinung.ng - Ihre medizinische Zweitmeinung online'
@@ -54,13 +55,13 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function HomePage() {
   let pageData: Page | null = null
 
-  try {
-    console.log('🏠 Loading homepage data...')
-    pageData = await getPageBySlug('home')
-    console.log('📊 Homepage data loaded:', pageData ? 'SUCCESS' : 'FAILED')
-  } catch (error) {
-    console.error('💥 Error loading homepage:', error)
-  }
+    try {
+      logger.info('Loading homepage data...')
+      pageData = await getPageBySlug('home')
+      logger.info(`Homepage data loaded: ${pageData ? 'SUCCESS' : 'FAILED'}`)
+    } catch (error) {
+      logger.error({ err: error }, 'Error loading homepage')
+    }
 
   // Debug section types in development
   if (process.env.NODE_ENV === 'development' && pageData?.attributes.sections) {
@@ -69,14 +70,14 @@ export default async function HomePage() {
 
   // Test with real data if available
   if (!pageData || !pageData.attributes.sections || pageData.attributes.sections.length === 0) {
-    console.log('🔧 Using simplified page - no sections available')
+      logger.warn('Using simplified page - no sections available')
     return <SimplePage />
   }
 
-  console.log('🎯 Using real Strapi data!')
+    logger.info('Using real Strapi data!')
 
   if (!pageData) {
-    console.log('⚠️ No homepage data available, using fallback content')
+      logger.warn('No homepage data available, using fallback content')
 
     return (
       <div className="min-h-screen bg-healthcare-background">
@@ -199,14 +200,14 @@ export default async function HomePage() {
           section.id > 0
 
         if (!isValid) {
-          console.warn('⚠️ Invalid section found:', section)
+            logger.warn('Invalid section found:', section)
         }
 
         return isValid
       }
     ) || []
 
-  console.log(`✅ Rendering ${validSections.length} valid sections`)
+    logger.info(`Rendering ${validSections.length} valid sections`)
 
   return (
     <>
@@ -215,7 +216,7 @@ export default async function HomePage() {
         try {
           return renderSection(section, index)
         } catch (error) {
-          console.error(`💥 Error rendering section ${section.__component}:`, error)
+            logger.error({ err: error }, `Error rendering section ${section.__component}`)
           return (
             <div key={`error-section-${section.id}-${index}`} className="section-padding bg-red-50">
               <div className="container-custom text-center">

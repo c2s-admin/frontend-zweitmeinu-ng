@@ -1,6 +1,8 @@
 // Real Strapi Data Structure (without attributes wrapper)
 // Based on actual API exploration of zweitmeinu-ng site
 
+import { logger } from "@/lib/logger";
+
 export interface StrapiResponse<T> {
   data: T;
   meta?: {
@@ -311,7 +313,7 @@ export function isRealHeroCarousel(
 export function convertRealSiteToExpected(
   realSite: RealSiteConfiguration,
 ): unknown {
-  console.log("🔄 Converting real site config:", realSite);
+  logger.info("🔄 Converting real site config:", realSite);
   const STRAPI_ORIGIN = (process.env.NEXT_PUBLIC_STRAPI_URL || "").replace(
     /\/api$/,
     "",
@@ -483,8 +485,8 @@ export function convertRealSiteToExpected(
 }
 
 export function convertRealPageToExpected(realPage: RealPage): unknown {
-  console.log("🔄 Converting real page:", realPage.title);
-  console.log("📦 Real sections:", realPage.sections);
+  logger.info("🔄 Converting real page:", realPage.title);
+  logger.info("📦 Real sections:", realPage.sections);
 
   // Ensure sections exist and are valid
   const validSections = (realPage.sections || []).filter(
@@ -496,7 +498,7 @@ export function convertRealPageToExpected(realPage: RealPage): unknown {
       section.id > 0,
   );
 
-  console.log("✅ Valid sections after filtering:", validSections.length);
+  logger.info("✅ Valid sections after filtering:", validSections.length);
 
   return {
     id: realPage.id,
@@ -515,7 +517,7 @@ export function convertRealPageToExpected(realPage: RealPage): unknown {
 export function convertRealHeroSlideToExpected(
   realSlide: RealHeroSlide,
 ): unknown {
-  console.log("🔄 Converting real hero slide:", realSlide.id);
+  logger.info("🔄 Converting real hero slide:", realSlide.id);
 
   return {
     id: realSlide.id,
@@ -545,33 +547,33 @@ export function validateAndConvertSections(
   sections: unknown[],
 ): RealDynamicZoneSection[] {
   if (!Array.isArray(sections)) {
-    console.warn("⚠️ Sections is not an array:", sections);
+    logger.warn("⚠️ Sections is not an array:", sections);
     return [];
   }
 
   return sections
     .filter((section): section is RealDynamicZoneSection => {
       if (!section || typeof section !== "object") {
-        console.warn("⚠️ Invalid section (not object):", section);
+        logger.warn("⚠️ Invalid section (not object):", section);
         return false;
       }
 
       const sectionObj = section as Record<string, unknown>;
 
       if (typeof sectionObj.__component !== "string") {
-        console.warn("⚠️ Invalid section (__component missing):", section);
+        logger.warn("⚠️ Invalid section (__component missing):", section);
         return false;
       }
 
       if (typeof sectionObj.id !== "number" || sectionObj.id <= 0) {
-        console.warn("⚠️ Invalid section (invalid id):", section);
+        logger.warn("⚠️ Invalid section (invalid id):", section);
         return false;
       }
 
       return true;
     })
     .map((section) => {
-      console.log("✅ Valid section:", section.__component, section.id);
+      logger.info("✅ Valid section:", section.__component, section.id);
       return section;
     });
 }

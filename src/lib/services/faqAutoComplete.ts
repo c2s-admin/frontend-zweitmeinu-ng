@@ -3,6 +3,8 @@
 // FAQ Auto-Complete Service
 // Handles intelligent auto-complete suggestions with medical terms, fuzzy search, and performance optimization
 
+import { logger } from '@/lib/logger'
+
 export interface AutoCompleteSuggestion {
   id: string
   text: string
@@ -104,7 +106,7 @@ export class FAQAutoCompleteService {
         const cacheKey = `${query.toLowerCase()}-${this.options.maxResults}`
         const cached = autoCompleteCache.get(cacheKey)
         if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
-          console.log('🎯 Auto-complete cache hit:', query)
+          logger.info('Auto-complete cache hit:', query)
           return cached.data
         }
       }
@@ -130,7 +132,7 @@ export class FAQAutoCompleteService {
 
       if (!response.ok) {
         if (response.status === 429) {
-          console.warn('⚠️ Auto-complete rate limit exceeded')
+            logger.warn('Auto-complete rate limit exceeded')
           return null
         }
         throw new Error(`Auto-complete API error: ${response.statusText}`)
@@ -147,7 +149,7 @@ export class FAQAutoCompleteService {
         })
       }
 
-      console.log(`🔍 Auto-complete fetched: "${query}" -> ${data.totalSuggestions} suggestions (${data.processingTime}ms)`)
+        logger.info(`Auto-complete fetched: "${query}" -> ${data.totalSuggestions} suggestions (${data.processingTime}ms)`)
       return data
 
     } catch (error) {
@@ -156,7 +158,7 @@ export class FAQAutoCompleteService {
         return null
       }
 
-      console.error('Error fetching auto-complete suggestions:', error)
+        logger.error({ err: error }, 'Error fetching auto-complete suggestions')
       return null
     }
   }
@@ -164,7 +166,7 @@ export class FAQAutoCompleteService {
   // Clear cache
   clearCache(): void {
     autoCompleteCache.clear()
-    console.log('🧹 Auto-complete cache cleared')
+    logger.info('Auto-complete cache cleared')
   }
 
   // Update options
@@ -261,7 +263,7 @@ export function trackAutoCompleteUsage(
     timestamp: new Date().toISOString()
   }
 
-  console.log('📊 Auto-complete analytics:', analyticsEvent)
+  logger.info('Auto-complete analytics:', analyticsEvent)
 
   // In production, send to your analytics service:
   // analytics.track('faq_autocomplete_usage', analyticsEvent)
@@ -300,11 +302,11 @@ export function measureAutoCompletePerformance<T>(
     const endTime = performance.now()
     const duration = endTime - startTime
 
-    console.log(`⚡ Auto-complete ${operationName}: ${duration.toFixed(2)}ms`)
+    logger.info(`Auto-complete ${operationName}: ${duration.toFixed(2)}ms`)
 
     // Log slow operations
     if (duration > 500) {
-      console.warn(`🐌 Slow auto-complete ${operationName}: ${duration.toFixed(2)}ms`)
+      logger.warn(`Slow auto-complete ${operationName}: ${duration.toFixed(2)}ms`)
     }
 
     return result

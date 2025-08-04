@@ -5,6 +5,7 @@ import type {
   StrapiMedia,
   Service,
 } from "@/types/strapi";
+import { logger } from "@/lib/logger";
 
 const BASE_URL = process.env.NEXT_PUBLIC_STRAPI_URL || "";
 
@@ -239,16 +240,16 @@ export async function getFAQPage(): Promise<FAQPage | null> {
     );
 
     if (!response.ok) {
-      console.error("Failed to fetch FAQ page:", response.statusText);
+      logger.error("Failed to fetch FAQ page:", response.statusText);
       return null;
     }
 
     const data: StrapiResponse<FAQPage[]> = await response.json();
-    console.log("✅ FAQ Page loaded:", data.data?.[0]?.title);
+    logger.info("✅ FAQ Page loaded:", data.data?.[0]?.title);
 
     return data.data?.[0] || null;
   } catch (error) {
-    console.error("Error fetching FAQ page:", error);
+    logger.error("Error fetching FAQ page:", error);
     return null;
   }
 }
@@ -266,16 +267,16 @@ export async function getFAQCategories(): Promise<FAQCategory[]> {
     );
 
     if (!response.ok) {
-      console.error("Failed to fetch FAQ categories:", response.statusText);
+      logger.error("Failed to fetch FAQ categories:", response.statusText);
       return [];
     }
 
     const data: StrapiResponse<FAQCategory[]> = await response.json();
-    console.log("✅ FAQ Categories loaded:", data.data?.length);
+    logger.info("✅ FAQ Categories loaded:", data.data?.length);
 
     return data.data || [];
   } catch (error) {
-    console.error("Error fetching FAQ categories:", error);
+    logger.error("Error fetching FAQ categories:", error);
     return [];
   }
 }
@@ -293,16 +294,16 @@ export async function getFAQs(limit = 25): Promise<FAQ[]> {
     );
 
     if (!response.ok) {
-      console.error("Failed to fetch FAQs:", response.statusText);
+      logger.error("Failed to fetch FAQs:", response.statusText);
       return [];
     }
 
     const data: StrapiResponse<FAQ[]> = await response.json();
-    console.log("✅ FAQs loaded:", data.data?.length);
+    logger.info("✅ FAQs loaded:", data.data?.length);
 
     return data.data || [];
   } catch (error) {
-    console.error("Error fetching FAQs:", error);
+    logger.error("Error fetching FAQs:", error);
     return [];
   }
 }
@@ -315,7 +316,7 @@ export async function getFAQsByCategory(
 
   try {
     // Enhanced Strapi category relations test with detailed logging
-    console.log(`🔍 Enhanced category test for ${categorySlug}...`);
+    logger.info(`🔍 Enhanced category test for ${categorySlug}...`);
 
     // Try comprehensive Strapi filter approaches
     const filterApproaches = [
@@ -342,7 +343,7 @@ export async function getFAQsByCategory(
 
     for (const approach of filterApproaches) {
       try {
-        console.log(`   🔎 Trying: ${approach.description}...`);
+        logger.info(`   🔎 Trying: ${approach.description}...`);
         const response = await fetch(
           `${BASE_URL}/faqs?${approach.query}&sort=priority:desc,helpfulCount:desc&pagination[limit]=${limit}&populate=category`,
           {
@@ -357,29 +358,29 @@ export async function getFAQsByCategory(
           if (data.data && data.data.length > 0) {
             strapiFilteredFAQs = data.data;
             successfulMethod = approach.description;
-            console.log(
+            logger.info(
               `   ✅ SUCCESS via ${approach.description}: ${strapiFilteredFAQs.length} FAQs found`,
             );
 
             // Log the category relations found
             strapiFilteredFAQs.forEach((faq, i) => {
               if (faq.category) {
-                console.log(
+                logger.info(
                   `     FAQ ${i + 1}: ${faq.category.name} (${faq.category.slug})`,
                 );
               }
             });
             break;
           } else {
-            console.log(`     ⚪ No results via ${approach.description}`);
+            logger.info(`     ⚪ No results via ${approach.description}`);
           }
         } else {
-          console.log(
+          logger.info(
             `     ❌ Failed via ${approach.description}: ${response.status}`,
           );
         }
       } catch (error) {
-        console.log(
+        logger.info(
           `     ⚠️ Error via ${approach.description}: ${error instanceof Error ? error.message : "Unknown error"}`,
         );
       }
@@ -388,14 +389,14 @@ export async function getFAQsByCategory(
     // If Strapi relations worked, use them
     if (strapiFilteredFAQs.length > 0) {
       const processingTime = Date.now() - startTime;
-      console.log(
+      logger.info(
         `🎯 API Relations SUCCESS for ${categorySlug}: ${strapiFilteredFAQs.length} FAQs (${processingTime}ms) via ${successfulMethod}`,
       );
       return strapiFilteredFAQs;
     }
 
     // Enhanced fallback to keyword-based filtering
-    console.log(
+    logger.info(
       `🔄 API relations failed for ${categorySlug}, using enhanced keyword categorization...`,
     );
 
@@ -404,7 +405,7 @@ export async function getFAQsByCategory(
       CATEGORY_KEYWORDS[categorySlug as keyof typeof CATEGORY_KEYWORDS];
 
     if (!categoryKeywords) {
-      console.warn(`❌ No keywords defined for category: ${categorySlug}`);
+      logger.warn(`❌ No keywords defined for category: ${categorySlug}`);
       return [];
     }
 
@@ -430,7 +431,7 @@ export async function getFAQsByCategory(
 
       if (score > 0) {
         keywordFilteredFAQs.push({ ...faq, matchScore: score });
-        console.log(`   🔤 Keyword match: FAQ ${faq.id} score=${score}`);
+        logger.info(`   🔤 Keyword match: FAQ ${faq.id} score=${score}`);
       }
     });
 
@@ -450,13 +451,13 @@ export async function getFAQsByCategory(
       .map(({ matchScore, ...faq }) => faq); // Remove matchScore from final result
 
     const processingTime = Date.now() - startTime;
-    console.log(
+    logger.info(
       `✅ Keyword categorization for ${categorySlug}: ${sortedFAQs.length} FAQs (${processingTime}ms, confidence: ${confidence})`,
     );
 
     return sortedFAQs;
   } catch (error) {
-    console.error("Error fetching FAQs by category:", error);
+    logger.error("Error fetching FAQs by category:", error);
     return [];
   }
 }
@@ -479,12 +480,12 @@ export async function searchFAQs(
     );
 
     if (!response.ok) {
-      console.error("Failed to search FAQs:", response.statusText);
+      logger.error("Failed to search FAQs:", response.statusText);
       return [];
     }
 
     const data: StrapiResponse<FAQ[]> = await response.json();
-    console.log(
+    logger.info(
       "✅ FAQ search results:",
       data.data?.length,
       "for term:",
@@ -493,7 +494,7 @@ export async function searchFAQs(
 
     return data.data || [];
   } catch (error) {
-    console.error("Error searching FAQs:", error);
+    logger.error("Error searching FAQs:", error);
     return [];
   }
 }
@@ -603,7 +604,7 @@ export async function advancedFAQSearch(
 
     const suggestions = generateSearchSuggestions(term, sortedResults);
 
-    console.log("✅ Advanced FAQ search completed:", {
+    logger.info("✅ Advanced FAQ search completed:", {
       term,
       totalResults: sortedResults.length,
       questionMatches: questionResults.length,
@@ -618,7 +619,7 @@ export async function advancedFAQSearch(
       categories: categoryDistribution,
     };
   } catch (error) {
-    console.error("Error in advanced FAQ search:", error);
+    logger.error("Error in advanced FAQ search:", error);
     return {
       results: [],
       total: 0,
@@ -652,7 +653,7 @@ export function analyzeCategorizationStrategy(
       relationQuality += 1.0;
       categoryDistribution[faq.category.slug] =
         (categoryDistribution[faq.category.slug] || 0) + 1;
-      console.log(
+      logger.info(
         `🎯 API Relation: FAQ ${faq.id} → ${faq.category.name} (${faq.category.slug})`,
       );
     } else {
@@ -662,12 +663,12 @@ export function analyzeCategorizationStrategy(
         relationQuality += keywordResult.confidence;
         categoryDistribution[keywordResult.category] =
           (categoryDistribution[keywordResult.category] || 0) + 1;
-        console.log(
+        logger.info(
           `🔤 Keyword Match: FAQ ${faq.id} → ${keywordResult.category} (confidence: ${keywordResult.confidence.toFixed(2)})`,
         );
       } else {
         uncategorized++;
-        console.log(
+        logger.info(
           `⚠️ Uncategorized: FAQ ${faq.id} - "${faq.question.substring(0, 50)}..."`,
         );
       }
@@ -708,35 +709,35 @@ export function analyzeCategorizationStrategy(
     categoryDistribution,
   };
 
-  console.log("📊 Enhanced Categorization Strategy Analysis:");
-  console.log(
+  logger.info("📊 Enhanced Categorization Strategy Analysis:");
+  logger.info(
     `   📡 Strapi API Relations: ${strapiRelations}/${faqs.length} (${Math.round(strapiCoverage * 100)}%)`,
   );
-  console.log(
+  logger.info(
     `   🔤 Keyword-based: ${keywordBased}/${faqs.length} (${Math.round((keywordBased / faqs.length) * 100)}%)`,
   );
-  console.log(
+  logger.info(
     `   ❓ Uncategorized: ${uncategorized}/${faqs.length} (${Math.round((uncategorized / faqs.length) * 100)}%)`,
   );
-  console.log(`   🎯 Overall Confidence: ${Math.round(confidence * 100)}%`);
-  console.log(`   🏥 API Health: ${apiHealth}`);
-  console.log(`   ⚡ Processing Time: ${processingTime}ms`);
-  console.log(`   💾 Cache Efficiency: ${cacheHits} entries`);
+  logger.info(`   🎯 Overall Confidence: ${Math.round(confidence * 100)}%`);
+  logger.info(`   🏥 API Health: ${apiHealth}`);
+  logger.info(`   ⚡ Processing Time: ${processingTime}ms`);
+  logger.info(`   💾 Cache Efficiency: ${cacheHits} entries`);
 
   if (strapiCoverage === 0) {
-    console.log(
+    logger.info(
       "💡 Recommendation: FAQ category relations are not set up in Strapi. Consider:",
     );
-    console.log("   1. Setting up category relations in Strapi CMS");
-    console.log("   2. Current keyword-based system provides good coverage");
+    logger.info("   1. Setting up category relations in Strapi CMS");
+    logger.info("   2. Current keyword-based system provides good coverage");
   } else if (strapiCoverage < 0.5) {
-    console.log(
+    logger.info(
       "💡 Recommendation: Partial Strapi relations detected. Consider:",
     );
-    console.log("   1. Completing category assignments in Strapi");
-    console.log("   2. Hybrid approach working well");
+    logger.info("   1. Completing category assignments in Strapi");
+    logger.info("   2. Hybrid approach working well");
   } else {
-    console.log("✅ Excellent: High API relation coverage detected!");
+    logger.info("✅ Excellent: High API relation coverage detected!");
   }
 
   return stats;
@@ -748,7 +749,7 @@ export function intelligentCategorizeFrequentlyAskedQuestion(
 ): string | null {
   const cached = CATEGORIZATION_CACHE.get(faq.id);
   if (cached && Date.now() - cached.timestamp < cached.ttl) {
-    console.log(
+    logger.info(
       `💾 Cache hit for FAQ ${faq.id}: ${cached.categorySlug} (${cached.method})`,
     );
     return cached.categorySlug;
@@ -766,7 +767,7 @@ export function intelligentCategorizeFrequentlyAskedQuestion(
       categorySlug = faq.category.slug;
       method = "relations";
       confidence = 1.0;
-      console.log(`🎯 Strong API relation for FAQ ${faq.id}: ${categorySlug}`);
+      logger.info(`🎯 Strong API relation for FAQ ${faq.id}: ${categorySlug}`);
     }
   }
 
@@ -777,15 +778,15 @@ export function intelligentCategorizeFrequentlyAskedQuestion(
       categorySlug = keywordResult.category;
       method = "keywords";
       confidence = keywordResult.confidence;
-      console.log(
+      logger.info(
         `🔤 Keyword categorization for FAQ ${faq.id}: ${categorySlug} (confidence: ${confidence.toFixed(2)})`,
       );
     } else if (keywordResult) {
-      console.log(
+      logger.info(
         `⚠️ Low confidence keyword match for FAQ ${faq.id}: ${keywordResult.category} (${keywordResult.confidence.toFixed(2)}) - skipping`,
       );
     } else {
-      console.log(
+      logger.info(
         `❌ No categorization possible for FAQ ${faq.id}: "${faq.question.substring(0, 50)}..."`,
       );
     }
@@ -847,7 +848,7 @@ function categorizeByKeywordsEnhanced(
         1.0,
       );
 
-      console.log(
+      logger.info(
         `🔍 Category ${categorySlug}: score=${score}, matches=[${matchDetails.join(", ")}], confidence=${finalConfidence.toFixed(3)}`,
       );
 
@@ -1095,7 +1096,7 @@ export function groupFAQsByCategory(
   });
 
   const stats = analyzeCategorizationStrategy(faqs);
-  console.log(
+  logger.info(
     `🧠 Using categorization strategy: ${stats.method} (API Health: ${stats.apiHealth})`,
   );
 
@@ -1108,28 +1109,28 @@ export function groupFAQsByCategory(
 
   const processingTime = Date.now() - startTime;
 
-  console.log("📊 FAQ categorization results:");
+  logger.info("📊 FAQ categorization results:");
   Object.entries(grouped).forEach(([slug, faqList]) => {
     if (faqList.length > 0) {
-      console.log(`  ✅ ${slug}: ${faqList.length} FAQs`);
+      logger.info(`  ✅ ${slug}: ${faqList.length} FAQs`);
     } else {
-      console.log(`  ⚪ ${slug}: 0 FAQs`);
+      logger.info(`  ⚪ ${slug}: 0 FAQs`);
     }
   });
 
-  console.log(`⚡ Grouping completed in ${processingTime}ms`);
-  console.log(
+  logger.info(`⚡ Grouping completed in ${processingTime}ms`);
+  logger.info(
     `💾 Cache efficiency: ${stats.cacheHits}/${stats.totalFAQs} entries`,
   );
 
   const quality = analyzeCategorizationQuality(faqs, categories);
-  console.log(
+  logger.info(
     `🎯 Categorization Quality Score: ${Math.round(quality.overallScore * 100)}%`,
   );
 
   if (quality.recommendations.length > 0) {
-    console.log("💡 Recommendations:");
-    quality.recommendations.forEach((rec) => console.log(`   - ${rec}`));
+    logger.info("💡 Recommendations:");
+    quality.recommendations.forEach((rec) => logger.info(`   - ${rec}`));
   }
 
   return grouped;
