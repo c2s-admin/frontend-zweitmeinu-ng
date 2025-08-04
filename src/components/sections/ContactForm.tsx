@@ -1,39 +1,42 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Send } from 'lucide-react'
-import type { ContactForm as ContactFormType } from '@/types/strapi'
+import { useState } from "react";
+import { Send } from "lucide-react";
+import { useForm, Controller } from "react-hook-form";
+import type { ContactForm as ContactFormType } from "@/types/strapi";
+import getValidationRules from "@/lib/contact/validation";
 
 export default function ContactForm({
   title,
   subtitle,
   fields = [],
-  submitButtonText = 'Nachricht senden',
-  successMessage = 'Vielen Dank! Ihre Nachricht wurde erfolgreich gesendet.',
-  errorMessage = 'Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.'
+  submitButtonText = "Nachricht senden",
+  successMessage = "Vielen Dank! Ihre Nachricht wurde erfolgreich gesendet.",
+  errorMessage = "Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
 }: ContactFormType) {
-  const [formData, setFormData] = useState<Record<string, string>>({})
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const {
+    register,
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<Record<string, unknown>>();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<
+    "idle" | "success" | "error"
+  >("idle");
+
+  const onSubmit = async (data: Record<string, unknown>) => {
+    setIsSubmitting(true);
 
     // Simulate form submission
     setTimeout(() => {
-      setIsSubmitting(false)
-      setSubmitStatus('success')
-      setFormData({})
-    }, 2000)
-  }
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData(prev => ({
-      ...prev,
-      [e.target.name]: e.target.value
-    }))
-  }
+      setIsSubmitting(false);
+      setSubmitStatus("success");
+      reset();
+    }, 2000);
+  };
 
   return (
     <section className="section-padding bg-healthcare-background">
@@ -42,9 +45,7 @@ export default function ContactForm({
           {(title || subtitle) && (
             <div className="text-center mb-16">
               {title && (
-                <h2 className="text-healthcare-primary mb-6">
-                  {title}
-                </h2>
+                <h2 className="text-healthcare-primary mb-6">{title}</h2>
               )}
               {subtitle && (
                 <p className="text-xl text-healthcare-text-muted max-w-3xl mx-auto">
@@ -55,7 +56,7 @@ export default function ContactForm({
           )}
 
           <div className="bg-white rounded-2xl shadow-xl p-8">
-            {submitStatus === 'success' ? (
+            {submitStatus === "success" ? (
               <div className="text-center py-12">
                 <div className="text-6xl mb-4">✅</div>
                 <h3 className="text-2xl font-semibold text-healthcare-primary mb-4">
@@ -72,55 +73,71 @@ export default function ContactForm({
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-6">
-                {fields.map((field) => (
-                  <div key={field.id}>
-                    <label htmlFor={field.name} className="block text-sm font-medium text-healthcare-primary mb-2">
-                      {field.label}
-                      {field.required && <span className="text-red-500 ml-1">*</span>}
-                    </label>
-
-                    {field.type === 'textarea' ? (
-                      <textarea
-                        id={field.name}
-                        name={field.name}
-                        required={field.required}
-                        placeholder={field.placeholder}
-                        value={formData[field.name] || ''}
-                        onChange={handleChange}
-                        rows={4}
-                        className="w-full px-4 py-3 border border-healthcare-border rounded-lg focus:outline-none focus:ring-2 focus:ring-healthcare-primary-light focus:border-transparent"
-                      />
-                    ) : field.type === 'select' ? (
-                      <select
-                        id={field.name}
-                        name={field.name}
-                        required={field.required}
-                        value={formData[field.name] || ''}
-                        onChange={handleChange}
-                        className="w-full px-4 py-3 border border-healthcare-border rounded-lg focus:outline-none focus:ring-2 focus:ring-healthcare-primary-light focus:border-transparent"
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+                {fields.map((field) => {
+                  const rules = getValidationRules(field);
+                  const error = errors[field.name as string];
+                  const baseClasses =
+                    "w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:border-transparent";
+                  const className = `${baseClasses} ${error ? "border-red-500 focus:ring-red-500" : "border-healthcare-border focus:ring-healthcare-primary-light"}`;
+                  return (
+                    <div key={field.id}>
+                      <label
+                        htmlFor={field.name}
+                        className="block text-sm font-medium text-healthcare-primary mb-2"
                       >
-                        <option value="">Bitte wählen...</option>
-                        {field.options?.map((option) => (
-                          <option key={option.value} value={option.value}>
-                            {option.label}
-                          </option>
-                        ))}
-                      </select>
-                    ) : (
-                      <input
-                        type={field.type}
-                        id={field.name}
-                        name={field.name}
-                        required={field.required}
-                        placeholder={field.placeholder}
-                        value={formData[field.name] || ''}
-                        onChange={handleChange}
-                        className="w-full px-4 py-3 border border-healthcare-border rounded-lg focus:outline-none focus:ring-2 focus:ring-healthcare-primary-light focus:border-transparent"
-                      />
-                    )}
-                  </div>
-                ))}
+                        {field.label}
+                        {field.required && (
+                          <span className="text-red-500 ml-1">*</span>
+                        )}
+                      </label>
+
+                      {field.type === "textarea" ? (
+                        <textarea
+                          id={field.name}
+                          placeholder={field.placeholder}
+                          rows={4}
+                          className={className}
+                          {...register(field.name as string, rules)}
+                        />
+                      ) : field.type === "select" ? (
+                        <Controller
+                          name={field.name as string}
+                          control={control}
+                          defaultValue=""
+                          rules={rules}
+                          render={({ field: ctrl }) => (
+                            <select
+                              {...ctrl}
+                              id={field.name}
+                              className={className}
+                            >
+                              <option value="">Bitte wählen...</option>
+                              {field.options?.map((option) => (
+                                <option key={option.value} value={option.value}>
+                                  {option.label}
+                                </option>
+                              ))}
+                            </select>
+                          )}
+                        />
+                      ) : (
+                        <input
+                          type={field.type}
+                          id={field.name}
+                          placeholder={field.placeholder}
+                          className={className}
+                          {...register(field.name as string, rules)}
+                        />
+                      )}
+                      {error && (
+                        <p className="text-red-500 text-sm mt-1">
+                          {error.message as string}
+                        </p>
+                      )}
+                    </div>
+                  );
+                })}
 
                 <button
                   type="submit"
@@ -145,5 +162,5 @@ export default function ContactForm({
         </div>
       </div>
     </section>
-  )
+  );
 }
