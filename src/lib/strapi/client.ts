@@ -7,9 +7,19 @@ export class StrapiClient {
       process.env.STRAPI_API_URL || process.env.NEXT_PUBLIC_STRAPI_URL || "";
   }
 
-  async get<T>(endpoint: string, params?: Record<string, any>): Promise<T> {
+  async get<T>(
+    endpoint: string,
+    params?: Record<string, string | number | boolean | undefined>,
+  ): Promise<T> {
     const queryString = params
-      ? `?${new URLSearchParams(params).toString()}`
+      ? `?${new URLSearchParams(
+          Object.entries(params).reduce<Record<string, string>>(
+            (acc, [key, value]) => {
+              if (value !== undefined) acc[key] = String(value);
+              return acc;
+            },
+          {}),
+        ).toString()}`
       : "";
     const url = `${this.baseUrl}${endpoint}${queryString}`;
 
@@ -38,7 +48,10 @@ export class StrapiClient {
     }
   }
 
-  async post<T>(endpoint: string, body?: any): Promise<T> {
+  async post<T, B extends Record<string, unknown>>(
+    endpoint: string,
+    body?: B,
+  ): Promise<T> {
     const url = `${this.baseUrl}${endpoint}`;
 
     try {
@@ -56,7 +69,7 @@ export class StrapiClient {
         );
       }
 
-      const data = await response.json();
+      const data = (await response.json()) as T;
       return data;
     } catch (error) {
       console.error("Strapi API Error:", error);
@@ -82,9 +95,9 @@ export class StrapiClient {
    * NOTE: This Strapi instance uses a different data structure without 'sites' relation
    */
   buildSiteFilter(
-    additionalFilters?: Record<string, any>,
-  ): Record<string, any> {
-    const filters: Record<string, any> = {
+    additionalFilters?: Record<string, unknown>,
+  ): Record<string, unknown> {
+    const filters: Record<string, unknown> = {
       // Note: Based on exploration, this Strapi doesn't use site filtering on pages
       // Pages are already filtered by the specific site setup
     };

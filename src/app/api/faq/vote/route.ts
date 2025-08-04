@@ -29,6 +29,11 @@ interface VoteResponse {
   message?: string;
 }
 
+interface FAQData {
+  helpfulCount?: number;
+  notHelpfulCount?: number;
+}
+
 // Rate limiting function
 function checkRateLimit(clientIP: string): boolean {
   const now = Date.now();
@@ -67,16 +72,18 @@ function getClientIP(request: NextRequest): string {
 }
 
 // Validate vote request
-function validateVoteRequest(data: any): { valid: boolean; error?: string } {
+export function validateVoteRequest(data: unknown): { valid: boolean; error?: string } {
   if (!data || typeof data !== "object") {
     return { valid: false, error: "Invalid request body" };
   }
 
-  if (typeof data.faqId !== "number" || data.faqId <= 0) {
+  const req = data as Partial<VoteRequest>;
+
+  if (typeof req.faqId !== "number" || req.faqId <= 0) {
     return { valid: false, error: "Invalid FAQ ID" };
   }
 
-  if (typeof data.isHelpful !== "boolean") {
+  if (typeof req.isHelpful !== "boolean") {
     return { valid: false, error: "Invalid vote value" };
   }
 
@@ -84,7 +91,7 @@ function validateVoteRequest(data: any): { valid: boolean; error?: string } {
 }
 
 // Fetch current FAQ data from Strapi
-async function getCurrentFAQData(faqId: number): Promise<any> {
+async function getCurrentFAQData(faqId: number): Promise<FAQData | null> {
   try {
     const response = await fetch(`${STRAPI_BASE_URL}/faqs/${faqId}`, {
       headers: {
@@ -98,7 +105,7 @@ async function getCurrentFAQData(faqId: number): Promise<any> {
     }
 
     const data = await response.json();
-    return data.data;
+    return (data.data as FAQData) ?? null;
   } catch (error) {
     console.error("Error fetching FAQ data:", error);
     throw error;
@@ -164,7 +171,7 @@ export async function POST(
     }
 
     // Parse request body
-    const body = await request.json();
+    const body: unknown = await request.json();
 
     // Validate request
     const validation = validateVoteRequest(body);
@@ -179,7 +186,7 @@ export async function POST(
       );
     }
 
-    const { faqId, isHelpful, sessionId }: VoteRequest = body;
+    const { faqId, isHelpful, sessionId } = body as VoteRequest;
 
     // Get current FAQ data
     const currentFAQ = await getCurrentFAQData(faqId);
@@ -258,36 +265,45 @@ export async function POST(
 }
 
 // GET: Get vote statistics for a specific FAQ
-export async function GET(request: NextRequest): Promise<NextResponse> {
+export async function GET(
+  request: NextRequest,
+): Promise<NextResponse<VoteResponse>> {
   try {
     const { searchParams } = new URL(request.url);
     const faqIdParam = searchParams.get("faqId");
 
     if (!faqIdParam) {
-      return NextResponse.json(
-        { error: "FAQ ID is required" },
+      return NextResponse.json<VoteResponse>(
+        { success: false, error: "FAQ ID is required" },
         { status: 400 },
       );
     }
 
     const faqId = parseInt(faqIdParam, 10);
     if (isNaN(faqId) || faqId <= 0) {
-      return NextResponse.json({ error: "Invalid FAQ ID" }, { status: 400 });
+      return NextResponse.json<VoteResponse>(
+        { success: false, error: "Invalid FAQ ID" },
+        { status: 400 },
+      );
     }
 
     // Get current FAQ data
     const currentFAQ = await getCurrentFAQData(faqId);
     if (!currentFAQ) {
-      return NextResponse.json({ error: "FAQ not found" }, { status: 404 });
+      return NextResponse.json<VoteResponse>(
+        { success: false, error: "FAQ not found" },
+        { status: 404 },
+      );
     }
 
-    return NextResponse.json(
+    return NextResponse.json<VoteResponse>(
       {
         success: true,
         data: {
           faqId,
           helpfulCount: currentFAQ.helpfulCount || 0,
           notHelpfulCount: currentFAQ.notHelpfulCount || 0,
+          userVote: null,
         },
       },
       { status: 200 },
@@ -295,8 +311,8 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   } catch (error) {
     console.error("Error getting FAQ vote stats:", error);
 
-    return NextResponse.json(
-      { error: "Internal server error" },
+    return NextResponse.json<VoteResponse>(
+      { success: false, error: "Internal server error" },
       { status: 500 },
     );
   }

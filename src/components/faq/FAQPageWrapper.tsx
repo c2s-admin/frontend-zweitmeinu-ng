@@ -9,8 +9,12 @@ import {
   analyzeCategorizationQuality,
   type FAQSearchResponse,
   type CategorizationStats,
-  type CategorizationQuality
+  type CategorizationQuality,
+  type FAQPage,
+  type FAQCategory,
+  type FAQ
 } from '@/lib/strapi/faq'
+import type { DynamicZoneSection } from '@/types/strapi'
 import { FAQHeroSection } from './FAQHeroSection'
 import { FAQCategoriesGrid } from './FAQCategoriesGrid'
 import { FAQAccordion } from './FAQAccordion'
@@ -18,11 +22,39 @@ import { FAQCTASection } from './FAQCTASection'
 import { FAQSearchResults } from './FAQSearchResults'
 import { FAQCategorizationInfo } from './FAQCategorizationInfo'
 
+interface FAQHeroSection extends DynamicZoneSection {
+  __component: 'sections.faq-hero'
+  title: string
+  subtitle?: string
+  description?: string
+  showSearch?: boolean
+  searchPlaceholder?: string
+  backgroundColor?: string
+}
+
+interface FAQCategoriesSection extends DynamicZoneSection {
+  __component: 'sections.faq-categories'
+  description?: string
+  columns?: number
+  showQuestionCount?: boolean
+}
+
+interface FAQCTASection extends DynamicZoneSection {
+  __component: 'sections.faq-cta'
+  icon: string
+  iconColor?: string
+  title: string
+  description?: string
+  additionalInfo?: string
+  backgroundColor?: string
+  textColor?: string
+}
+
 interface FAQPageWrapperProps {
   initialData: {
-    faqPage: any
-    categories: any[]
-    faqs: any[]
+    faqPage: FAQPage
+    categories: FAQCategory[]
+    faqs: FAQ[]
   }
 }
 
@@ -36,7 +68,7 @@ export function FAQPageWrapper({ initialData }: FAQPageWrapperProps) {
   const [isSearchMode, setIsSearchMode] = useState(false)
 
   // Category-specific FAQ state
-  const [categorizedFAQs, setCategorizedFAQs] = useState<Record<string, any[]>>({})
+  const [categorizedFAQs, setCategorizedFAQs] = useState<Record<string, FAQ[]>>({})
 
   // Categorization analytics state
   const [categorizationStats, setCategorizationStats] = useState<CategorizationStats | null>(null)
@@ -146,9 +178,15 @@ export function FAQPageWrapper({ initialData }: FAQPageWrapperProps) {
   const groupedFAQs = groupFAQsByCategory(faqs, categories)
 
   // Extract sections from Strapi page data
-  const heroSection = faqPage.sections.find((s: any) => s.__component === 'sections.faq-hero')
-  const categoriesSection = faqPage.sections.find((s: any) => s.__component === 'sections.faq-categories')
-  const ctaSection = faqPage.sections.find((s: any) => s.__component === 'sections.faq-cta')
+  const heroSection = faqPage.sections.find(
+    (s): s is FAQHeroSection => s.__component === 'sections.faq-hero'
+  )
+  const categoriesSection = faqPage.sections.find(
+    (s): s is FAQCategoriesSection => s.__component === 'sections.faq-categories'
+  )
+  const ctaSection = faqPage.sections.find(
+    (s): s is FAQCTASection => s.__component === 'sections.faq-cta'
+  )
 
   return (
     <div className="min-h-screen bg-white">
@@ -156,11 +194,11 @@ export function FAQPageWrapper({ initialData }: FAQPageWrapperProps) {
       {heroSection && (
         <FAQHeroSection
           title={heroSection.title}
-          subtitle={heroSection.subtitle}
-          description={heroSection.description}
-          showSearch={heroSection.showSearch}
-          searchPlaceholder={heroSection.searchPlaceholder}
-          backgroundColor={heroSection.backgroundColor}
+          subtitle={heroSection.subtitle ?? ''}
+          description={heroSection.description ?? ''}
+          showSearch={heroSection.showSearch ?? false}
+          searchPlaceholder={heroSection.searchPlaceholder ?? ''}
+          backgroundColor={heroSection.backgroundColor ?? ''}
           onSearch={handleSearch}
           searchTerm={searchTerm}
           isSearching={isSearching}
@@ -340,7 +378,7 @@ export function FAQPageWrapper({ initialData }: FAQPageWrapperProps) {
           <section className="py-16 bg-white">
             <div className="container-custom">
               <div className="space-y-16">
-                {categories.map((category: any) => {
+                {categories.map((category: FAQCategory) => {
                   // Use the keyword-based categorized FAQs
                   const categoryFAQs = groupedFAQs[category.slug] || []
 
@@ -364,12 +402,12 @@ export function FAQPageWrapper({ initialData }: FAQPageWrapperProps) {
       {ctaSection && (
         <FAQCTASection
           icon={ctaSection.icon}
-          iconColor={ctaSection.iconColor}
+          iconColor={ctaSection.iconColor ?? ''}
           title={ctaSection.title}
-          description={ctaSection.description}
+          description={ctaSection.description ?? ''}
           additionalInfo={ctaSection.additionalInfo}
-          backgroundColor={ctaSection.backgroundColor}
-          textColor={ctaSection.textColor}
+          backgroundColor={ctaSection.backgroundColor ?? ''}
+          textColor={ctaSection.textColor ?? ''}
         />
       )}
     </div>

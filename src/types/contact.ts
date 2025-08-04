@@ -27,9 +27,7 @@ export interface ContactSubmission {
 
 export interface ContactAPIResponse {
   data: ContactSubmission
-  meta?: {
-    [key: string]: any
-  }
+  meta?: Record<string, unknown>
 }
 
 export interface ContactAPIError {

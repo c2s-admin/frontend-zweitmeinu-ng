@@ -102,18 +102,33 @@ export async function getPageSlugs(): Promise<string[]> {
   }
 }
 
-export function validatePageData(page: any): page is Page {
-  const isValid = page?.id &&
-                  page?.attributes?.slug &&
-                  page?.attributes?.title &&
-                  Array.isArray(page?.attributes?.sections)
+export function validatePageData(page: unknown): page is Page {
+  if (!page || typeof page !== 'object') {
+    console.error('❌ Page validation failed:', { page })
+    return false
+  }
+
+  const p = page as {
+    id?: unknown
+    attributes?: {
+      slug?: unknown
+      title?: unknown
+      sections?: unknown
+    }
+  }
+
+  const isValid =
+    typeof p.id === 'number' &&
+    typeof p.attributes?.slug === 'string' &&
+    typeof p.attributes?.title === 'string' &&
+    Array.isArray(p.attributes?.sections)
 
   if (!isValid) {
     console.error('❌ Page validation failed:', {
-      hasId: !!page?.id,
-      hasSlug: !!page?.attributes?.slug,
-      hasTitle: !!page?.attributes?.title,
-      hasSections: Array.isArray(page?.attributes?.sections),
+      hasId: typeof p.id === 'number',
+      hasSlug: typeof p.attributes?.slug === 'string',
+      hasTitle: typeof p.attributes?.title === 'string',
+      hasSections: Array.isArray(p.attributes?.sections),
       pageStructure: page
     })
   }

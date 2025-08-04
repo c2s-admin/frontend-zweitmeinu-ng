@@ -357,18 +357,29 @@ export function convertRealSiteToExpected(
         ? {
             main:
               realSite.navigation.mainNavigation?.map(
-                (item: any, index: number) => ({
+                (
+                  item: {
+                    id: string
+                    label: string
+                    url: string
+                    type?: string
+                    subItems?: Array<{ label: string; url: string }>
+                  },
+                  index: number,
+                ) => ({
                   id: parseInt(item.id.replace(/\D/g, "")) || index + 1,
                   label: item.label,
                   href: item.url,
                   isExternal: item.type === "external",
                   children:
-                    item.subItems?.map((subItem: any, subIndex: number) => ({
-                      id: subIndex + 1,
-                      label: subItem.label,
-                      href: subItem.url,
-                      isExternal: false,
-                    })) || undefined,
+                    item.subItems?.map(
+                      (subItem: { label: string; url: string }, subIndex: number) => ({
+                        id: subIndex + 1,
+                        label: subItem.label,
+                        href: subItem.url,
+                        isExternal: false,
+                      }),
+                    ) || undefined,
                 }),
               ) || [],
             footer: [], // Legacy footer format - now using the new footer structure
@@ -391,14 +402,17 @@ export function convertRealSiteToExpected(
         openingHours: realSite.openingHours
           ? {
               regular: realSite.openingHours.hours?.reduce(
-                (acc: any, hour: any) => {
+                (
+                  acc: Record<string, string>,
+                  hour: { day: string; isClosed?: boolean; openTime?: string; closeTime?: string },
+                ) => {
                   const dayKey = hour.day.toLowerCase();
                   acc[dayKey] = hour.isClosed
                     ? "geschlossen"
                     : `${hour.openTime}-${hour.closeTime}`;
                   return acc;
                 },
-                {},
+                {} as Record<string, string>,
               ) || {
                 monday: "09:00-16:00",
                 tuesday: "09:00-16:00",
