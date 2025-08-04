@@ -82,6 +82,40 @@ describe("POST /api/faq/vote", () => {
     const json = (await res.json()) as { error?: string };
     expect(json.error).toBe("Invalid vote value");
   });
+
+  test("rate limits requests exceeding 10 per minute", async () => {
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = async () =>
+      new Response(
+        JSON.stringify({ data: { helpfulCount: 0, notHelpfulCount: 0 } }),
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        },
+      );
+
+    const makeRequest = () =>
+      new NextRequest(baseUrl, {
+        method: "POST",
+        body: JSON.stringify({ faqId: 1, isHelpful: true }),
+        headers: {
+          "content-type": "application/json",
+          "x-forwarded-for": "9.9.9.9",
+        },
+      });
+
+    for (let i = 0; i < 10; i++) {
+      const res = await POST(makeRequest());
+      expect(res.status).toBe(200);
+    }
+
+    const res = await POST(makeRequest());
+    expect(res.status).toBe(429);
+    const json = (await res.json()) as { error?: string };
+    expect(json.error).toBe("Rate limit exceeded");
+
+    globalThis.fetch = originalFetch;
+  });
 });
 
 // Tests for GET handler
