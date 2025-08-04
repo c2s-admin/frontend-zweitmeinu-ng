@@ -256,7 +256,7 @@ export function Footer({ siteConfig }: FooterProps) {
                     {column.links.map((link, linkIndex) => (
                       <li key={linkIndex}>
                         {link.type === "action" ? (
-                          <button
+                          <button type="button"
                             className={cn(
                               "flex items-center gap-2 transition-colors duration-300 hover:translate-x-1 text-left w-full",
                               link.style === "link-primary"

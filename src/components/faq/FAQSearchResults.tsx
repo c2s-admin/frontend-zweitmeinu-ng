@@ -236,7 +236,7 @@ export function FAQSearchResults({
                 <span>
                   {total} {total === 1 ? 'Ergebnis' : 'Ergebnisse'} für "<strong className="text-healthcare-primary">{searchTerm}</strong>"
                 </span>
-                <button
+                <button type="button"
                   onClick={onClearSearch}
                   className="inline-flex items-center gap-1 text-healthcare-accent-green hover:text-healthcare-accent-hover transition-colors"
                 >
@@ -256,7 +256,7 @@ export function FAQSearchResults({
                   <h3 className="font-semibold text-blue-900 mb-2">Verwandte Suchbegriffe:</h3>
                   <div className="flex flex-wrap gap-2">
                     {suggestions.map((suggestion, index) => (
-                      <button
+                      <button type="button"
                         key={index}
                         onClick={() => onSuggestionClick(suggestion)}
                         className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 hover:bg-blue-200 text-blue-800 rounded-full text-sm transition-colors"
@@ -307,7 +307,7 @@ export function FAQSearchResults({
                 Versuchen Sie es mit anderen Suchbegriffen oder kontaktieren Sie uns direkt.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-                <button
+                <button type="button"
                   onClick={onClearSearch}
                   className="px-6 py-3 bg-healthcare-primary hover:bg-healthcare-primary-light text-white rounded-lg transition-colors"
                 >
@@ -330,7 +330,7 @@ export function FAQSearchResults({
                 return (
                   <div key={result.id} className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
                     {/* Question */}
-                    <button
+                    <button type="button"
                       onClick={() => toggleItem(result.id)}
                       className="w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 transition-colors rounded-xl"
                     >
@@ -441,7 +441,7 @@ export function FAQSearchResults({
                               </div>
 
                               <div className="flex items-center gap-2 mb-3">
-                                <button
+                                <button type="button"
                                   onClick={() => handleVote(result.id, true)}
                                   disabled={voteLoading[result.id] || hasUserVoted(result.id)}
                                   className={cn(
@@ -464,7 +464,7 @@ export function FAQSearchResults({
                                   <span>Ja ({getDisplayCounts(result).helpfulCount})</span>
                                 </button>
 
-                                <button
+                                <button type="button"
                                   onClick={() => handleVote(result.id, false)}
                                   disabled={voteLoading[result.id] || hasUserVoted(result.id)}
                                   className={cn(
@@ -535,7 +535,7 @@ export function FAQSearchResults({
           {/* Load More Button (if there are more results) */}
           {results.length > 0 && total > results.length && (
             <div className="text-center mt-8">
-              <button className="inline-flex items-center gap-2 px-6 py-3 bg-healthcare-primary hover:bg-healthcare-primary-light text-white rounded-lg transition-colors font-medium">
+              <button type="button" className="inline-flex items-center gap-2 px-6 py-3 bg-healthcare-primary hover:bg-healthcare-primary-light text-white rounded-lg transition-colors font-medium">
                 Weitere Ergebnisse laden
                 <ChevronDown className="w-4 h-4" />
               </button>

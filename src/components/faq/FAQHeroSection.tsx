@@ -423,7 +423,7 @@ export function FAQHeroSection({
                   </h4>
                   <div className="flex flex-wrap gap-2">
                     {popularSearches.map((search, index) => (
-                      <button
+                      <button type="button"
                         key={index}
                         onClick={() => {
                           setLocalSearchTerm(search)

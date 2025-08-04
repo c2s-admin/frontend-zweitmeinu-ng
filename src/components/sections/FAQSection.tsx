@@ -44,7 +44,7 @@ export default function FAQSection({
 
             return (
               <div key={faq.id} className="border border-healthcare-border rounded-lg overflow-hidden">
-                <button
+                <button type="button"
                   onClick={() => toggleItem(faq.id)}
                   className="w-full px-6 py-4 text-left bg-healthcare-background hover:bg-healthcare-primary hover:text-white transition-colors duration-300 flex items-center justify-between"
                 >

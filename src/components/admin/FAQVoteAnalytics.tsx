@@ -249,7 +249,7 @@ export function FAQVoteAnalytics({ faqs, categories, className }: FAQVoteAnalyti
               <option value="all">Alle Zeit</option>
             </select>
 
-            <button
+            <button type="button"
               onClick={handleRefresh}
               disabled={refreshing}
               className="flex items-center gap-2 px-4 py-2 bg-healthcare-primary hover:bg-healthcare-primary-light text-white rounded-lg transition-colors disabled:opacity-50"
@@ -258,7 +258,7 @@ export function FAQVoteAnalytics({ faqs, categories, className }: FAQVoteAnalyti
               Aktualisieren
             </button>
 
-            <button
+            <button type="button"
               onClick={exportData}
               className="flex items-center gap-2 px-4 py-2 border border-gray-200 hover:bg-gray-50 rounded-lg transition-colors"
             >
