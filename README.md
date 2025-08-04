@@ -4,8 +4,8 @@
 
 [![CI](https://github.com/c2s-admin/frontend-zweitmeinu-ng/actions/workflows/ci.yml/badge.svg)](https://github.com/c2s-admin/frontend-zweitmeinu-ng/actions/workflows/ci.yml)
 [![Next.js](https://img.shields.io/badge/Next.js-15.3.2-black?style=flat-square&logo=next.js)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.5.4-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4.10-38B2AC?style=flat-square&logo=tailwind-css)](https://tailwindcss.com/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4.17-38B2AC?style=flat-square&logo=tailwind-css)](https://tailwindcss.com/)
 [![Bun](https://img.shields.io/badge/Bun-1.1.26-orange?style=flat-square&logo=bun)](https://bun.sh/)
 [![Strapi](https://img.shields.io/badge/Strapi-5.x-purple?style=flat-square&logo=strapi)](https://strapi.io/)
 
@@ -53,12 +53,12 @@
 | Technology | Version | Purpose |
 |------------|---------|---------|
 | **Next.js** | 15.3.2 | React framework with App Router |
-| **TypeScript** | 5.5.4 | Type safety and developer experience |
-| **Tailwind CSS** | 3.4.10 | Utility-first CSS framework |
+| **TypeScript** | 5.8.3 | Type safety and developer experience |
+| **Tailwind CSS** | 3.4.17 | Utility-first CSS framework |
 | **Bun** | 1.1.26 | Fast package manager and runtime |
 | **Strapi** | 5.x | Headless CMS for content management |
-| **Lucide React** | 0.438.0 | Modern icon library |
-| **React Hook Form** | 7.53.0 | Form handling and validation |
+| **Lucide React** | 0.536.0 | Modern icon library |
+| **React Hook Form** | 7.62.0 | Form handling and validation |
 
 ---
 
