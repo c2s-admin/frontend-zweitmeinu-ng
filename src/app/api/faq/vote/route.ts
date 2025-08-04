@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { headers } from "next/headers";
 import { validateVoteRequest } from "@/lib/faq/validateVoteRequest";
 import { logger } from "@/lib/logger";
 import { redis } from "@/lib/redis";
@@ -14,7 +13,6 @@ const RATE_LIMIT_MAX_REQUESTS = 10; // 10 votes per minute per IP
 interface VoteRequest {
   faqId: number;
   isHelpful: boolean;
-  sessionId?: string;
 }
 
 // Vote response interface
@@ -109,11 +107,6 @@ async function updateFAQVotes(
   }
 }
 
-// Store user vote in localStorage (client-side handling)
-function generateSessionId(): string {
-  return `faq_session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-}
-
 // POST: Submit a vote
 export async function POST(
   request: NextRequest,
@@ -151,7 +144,7 @@ export async function POST(
       );
     }
 
-    const { faqId, isHelpful, sessionId } = body as VoteRequest;
+    const { faqId, isHelpful } = body as VoteRequest;
 
     // Get current FAQ data
     const currentFAQ = await getCurrentFAQData(faqId);
@@ -284,7 +277,7 @@ export async function GET(
 }
 
 // OPTIONS: Handle CORS preflight
-export async function OPTIONS(request: NextRequest): Promise<NextResponse> {
+export async function OPTIONS(_request: NextRequest): Promise<NextResponse> {
   return new NextResponse(null, {
     status: 200,
     headers: {

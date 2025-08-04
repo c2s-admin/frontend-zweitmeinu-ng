@@ -1,12 +1,9 @@
-import Link from 'next/link'
-import { ChevronRight } from 'lucide-react'
 import type { MotivationHeroSection } from '@/types/strapi'
 
 export default function MotivationHero({
   title,
   subtitle,
   description,
-  backgroundType = 'gradient',
   showBreadcrumb = true,
   breadcrumbText = 'Patientenversorgung für Zentren'
 }: MotivationHeroSection) {

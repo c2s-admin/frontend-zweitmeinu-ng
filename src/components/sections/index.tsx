@@ -1,4 +1,3 @@
-import React from 'react'
 import dynamic from 'next/dynamic'
 import type { DynamicZoneSection, HeroSection, MedicalSpecialtiesGrid, TextBlock, ServicesGrid, TestimonialsSection, NewsSection, FAQSection, ContactForm, StatsSection, TeamSection, CTASection, MotivationHeroSection, StorySection, CoreValuesSection, MissionStatementSection } from '@/types/strapi'
 import type { RealHeroCarousel } from '@/types/strapi-real'

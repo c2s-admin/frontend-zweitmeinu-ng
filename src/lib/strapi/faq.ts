@@ -448,7 +448,7 @@ export async function getFAQsByCategory(
         return b.helpfulCount - a.helpfulCount;
       })
       .slice(0, limit)
-      .map(({ matchScore, ...faq }) => faq); // Remove matchScore from final result
+      .map(({ matchScore: _matchScore, ...faq }) => faq); // Remove matchScore from final result
 
     const processingTime = Date.now() - startTime;
     logger.info(
@@ -505,8 +505,6 @@ export async function advancedFAQSearch(
   try {
     const {
       term,
-      categories,
-      priority,
       limit = 20,
       includeAnswers = true,
     } = options;

@@ -7,14 +7,12 @@ import {
   ThumbsUp,
   ThumbsDown,
   Users,
-  Eye,
   RefreshCw,
   Download,
-  Calendar,
   Filter
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { getUserVoteStatus, getVoteSummary } from '@/lib/services/faqVoting'
+import { getVoteSummary } from '@/lib/services/faqVoting'
 import type { FAQ, FAQCategory } from '@/lib/strapi/faq'
 
 interface FAQVoteAnalyticsProps {

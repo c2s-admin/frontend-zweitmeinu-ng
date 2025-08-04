@@ -14,7 +14,6 @@ class StrapiAPIError extends Error {
 
 export class StrapiClient {
   private baseUrl: string;
-  private siteId = "zweitmeinu-ng"; // Updated with real site identifier
   private maxRetries = 3;
   private baseDelay = 200; // ms
 

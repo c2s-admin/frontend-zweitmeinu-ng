@@ -5,7 +5,6 @@ import { HelpCircle, Phone, Mail, Clock, UserCheck, Shield, Zap } from 'lucide-r
 import { cn } from '@/lib/utils'
 
 interface FAQCTASectionProps {
-  icon?: string
   iconColor?: string
   title: string
   description: string
@@ -15,7 +14,6 @@ interface FAQCTASectionProps {
 }
 
 export function FAQCTASection({
-  icon = 'HelpCircle',
   iconColor = 'text-yellow-500',
   title,
   description,
