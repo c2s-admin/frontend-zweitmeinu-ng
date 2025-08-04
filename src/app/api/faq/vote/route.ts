@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
+import { validateVoteRequest } from "@/lib/faq/validateVoteRequest";
 
 const STRAPI_BASE_URL =
   process.env.STRAPI_API_URL || process.env.NEXT_PUBLIC_STRAPI_URL || "";
@@ -69,25 +70,6 @@ function getClientIP(request: NextRequest): string {
   const real = request.headers.get("x-real-ip");
   const ip = forwarded?.split(",")[0] || real || "unknown";
   return ip;
-}
-
-// Validate vote request
-export function validateVoteRequest(data: unknown): { valid: boolean; error?: string } {
-  if (!data || typeof data !== "object") {
-    return { valid: false, error: "Invalid request body" };
-  }
-
-  const req = data as Partial<VoteRequest>;
-
-  if (typeof req.faqId !== "number" || req.faqId <= 0) {
-    return { valid: false, error: "Invalid FAQ ID" };
-  }
-
-  if (typeof req.isHelpful !== "boolean") {
-    return { valid: false, error: "Invalid vote value" };
-  }
-
-  return { valid: true };
 }
 
 // Fetch current FAQ data from Strapi
