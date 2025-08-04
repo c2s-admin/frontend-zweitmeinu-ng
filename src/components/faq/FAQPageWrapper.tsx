@@ -244,7 +244,7 @@ export function FAQPageWrapper({ initialData }: FAQPageWrapperProps) {
                 {/* Enhanced Categorization Debug Panel - Only in Development */}
                 {process.env.NODE_ENV === 'development' && categorizationStats && categorizationQuality && (
                   <div className="mt-12">
-                    <button
+                    <button type="button"
                       onClick={() => setShowDebugInfo(!showDebugInfo)}
                       className="mb-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
                     >

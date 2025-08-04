@@ -326,7 +326,7 @@ export default function HeroCarousel({
           {/* Navigation Arrows */}
           {showArrows && (
             <>
-              <button
+              <button type="button"
                 onClick={prevSlide}
                 onMouseEnter={() => pauseOnHover && setIsPaused(true)}
                 onMouseLeave={() => pauseOnHover && setIsPaused(false)}
@@ -336,7 +336,7 @@ export default function HeroCarousel({
                 <ChevronLeft className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />
               </button>
 
-              <button
+              <button type="button"
                 onClick={nextSlide}
                 onMouseEnter={() => pauseOnHover && setIsPaused(true)}
                 onMouseLeave={() => pauseOnHover && setIsPaused(false)}
@@ -349,7 +349,7 @@ export default function HeroCarousel({
           )}
 
           {/* Play/Pause Button */}
-          <button
+          <button type="button"
             onClick={() => setIsPlaying(!isPlaying)}
             className="absolute top-4 right-4 md:top-8 md:right-8 z-30 bg-white/20 backdrop-blur-md p-3 rounded-full hover:bg-white/30 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-white/50"
             aria-label={isPlaying ? "Autoplay pausieren" : "Autoplay starten"}
@@ -365,7 +365,7 @@ export default function HeroCarousel({
           {showDots && (
             <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex gap-3">
               {slides.map((_, index) => (
-                <button
+                <button type="button"
                   key={index}
                   onClick={() => goToSlide(index)}
                   onMouseEnter={() => pauseOnHover && setIsPaused(true)}

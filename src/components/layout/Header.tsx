@@ -335,7 +335,7 @@ export function Header({ siteConfig }: HeaderProps) {
                       onMouseEnter={() => setActiveDropdown(item.id)}
                       onMouseLeave={() => setActiveDropdown(null)}
                     >
-                      <button className="flex items-center gap-1 font-medium transition-colors duration-300 relative group text-white hover:text-healthcare-accent-green">
+                      <button type="button" className="flex items-center gap-1 font-medium transition-colors duration-300 relative group text-white hover:text-healthcare-accent-green">
                         {item.label}
                         <ChevronDown className="w-4 h-4 transition-transform duration-300 group-hover:rotate-180" />
                         <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-healthcare-primary-light transition-all duration-300 group-hover:w-full" />
@@ -393,7 +393,7 @@ export function Header({ siteConfig }: HeaderProps) {
             </div>
 
             {/* Mobile Menu Button */}
-            <button
+            <button type="button"
               onClick={(e) => {
                 e.stopPropagation();
                 setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -419,7 +419,7 @@ export function Header({ siteConfig }: HeaderProps) {
                   <div key={item.id}>
                     {item.children && item.children.length > 0 ? (
                       <div>
-                        <button
+                        <button type="button"
                           onClick={() =>
                             setActiveDropdown(
                               activeDropdown === item.id ? null : item.id,
