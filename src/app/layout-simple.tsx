@@ -1,21 +1,27 @@
-import type { Metadata } from 'next'
-import './globals.css'
+import type { Metadata } from "next";
+import Link from "next/link";
+import "./globals.css";
 
 export const metadata: Metadata = {
-  title: 'Zweitmeinung.ng - Medizinische Zweitmeinung online',
-  description: 'Erhalten Sie schnell und unkompliziert eine professionelle medizinische Zweitmeinung von Fachärzten.',
-}
+  title: "Zweitmeinung.ng - Medizinische Zweitmeinung online",
+  description:
+    "Erhalten Sie schnell und unkompliziert eine professionelle medizinische Zweitmeinung von Fachärzten.",
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="de" className="scroll-smooth">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
         <meta name="theme-color" content="#004166" />
       </head>
       <body className="min-h-screen flex flex-col antialiased">
@@ -33,11 +39,34 @@ export default function RootLayout({
               </div>
 
               <div className="hidden lg:flex items-center space-x-8">
-                <a href="/" className="text-healthcare-primary hover:text-healthcare-primary-light font-medium">Home</a>
-                <a href="/zweitmeinung" className="text-healthcare-primary hover:text-healthcare-primary-light font-medium">Zweitmeinung</a>
-                <a href="/fachbereiche" className="text-healthcare-primary hover:text-healthcare-primary-light font-medium">Fachbereiche</a>
-                <a href="/kontakt" className="text-healthcare-primary hover:text-healthcare-primary-light font-medium">Kontakt</a>
-                <a href="tel:+4917647870680" className="bg-healthcare-primary-light text-white px-6 py-3 rounded-lg font-medium hover:bg-healthcare-accent-hover transition-colors">
+                <Link
+                  href="/"
+                  className="text-healthcare-primary hover:text-healthcare-primary-light font-medium"
+                >
+                  Home
+                </Link>
+                <Link
+                  href="/zweitmeinung"
+                  className="text-healthcare-primary hover:text-healthcare-primary-light font-medium"
+                >
+                  Zweitmeinung
+                </Link>
+                <Link
+                  href="/fachbereiche"
+                  className="text-healthcare-primary hover:text-healthcare-primary-light font-medium"
+                >
+                  Fachbereiche
+                </Link>
+                <Link
+                  href="/kontakt"
+                  className="text-healthcare-primary hover:text-healthcare-primary-light font-medium"
+                >
+                  Kontakt
+                </Link>
+                <a
+                  href="tel:+4917647870680"
+                  className="bg-healthcare-primary-light text-white px-6 py-3 rounded-lg font-medium hover:bg-healthcare-accent-hover transition-colors"
+                >
                   Notfall-Zweitmeinung
                 </a>
               </div>
@@ -45,9 +74,7 @@ export default function RootLayout({
           </div>
         </header>
 
-        <main className="flex-grow pt-20">
-          {children}
-        </main>
+        <main className="flex-grow pt-20">{children}</main>
 
         {/* Simplified Footer */}
         <footer className="bg-healthcare-primary-dark text-white py-16">
@@ -56,7 +83,8 @@ export default function RootLayout({
               <div>
                 <h3 className="text-xl font-semibold mb-4">Zweitmeinung.ng</h3>
                 <p className="text-gray-300">
-                  Ihre Gesundheit verdient eine zweite Meinung. Vertrauen Sie auf unsere medizinische Expertise.
+                  Ihre Gesundheit verdient eine zweite Meinung. Vertrauen Sie
+                  auf unsere medizinische Expertise.
                 </p>
               </div>
 
@@ -65,7 +93,9 @@ export default function RootLayout({
                 <div className="space-y-2 text-gray-300">
                   <p>E-Mail: info@zweitmein.ng</p>
                   <p>Telefon: +49 176 47870680</p>
-                  <p className="text-healthcare-accent-green">24/7 Notfallberatung</p>
+                  <p className="text-healthcare-accent-green">
+                    24/7 Notfallberatung
+                  </p>
                 </div>
               </div>
 
@@ -86,5 +116,5 @@ export default function RootLayout({
         </footer>
       </body>
     </html>
-  )
+  );
 }
