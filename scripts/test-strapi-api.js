@@ -5,7 +5,7 @@
  * Tests the connection to the Strapi backend and validates data structure
  */
 
-const baseUrl = 'https://st.zh3.de/api'
+const baseUrl = process.env.STRAPI_API_URL || process.env.NEXT_PUBLIC_STRAPI_URL || ''
 const possibleSiteIds = ['zweitmeinung-ng', 'zweitmeinu-ng', 'zweitmein-ng']
 
 async function testStrapiConnection() {

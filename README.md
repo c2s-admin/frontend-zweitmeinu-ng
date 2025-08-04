@@ -85,8 +85,13 @@ bun install
 cp .env.example .env.local
 
 # Configure your Strapi API endpoint
-NEXT_PUBLIC_STRAPI_URL=https://st.zh3.de/api
+NEXT_PUBLIC_STRAPI_URL=https://your-strapi-instance/api
 ```
+
+The frontend builds image and favicon URLs by replacing the `/api` segment of
+`NEXT_PUBLIC_STRAPI_URL` with `/uploads`. Deployed environments must expose
+assets under this pattern (e.g. `https://your-strapi-instance/uploads/...`) so
+files continue to load correctly.
 
 ### 4. Development Server
 ```bash
@@ -224,8 +229,12 @@ bun run build
 out
 
 # Environment variables
-NEXT_PUBLIC_STRAPI_URL=https://st.zh3.de/api
+NEXT_PUBLIC_STRAPI_URL=https://your-strapi-instance/api
 ```
+
+Uploads and favicons are resolved from the same origin by replacing `/api` with
+`/uploads` on `NEXT_PUBLIC_STRAPI_URL`. Ensure your hosting setup forwards
+`/uploads/*` to the Strapi server so these assets load in production.
 
 ### Vercel
 ```bash

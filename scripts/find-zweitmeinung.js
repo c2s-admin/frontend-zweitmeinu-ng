@@ -4,7 +4,7 @@
  * Find Zweitmeinung Site and Data
  */
 
-const baseUrl = 'https://st.zh3.de/api'
+const baseUrl = process.env.STRAPI_API_URL || process.env.NEXT_PUBLIC_STRAPI_URL || ''
 
 async function findZweitmeinung() {
   console.log('🔍 Looking for Zweitmeinung Site and Data...\n')
