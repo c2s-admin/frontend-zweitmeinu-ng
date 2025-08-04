@@ -1,12 +1,51 @@
 import { env } from "@/lib/env";
 import { logger } from "@/lib/logger";
+import { Sentry } from "@/lib/sentry";
+
+class StrapiAPIError extends Error {
+  constructor(
+    message: string,
+    public status?: number,
+  ) {
+    super(message);
+    this.name = "StrapiAPIError";
+  }
+}
 
 export class StrapiClient {
   private baseUrl: string;
   private siteId = "zweitmeinu-ng"; // Updated with real site identifier
+  private maxRetries = 3;
+  private baseDelay = 200; // ms
 
   constructor() {
     this.baseUrl = env.STRAPI_API_URL || env.NEXT_PUBLIC_STRAPI_URL;
+  }
+
+  private async request<T>(
+    url: string,
+    init: RequestInit & { next?: { revalidate?: number; tags?: string[] } },
+    attempt = 0,
+  ): Promise<T> {
+    try {
+      const response = await fetch(url, init);
+      if (!response.ok) {
+        throw new StrapiAPIError(
+          `API Error: ${response.status} - ${response.statusText}`,
+          response.status,
+        );
+      }
+      return (await response.json()) as T;
+    } catch (error) {
+      logger.error({ err: error }, "Strapi API Error");
+      Sentry.captureException(error);
+      if (attempt < this.maxRetries) {
+        const delay = Math.pow(2, attempt) * this.baseDelay;
+        await new Promise((resolve) => setTimeout(resolve, delay));
+        return this.request<T>(url, init, attempt + 1);
+      }
+      throw error;
+    }
   }
 
   async get<T>(
@@ -20,34 +59,20 @@ export class StrapiClient {
               if (value !== undefined) acc[key] = String(value);
               return acc;
             },
-          {}),
+            {},
+          ),
         ).toString()}`
       : "";
     const url = `${this.baseUrl}${endpoint}${queryString}`;
-
-    try {
-      const response = await fetch(url, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        next: {
-          revalidate: 60, // Cache für 60 Sekunden
-          tags: ["strapi"], // Cache tag für revalidation
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(
-          `API Error: ${response.status} - ${response.statusText}`,
-        );
-      }
-
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      logger.error({ err: error }, "Strapi API Error");
-      throw error;
-    }
+    return this.request<T>(url, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      next: {
+        revalidate: 60, // Cache für 60 Sekunden
+        tags: ["strapi"], // Cache tag für revalidation
+      },
+    });
   }
 
   async post<T, B extends Record<string, unknown>>(
@@ -55,28 +80,13 @@ export class StrapiClient {
     body?: B,
   ): Promise<T> {
     const url = `${this.baseUrl}${endpoint}`;
-
-    try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
-      });
-
-      if (!response.ok) {
-        throw new Error(
-          `API Error: ${response.status} - ${response.statusText}`,
-        );
-      }
-
-      const data = (await response.json()) as T;
-      return data;
-    } catch (error) {
-      logger.error({ err: error }, "Strapi API Error");
-      throw error;
-    }
+    return this.request<T>(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
   }
 
   /**
