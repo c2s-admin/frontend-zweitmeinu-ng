@@ -4,10 +4,12 @@ import { getSiteConfig } from "@/lib/strapi/site-config";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 
-const STRAPI_ORIGIN = (process.env.NEXT_PUBLIC_STRAPI_URL || "").replace(
-  /\/api$/,
-  "",
-);
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || "";
+const STRAPI_ORIGIN = STRAPI_URL.replace(/\/api$/, "");
+const DEFAULT_FAVICON = new URL(
+  "uploads/favicon_af3459ec0b.ico",
+  STRAPI_ORIGIN,
+).toString();
 
 export async function generateMetadata(): Promise<Metadata> {
   let siteConfig = null;
@@ -19,6 +21,12 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 
   const siteAttributes = siteConfig?.attributes;
+  const iconUrl = siteAttributes?.favicon?.data?.attributes?.url
+    ? new URL(
+        siteAttributes.favicon.data.attributes.url,
+        STRAPI_ORIGIN,
+      ).toString()
+    : DEFAULT_FAVICON;
 
   return {
     title: siteAttributes?.siteName
@@ -26,11 +34,7 @@ export async function generateMetadata(): Promise<Metadata> {
       : "Zweitmeinung.ng - Medizinische Zweitmeinung online",
     description:
       "Erhalten Sie schnell und unkompliziert eine professionelle medizinische Zweitmeinung von Fachärzten.",
-    icons: {
-      icon:
-        siteAttributes?.favicon?.data?.attributes?.url ||
-        `${STRAPI_ORIGIN}/uploads/favicon_af3459ec0b.ico`,
-    },
+    icons: { icon: iconUrl },
   };
 }
 

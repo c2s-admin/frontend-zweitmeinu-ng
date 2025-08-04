@@ -1,15 +1,21 @@
 /** @type {import('next').NextConfig} */
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || ''
-const STRAPI_HOSTNAME = STRAPI_URL ? new URL(STRAPI_URL).hostname : ''
+const STRAPI = STRAPI_URL ? new URL(STRAPI_URL) : null
+const STRAPI_HOSTNAME = STRAPI?.hostname || ''
+const STRAPI_PROTOCOL = STRAPI?.protocol.replace(':', '') || 'https'
+const STRAPI_BASE_PATH = STRAPI
+  ? STRAPI.pathname.replace(/\/api$/, '').replace(/\/$/, '')
+  : ''
+const STRAPI_UPLOADS_SEGMENT = 'uploads'
 
 const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
+        protocol: STRAPI_PROTOCOL,
         hostname: STRAPI_HOSTNAME,
         port: '',
-        pathname: '/uploads/**',
+        pathname: `${STRAPI_BASE_PATH}/${STRAPI_UPLOADS_SEGMENT}/**`,
       },
     ],
     formats: ['image/webp', 'image/avif'],
