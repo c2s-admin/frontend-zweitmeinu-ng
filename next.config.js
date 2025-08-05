@@ -8,6 +8,17 @@ const STRAPI_BASE_PATH = STRAPI.pathname
   .replace(/\/api$/, '')
   .replace(/\/$/, '')
 const STRAPI_UPLOADS_SEGMENT = 'uploads'
+const STRAPI_ORIGIN = STRAPI.origin
+
+const ContentSecurityPolicy = `
+  default-src 'self';
+  script-src 'self';
+  style-src 'self' 'unsafe-inline';
+  img-src 'self' data: https:;
+  connect-src 'self' ${STRAPI_ORIGIN};
+  font-src 'self';
+  frame-ancestors 'none';
+`
 
 const nextConfig = {
   images: {
@@ -45,7 +56,11 @@ const nextConfig = {
           },
           {
             key: 'Referrer-Policy',
-            value: 'strict-origin-when-cross-origin',
+            value: 'no-referrer',
+          },
+          {
+            key: 'Content-Security-Policy',
+            value: ContentSecurityPolicy.replace(/\s{2,}/g, ' ').trim(),
           },
         ],
       },
