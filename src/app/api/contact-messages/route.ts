@@ -1,37 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { submitContactMessage } from "@/lib/strapi/contact-messages";
 import { logger } from "@/lib/logger";
-import { redis } from "@/lib/redis";
+import { getClientIP, withRateLimit } from "@/middlewares/rate-limit";
 
-const RATE_LIMIT_WINDOW = 60 * 60; // 1 hour in seconds
-const RATE_LIMIT_MAX_REQUESTS = 5; // 5 messages per hour per IP
-
-function getClientIP(request: NextRequest): string {
-  const forwarded = request.headers.get("x-forwarded-for");
-  const real = request.headers.get("x-real-ip");
-  const ip = forwarded?.split(",")[0] || real || "unknown";
-  return ip;
-}
-
-async function checkRateLimit(clientIP: string): Promise<boolean> {
-  const key = `contact_form:${clientIP}`;
-  const requestCount = await redis.incr(key);
-  if (requestCount === 1) {
-    await redis.expire(key, RATE_LIMIT_WINDOW);
-  }
-  return requestCount <= RATE_LIMIT_MAX_REQUESTS;
-}
-
-export async function POST(request: NextRequest) {
+async function handler(request: NextRequest) {
   try {
     const clientIP = getClientIP(request);
-
-    if (!(await checkRateLimit(clientIP))) {
-      return NextResponse.json(
-        { error: "Too many requests" },
-        { status: 429 },
-      );
-    }
 
     const body = await request.json();
     const { captchaToken, ...rest } = body;
@@ -80,3 +54,5 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
+export const POST = withRateLimit(handler);
