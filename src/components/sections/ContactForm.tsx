@@ -188,7 +188,7 @@ export default function ContactForm({
                   captchaConfig.provider === "recaptcha" && (
                     <ReCAPTCHA
                       sitekey={captchaConfig.siteKey}
-                      onChange={(token) => setCaptchaToken(token ?? "")}
+                      onChange={(token: string | null) => setCaptchaToken(token ?? "")}
                       onExpired={() => setCaptchaToken("")}
                     />
                   )}
