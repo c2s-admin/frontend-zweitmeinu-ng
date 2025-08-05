@@ -10,4 +10,20 @@ const envSchema = z
     message: "Either STRAPI_API_URL or NEXT_PUBLIC_STRAPI_URL must be set",
   });
 
-export const env = envSchema.parse(process.env);
+// Fallback for client-side when env var is not loaded
+const envWithFallback = {
+  ...process.env,
+  NEXT_PUBLIC_STRAPI_URL: process.env.NEXT_PUBLIC_STRAPI_URL || 'https://st.zh3.de/api'
+};
+
+// Debug environment variables
+if (typeof window !== 'undefined') {
+  console.log('[DEBUG] Client-side env check:', {
+    original: process.env.NEXT_PUBLIC_STRAPI_URL,
+    fallback: envWithFallback.NEXT_PUBLIC_STRAPI_URL,
+    hasProcessEnv: !!process.env,
+    keys: Object.keys(process.env).filter(key => key.startsWith('NEXT_PUBLIC_'))
+  });
+}
+
+export const env = envSchema.parse(envWithFallback);

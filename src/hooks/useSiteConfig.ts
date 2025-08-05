@@ -1,12 +1,17 @@
 "use client";
 
 import useSWR from "swr";
-import { getCachedSiteConfig } from "@/lib/strapi/site-config";
 import type { SiteConfiguration } from "@/types/strapi";
 
 async function fetchSiteConfig(): Promise<SiteConfiguration["attributes"] | null> {
-  const config = await getCachedSiteConfig();
-  return config?.attributes ?? null;
+  const response = await fetch('/api/site-config');
+  
+  if (!response.ok) {
+    throw new Error('Failed to fetch site config');
+  }
+  
+  const result = await response.json();
+  return result.data;
 }
 
 export function useSiteConfig() {

@@ -251,18 +251,6 @@ export function Header() {
                 <span className="text-white/90 font-medium">
                   Kostenlose Beratung
                 </span>
-
-                {/* Debug Info */}
-                {process.env.NODE_ENV === "development" && mounted && (
-                  <>
-                    <div className="text-white/60">|</div>
-                    <span className="text-white/60 text-xs">
-                      {siteConfig.openingHours
-                        ? "✅ openingHours found"
-                        : "❌ openingHours missing"}
-                    </span>
-                  </>
-                )}
               </div>
             </div>
           </div>

@@ -12,11 +12,11 @@ const STRAPI_ORIGIN = STRAPI.origin
 
 const ContentSecurityPolicy = `
   default-src 'self';
-  script-src 'self';
-  style-src 'self' 'unsafe-inline';
+  script-src 'self' ${process.env.NODE_ENV === 'development' ? "'unsafe-inline' 'unsafe-eval'" : ''};
+  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
   img-src 'self' data: https:;
-  connect-src 'self' ${STRAPI_ORIGIN};
-  font-src 'self';
+  connect-src 'self' ${STRAPI_ORIGIN} ${process.env.NODE_ENV === 'development' ? 'ws: wss:' : ''};
+  font-src 'self' https://fonts.gstatic.com;
   frame-ancestors 'none';
 `
 
