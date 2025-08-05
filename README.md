@@ -82,11 +82,25 @@ bun install
 
 ### 3. Environment Setup
 ```bash
-# Copy environment variables
+# Base configuration
 cp .env.example .env.local
+
+# Redis cache
+cp .env.redis.example .env.redis.local
+
+# Logging
+cp .env.logging.example .env.logging.local
 
 # Configure your Strapi API endpoint
 NEXT_PUBLIC_STRAPI_URL=https://your-strapi-instance/api
+
+# Redis connection (override host/port as needed)
+REDIS_URL=redis://localhost:6379
+
+# Logging preferences
+LOG_LEVEL=info
+LOG_FORMAT=json
+
 # hCaptcha configuration (optional)
 NEXT_PUBLIC_HCAPTCHA_SITE_KEY=your-hcaptcha-site-key
 HCAPTCHA_SECRET_KEY=your-hcaptcha-secret
@@ -129,6 +143,12 @@ src/
 ├── types/                  # TypeScript type definitions
 └── hooks/                  # Custom React hooks
 ```
+
+---
+
+## 🧱 Architecture Overview
+
+High-level system diagrams are documented in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) to help new contributors understand the flow between the frontend, backend, cache, and logging services.
 
 ---
 
