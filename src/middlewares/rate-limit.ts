@@ -10,6 +10,15 @@ interface RateLimitInfo {
 
 const ipRecords = new Map<string, RateLimitInfo>();
 
+// periodically purge expired records to prevent unbounded memory growth
+setInterval(() => {
+  const now = Date.now();
+  for (const [ip, info] of ipRecords) {
+    if (info.expires <= now) {
+      ipRecords.delete(ip);
+    }
+  }
+}, WINDOW_MS).unref?.();
 export function getClientIP(request: NextRequest): string {
   const forwarded = request.headers.get("x-forwarded-for");
   const real = request.headers.get("x-real-ip");
@@ -36,7 +45,15 @@ export function withRateLimit(handler: Handler): Handler {
   return async (request: NextRequest) => {
     const ip = getClientIP(request);
     if (!isAllowed(ip)) {
-      return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+      const info = ipRecords.get(ip);
+      const retryAfter = info ? Math.ceil((info.expires - Date.now()) / 1000) : 0;
+      return NextResponse.json(
+        { error: "Too many requests" },
+        {
+          status: 429,
+          headers: { "Retry-After": retryAfter.toString() },
+        },
+      );
     }
     return handler(request);
   };

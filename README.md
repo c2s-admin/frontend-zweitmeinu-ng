@@ -104,6 +104,9 @@ LOG_FORMAT=json
 # hCaptcha configuration (optional)
 NEXT_PUBLIC_HCAPTCHA_SITE_KEY=your-hcaptcha-site-key
 HCAPTCHA_SECRET_KEY=your-hcaptcha-secret
+# Contact message rate limiting (optional)
+CONTACT_MESSAGES_RATE_LIMIT_WINDOW=60
+CONTACT_MESSAGES_RATE_LIMIT_MAX=5
 ```
 
 The frontend builds image and favicon URLs by replacing the `/api` segment of
