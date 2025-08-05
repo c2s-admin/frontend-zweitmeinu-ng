@@ -90,6 +90,9 @@ NEXT_PUBLIC_STRAPI_URL=https://your-strapi-instance/api
 # hCaptcha configuration (optional)
 NEXT_PUBLIC_HCAPTCHA_SITE_KEY=your-hcaptcha-site-key
 HCAPTCHA_SECRET_KEY=your-hcaptcha-secret
+# Contact message rate limiting (optional)
+CONTACT_MESSAGES_RATE_LIMIT_WINDOW=60
+CONTACT_MESSAGES_RATE_LIMIT_MAX=5
 ```
 
 The frontend builds image and favicon URLs by replacing the `/api` segment of
@@ -167,7 +170,7 @@ POST /api/contact-messages
 ```
 **Features:**
 - hCaptcha verification (when configured)
-- Rate limiting (5 messages/hour)
+- Rate limiting (5 messages/min, configurable via `CONTACT_MESSAGES_RATE_LIMIT_MAX` and `CONTACT_MESSAGES_RATE_LIMIT_WINDOW`)
 
 ---
 
