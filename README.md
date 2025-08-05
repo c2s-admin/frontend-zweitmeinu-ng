@@ -187,7 +187,7 @@ POST /api/contact-messages
 ```
 **Features:**
 - hCaptcha verification (when configured)
-- Rate limiting (5 messages/hour)
+- Rate limiting (5 messages/min, configurable via `CONTACT_MESSAGES_RATE_LIMIT_MAX` and `CONTACT_MESSAGES_RATE_LIMIT_WINDOW`)
 
 ---
 
