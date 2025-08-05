@@ -46,6 +46,12 @@ export interface ContactAPIError {
   }
 }
 
+export interface CaptchaConfig {
+  provider: 'hcaptcha' | 'recaptcha'
+  siteKey: string
+  enabled: boolean
+}
+
 // Form validation types
 export interface FormErrors {
   [key: string]: string | undefined
