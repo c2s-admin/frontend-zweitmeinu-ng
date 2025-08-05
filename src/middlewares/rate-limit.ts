@@ -19,7 +19,6 @@ setInterval(() => {
     }
   }
 }, WINDOW_MS).unref?.();
-
 export function getClientIP(request: NextRequest): string {
   const forwarded = request.headers.get("x-forwarded-for");
   const real = request.headers.get("x-real-ip");
