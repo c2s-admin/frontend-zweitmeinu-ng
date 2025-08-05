@@ -24,8 +24,9 @@ export async function getSiteConfig(): Promise<SiteConfiguration | null> {
     )
     if (debugSite) {
       logger.info('Available fields in zweitmeinu-ng:', Object.keys(debugSite))
-      if (debugSite.contact?.openingHours) {
-        logger.info('openingHours found:', debugSite.contact.openingHours)
+      const contactInfo = (debugSite as any).contact
+      if (contactInfo?.openingHours) {
+        logger.info('openingHours found:', contactInfo.openingHours)
       } else {
         logger.warn('openingHours NOT found in site config')
       }

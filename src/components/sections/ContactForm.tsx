@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { Send } from "lucide-react";
 import { useForm, Controller } from "react-hook-form";
 import type { RegisterOptions } from "react-hook-form";
@@ -8,6 +8,8 @@ import type { ContactForm as ContactFormType } from "@/types/strapi";
 import type { ContactFormData, FormFieldConfig } from "@/types/contact";
 import getValidationRules from "@/lib/contact/validation";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
+import ReCAPTCHA from "react-google-recaptcha";
+import { useCaptcha } from "@/hooks/useCaptcha";
 
 export default function ContactForm({
   title,
@@ -28,16 +30,23 @@ export default function ContactForm({
   const [submitStatus, setSubmitStatus] = useState<
     "idle" | "success" | "error"
   >("idle");
-  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
-  const hcaptchaRef = useRef<HCaptcha>(null);
-  const hcaptchaSiteKey = process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY;
+  const {
+    config: captchaConfig,
+    token: captchaToken,
+    setToken: setCaptchaToken,
+    resetCaptcha,
+    isEnabled,
+  } = useCaptcha();
 
   const onSubmit = async (data: ContactFormData) => {
-    if (hcaptchaSiteKey && !captchaToken) return;
+    if (isEnabled && !captchaToken) return;
     setIsSubmitting(true);
     setSubmitStatus("idle");
     try {
-      const payload = { ...data, captchaToken };
+      const payload = {
+        ...data,
+        ...(isEnabled ? { captchaToken } : {}),
+      };
       const response = await fetch("/api/contact-messages", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -54,8 +63,7 @@ export default function ContactForm({
       setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);
-      setCaptchaToken(null);
-      hcaptchaRef.current?.resetCaptcha();
+      resetCaptcha();
     }
   };
 
@@ -168,18 +176,27 @@ export default function ContactForm({
                   );
                 })}
 
-                {hcaptchaSiteKey && (
-                  <HCaptcha
-                    sitekey={hcaptchaSiteKey}
-                    onVerify={setCaptchaToken}
-                    onExpire={() => setCaptchaToken(null)}
-                    ref={hcaptchaRef}
-                  />
-                )}
+                {captchaConfig?.enabled &&
+                  captchaConfig.provider === "hcaptcha" && (
+                    <HCaptcha
+                      sitekey={captchaConfig.siteKey}
+                      onVerify={(token) => setCaptchaToken(token)}
+                      onExpire={() => setCaptchaToken("")}
+                    />
+                  )}
+                {captchaConfig?.enabled &&
+                  captchaConfig.provider === "recaptcha" && (
+                    <ReCAPTCHA
+                      sitekey={captchaConfig.siteKey}
+                      onChange={(token) => setCaptchaToken(token ?? "")}
+                      onExpired={() => setCaptchaToken("")}
+                    />
+                  )}
                 <button
                   type="submit"
                   disabled={
-                    isSubmitting || (hcaptchaSiteKey ? !captchaToken : false)
+                    isSubmitting ||
+                    (captchaConfig?.enabled ? !captchaToken : false)
                   }
                   className="btn-primary w-full flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >

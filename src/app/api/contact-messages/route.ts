@@ -8,38 +8,9 @@ async function handler(request: NextRequest) {
     const clientIP = getClientIP(request);
 
     const body = await request.json();
-    const { captchaToken, ...rest } = body;
-
-    if (process.env.HCAPTCHA_SECRET_KEY) {
-      if (!captchaToken) {
-        return NextResponse.json(
-          { error: "Captcha verification required" },
-          { status: 400 },
-        );
-      }
-      const captchaResponse = await fetch(
-        "https://hcaptcha.com/siteverify",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: new URLSearchParams({
-            secret: process.env.HCAPTCHA_SECRET_KEY,
-            response: captchaToken,
-            remoteip: clientIP,
-          }),
-        },
-      );
-      const captchaData = await captchaResponse.json();
-      if (!captchaData.success) {
-        return NextResponse.json(
-          { error: "Captcha verification failed" },
-          { status: 400 },
-        );
-      }
-    }
 
     const payload = {
-      ...rest,
+      ...body,
       submittedAt: new Date().toISOString(),
       ipAddress: clientIP !== "unknown" ? clientIP : undefined,
       userAgent: request.headers.get("user-agent") || undefined,

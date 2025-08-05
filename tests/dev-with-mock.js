@@ -16,6 +16,13 @@ const strapiServer = http.createServer((req, res) => {
         JSON.stringify({ data: { id: 1, attributes: payload } })
       );
     });
+  } else if (req.method === 'GET' && req.url === '/contact-messages/captcha-config') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(
+      JSON.stringify({
+        data: { provider: 'hcaptcha', siteKey: 'test', enabled: true }
+      })
+    );
   } else {
     res.statusCode = 404;
     res.end();
