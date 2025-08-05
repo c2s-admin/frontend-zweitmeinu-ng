@@ -10,7 +10,7 @@ async function handler(request: NextRequest) {
     const body = await request.json();
     const { captchaToken, ...rest } = body;
 
-    if (process.env.HCAPTCHA_SECRET_KEY) {
+    if (process.env.RECAPTCHA_SECRET_KEY) {
       if (!captchaToken) {
         return NextResponse.json(
           { error: "Captcha verification required" },
@@ -18,12 +18,12 @@ async function handler(request: NextRequest) {
         );
       }
       const captchaResponse = await fetch(
-        "https://hcaptcha.com/siteverify",
+        "https://www.google.com/recaptcha/api/siteverify",
         {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
           body: new URLSearchParams({
-            secret: process.env.HCAPTCHA_SECRET_KEY,
+            secret: process.env.RECAPTCHA_SECRET_KEY,
             response: captchaToken,
             remoteip: clientIP,
           }),

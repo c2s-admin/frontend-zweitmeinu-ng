@@ -7,7 +7,7 @@ import type { RegisterOptions } from "react-hook-form";
 import type { ContactForm as ContactFormType } from "@/types/strapi";
 import type { ContactFormData, FormFieldConfig } from "@/types/contact";
 import getValidationRules from "@/lib/contact/validation";
-import HCaptcha from "@hcaptcha/react-hcaptcha";
+import ReCAPTCHA from "react-google-recaptcha";
 
 export default function ContactForm({
   title,
@@ -28,14 +28,16 @@ export default function ContactForm({
   const [submitStatus, setSubmitStatus] = useState<
     "idle" | "success" | "error"
   >("idle");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
-  const hcaptchaRef = useRef<HCaptcha>(null);
-  const hcaptchaSiteKey = process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY;
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
+  const recaptchaSiteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
 
   const onSubmit = async (data: ContactFormData) => {
-    if (hcaptchaSiteKey && !captchaToken) return;
+    if (recaptchaSiteKey && !captchaToken) return;
     setIsSubmitting(true);
     setSubmitStatus("idle");
+    setErrorMessage(null);
     try {
       const payload = { ...data, captchaToken };
       const response = await fetch("/api/contact-messages", {
@@ -45,17 +47,33 @@ export default function ContactForm({
       });
 
       if (!response.ok) {
-        throw new Error("Failed to submit contact message");
+        let message = "Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es später erneut.";
+        if (response.status === 429) {
+          message = "Zu viele Anfragen. Bitte versuchen Sie es später erneut.";
+        } else {
+          try {
+            const errorData = await response.json();
+            if (
+              response.status === 400 &&
+              typeof errorData.error === "string" &&
+              errorData.error.toLowerCase().includes("captcha")
+            ) {
+              message = "Captcha-Überprüfung fehlgeschlagen. Bitte versuchen Sie es erneut.";
+            }
+          } catch {}
+        }
+        throw new Error(message);
       }
 
       setSubmitStatus("success");
       reset();
-    } catch {
+    } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : null);
       setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);
       setCaptchaToken(null);
-      hcaptchaRef.current?.resetCaptcha();
+      recaptchaRef.current?.reset();
     }
   };
 
@@ -168,18 +186,22 @@ export default function ContactForm({
                   );
                 })}
 
-                {hcaptchaSiteKey && (
-                  <HCaptcha
-                    sitekey={hcaptchaSiteKey}
-                    onVerify={setCaptchaToken}
-                    onExpire={() => setCaptchaToken(null)}
-                    ref={hcaptchaRef}
+                {errorMessage && (
+                  <div className="text-red-600 text-center">{errorMessage}</div>
+                )}
+
+                {recaptchaSiteKey && (
+                  <ReCAPTCHA
+                    sitekey={recaptchaSiteKey}
+                    onChange={setCaptchaToken}
+                    onExpired={() => setCaptchaToken(null)}
+                    ref={recaptchaRef}
                   />
                 )}
                 <button
                   type="submit"
                   disabled={
-                    isSubmitting || (hcaptchaSiteKey ? !captchaToken : false)
+                    isSubmitting || (recaptchaSiteKey ? !captchaToken : false)
                   }
                   className="btn-primary w-full flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
