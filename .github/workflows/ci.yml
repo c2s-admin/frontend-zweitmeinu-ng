@@ -10,10 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v1
+      - uses: actions/setup-node@v4
         with:
-          bun-version: latest
-      - run: bun install
-      - run: bun run lint
-      - run: bun test
-      - run: bun run build
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npx tsc --noEmit --noUnusedLocals --noUnusedParameters
+      - run: npx next lint
+      - run: npm test
+      - run: npx next build
