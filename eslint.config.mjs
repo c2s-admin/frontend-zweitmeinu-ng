@@ -25,7 +25,7 @@ const eslintConfig = [
       "@next/next/no-img-element": "off",
       "jsx-a11y/alt-text": "warn",
     },
-  },
+  }
 ];
 
 export default eslintConfig;

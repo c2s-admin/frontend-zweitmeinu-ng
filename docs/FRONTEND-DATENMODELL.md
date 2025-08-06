@@ -4,6 +4,7 @@
 > **Strapi Version**: v5.20.0
 > **Database**: PostgreSQL (strapi_production)
 > **Language**: TypeScript ONLY - No JavaScript files allowed in production
+> **Component System**: Storybook 9.1.1 Healthcare Design System
 
 ## 🎯 Quick Reference
 
@@ -12,6 +13,7 @@
 - **Multi-Site Architecture** via `site-configuration` hub
 - **90+ Dynamic Zone Components** for flexible page building
 - **TypeScript Interfaces** for all data structures
+- **Healthcare Design System** via Storybook integration
 
 ### Essential Commands
 ```bash
@@ -23,6 +25,30 @@ find ./src -name "*.js" | wc -l  # Should return 0
 
 # Build with memory optimization
 NODE_OPTIONS='--max-old-space-size=4096' npm run build
+
+# Storybook development
+npm run storybook              # Start Storybook server
+npm run build-storybook        # Production build for CI/CD
+```
+
+### Healthcare Component System
+```typescript
+// Storybook Healthcare Components
+interface HealthcareComponentTypes {
+  'healthcare.button': HealthcareButtonProps
+  'healthcare.card': HealthcareCardProps
+  'healthcare.input': HealthcareInputProps
+  'healthcare.header': HealthcareHeaderProps
+  // 25+ healthcare components planned
+}
+
+// WCAG 2.1 AA Compliance
+interface AccessibilityStandards {
+  touchTargets: '44px minimum, 56px healthcare standard'
+  contrastRatio: '4.5:1 for normal text'
+  focusIndicators: '3px solid outline with 2px offset'
+  screenReader: 'Full ARIA support'
+}
 ```
 
 ## 🏗️ System Overview

@@ -727,9 +727,127 @@ const metrics = await performanceAPI.get('/performance-metrics/export', {
 })
 ```
 
+## 📚 Storybook Integration API
+
+### Component Documentation API
+
+#### Healthcare Design System Types
+```typescript
+// Component types for Storybook integration
+interface HealthcareButtonProps {
+  primary?: boolean
+  backgroundColor?: string
+  size?: 'small' | 'medium' | 'large'
+  label: string
+  disabled?: boolean
+  'aria-label'?: string
+  onClick?: () => void
+}
+
+interface HealthcareDesignTokens {
+  colors: {
+    'healthcare-primary': '#004166'
+    'healthcare-primary-light': '#1278B3'
+    'healthcare-accent-green': '#B3AF09'
+    'healthcare-light': '#ffffff'
+    'healthcare-background': '#f8fafc'
+  }
+  spacing: {
+    touchTarget: {
+      small: '44px'   // WCAG 2.1 AA minimum
+      medium: '56px'  // Healthcare optimized
+      large: '64px'   // Primary CTAs
+    }
+  }
+  accessibility: {
+    focusOutline: '3px solid'
+    focusOffset: '2px'
+    contrastRatio: '4.5:1' // WCAG 2.1 AA
+  }
+}
+```
+
+#### Storybook Development Endpoints
+```typescript
+// Development server endpoints
+interface StorybookAPI {
+  development: {
+    nextjs: 'http://localhost:3000'      // Next.js development server
+    storybook: 'http://localhost:6006'   // Storybook development server
+    storybook_alt: 'http://localhost:6007' // Alternative port
+  }
+  
+  production: {
+    build: 'npm run build-storybook'     // Production build command
+    output: './storybook-static/'        // Static build directory
+    deploy: 'CI/CD via GitHub Actions'   // Deployment method
+  }
+}
+```
+
+### Component Integration with Strapi
+
+#### Section Component Extensions
+```typescript
+// Extended section types for Storybook integration
+interface HealthcareSectionProps {
+  __component: string
+  id: number
+  // Standard Strapi section props...
+  
+  // Storybook-specific enhancements
+  storybookVariant?: 'default' | 'healthcare' | 'emergency'
+  accessibilityLevel?: 'AA' | 'AAA'
+  touchOptimized?: boolean
+}
+
+// Example: Healthcare Button in Strapi sections
+interface HealthcareCallToActionSection {
+  __component: 'sections.cta-healthcare'
+  button: HealthcareButtonProps
+  emergencyFallback?: {
+    text: string
+    phone: string
+    visible: boolean
+  }
+}
+```
+
+### Accessibility API Integration
+
+#### WCAG 2.1 AA Validation
+```typescript
+interface AccessibilityValidation {
+  endpoint: '/api/accessibility/validate'
+  
+  request: {
+    componentType: string
+    props: Record<string, any>
+    context: 'healthcare' | 'general'
+  }
+  
+  response: {
+    compliant: boolean
+    level: 'AA' | 'AAA'
+    issues: AccessibilityIssue[]
+    score: number // 0-100
+    recommendations: string[]
+  }
+}
+
+interface AccessibilityIssue {
+  rule: string
+  severity: 'error' | 'warning'
+  description: string
+  element: string
+  fix: string
+}
+```
+
 ---
 
-**API Reference zuletzt aktualisiert**: 2025-08-03  
-**Version**: 2.1 (Performance Monitoring hinzugefügt)  
+**API Reference zuletzt aktualisiert**: 2025-08-06  
+**Version**: 2.2 (Storybook Integration hinzugefügt)  
 **Maintenance**: Bei API-Änderungen auch FRONTEND-DATENMODELL.md aktualisieren  
-**Testing**: Alle Beispiele mit TypeScript getestet
+**Testing**: Alle Beispiele mit TypeScript getestet  
+**Storybook**: Healthcare Design System mit WCAG 2.1 AA Compliance
