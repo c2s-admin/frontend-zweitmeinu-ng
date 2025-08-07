@@ -1,0 +1,846 @@
+/* Healthcare Core Values Styles - WCAG 2.1 AA Compliant */
+
+.healthcare-core-values {
+  width: 100%;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  font-family: 'Roboto Condensed', sans-serif;
+}
+
+/* Size Variants */
+.healthcare-core-values--small {
+  padding: 20px 16px;
+  font-size: 14px;
+}
+
+.healthcare-core-values--medium {
+  padding: 40px 20px;
+  font-size: 16px;
+}
+
+.healthcare-core-values--large {
+  padding: 60px 20px;
+  font-size: 18px;
+}
+
+/* Layout Variants */
+.healthcare-core-values--cards {
+  /* Default card layout */
+}
+
+.healthcare-core-values--grid {
+  background: white;
+}
+
+.healthcare-core-values--list .healthcare-core-values-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.healthcare-core-values--featured .healthcare-core-values-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-rows: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.healthcare-core-values--featured .healthcare-core-values-value:first-child {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+}
+
+.healthcare-core-values--compact .healthcare-core-values-value {
+  padding: 16px;
+}
+
+/* Medical Context */
+.healthcare-core-values--medical {
+  background: linear-gradient(135deg, #f0f9ff 0%, #dbeafe 100%);
+  border-top: 4px solid #1278B3;
+}
+
+.healthcare-core-values--medical .healthcare-core-values-title {
+  color: #1278B3;
+}
+
+/* Interactive State */
+.healthcare-core-values--interactive .healthcare-core-values-value {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.healthcare-core-values--interactive .healthcare-core-values-value:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* Loading State */
+.healthcare-core-values--loading {
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+/* Header */
+.healthcare-core-values-header {
+  max-width: 1200px;
+  margin: 0 auto 40px;
+  text-align: center;
+}
+
+.healthcare-core-values-title {
+  margin: 0 0 16px 0;
+  font-size: 36px;
+  font-weight: 700;
+  color: #1f2937;
+  line-height: 1.2;
+}
+
+.healthcare-core-values--small .healthcare-core-values-title {
+  font-size: 28px;
+}
+
+.healthcare-core-values--large .healthcare-core-values-title {
+  font-size: 42px;
+}
+
+.healthcare-core-values-subtitle {
+  margin: 0 0 16px 0;
+  font-size: 20px;
+  font-weight: 500;
+  color: #6b7280;
+  line-height: 1.3;
+}
+
+.healthcare-core-values-description {
+  margin: 0;
+  font-size: 16px;
+  color: #374151;
+  line-height: 1.6;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* Values Grid */
+.healthcare-core-values-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Value Card */
+.healthcare-core-values-value {
+  background-color: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.healthcare-core-values-value:focus {
+  outline: 3px solid #1278B3;
+  outline-offset: 2px;
+}
+
+.healthcare-core-values-value--expanded {
+  border-color: #1278B3;
+  box-shadow: 0 8px 16px rgba(18, 120, 179, 0.15);
+}
+
+.healthcare-core-values-value--selected {
+  border-color: #059669;
+  background: linear-gradient(135deg, #f0fdf4 0%, white 100%);
+  transform: scale(1.02);
+}
+
+/* Value Header */
+.healthcare-core-values-value-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.healthcare-core-values-value-icon-container {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.healthcare-core-values-value-icon {
+  width: 32px;
+  height: 32px;
+  color: #1278B3;
+}
+
+.healthcare-core-values--small .healthcare-core-values-value-icon {
+  width: 28px;
+  height: 28px;
+}
+
+.healthcare-core-values--large .healthcare-core-values-value-icon {
+  width: 36px;
+  height: 36px;
+}
+
+.healthcare-core-values-value-priority {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
+}
+
+.healthcare-core-values-value-priority-icon {
+  width: 8px;
+  height: 8px;
+  color: white;
+}
+
+.healthcare-core-values-value-header-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.healthcare-core-values-value-name {
+  margin: 0 0 8px 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #1f2937;
+  line-height: 1.2;
+}
+
+.healthcare-core-values--small .healthcare-core-values-value-name {
+  font-size: 18px;
+}
+
+.healthcare-core-values--large .healthcare-core-values-value-name {
+  font-size: 22px;
+}
+
+.healthcare-core-values-value-description {
+  margin: 0;
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+.healthcare-core-values-value-toggle {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.healthcare-core-values-value-toggle:hover {
+  border-color: #1278B3;
+  background-color: #f0f9ff;
+  color: #1278B3;
+}
+
+.healthcare-core-values-value-toggle:focus {
+  outline: 2px solid #1278B3;
+  outline-offset: 2px;
+}
+
+.healthcare-core-values-value-toggle-icon {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.2s ease;
+}
+
+.healthcare-core-values-value-toggle-icon--expanded {
+  transform: rotate(90deg);
+}
+
+/* Value Details */
+.healthcare-core-values-value-details {
+  margin-bottom: 16px;
+  padding: 16px;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.healthcare-core-values-value-details p {
+  margin: 0;
+  font-size: 14px;
+  color: #374151;
+  line-height: 1.6;
+}
+
+/* Metrics */
+.healthcare-core-values-value-metrics {
+  margin-bottom: 16px;
+}
+
+.healthcare-core-values-value-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 16px;
+}
+
+.healthcare-core-values-value-metric {
+  text-align: center;
+  padding: 12px;
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  border-radius: 8px;
+  border: 1px solid #bbf7d0;
+}
+
+.healthcare-core-values-value-metric-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #059669;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.healthcare-core-values--small .healthcare-core-values-value-metric-value {
+  font-size: 20px;
+}
+
+.healthcare-core-values--large .healthcare-core-values-value-metric-value {
+  font-size: 28px;
+}
+
+.healthcare-core-values-value-metric-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #047857;
+  margin-bottom: 2px;
+}
+
+.healthcare-core-values-value-metric-description {
+  font-size: 10px;
+  color: #065f46;
+  opacity: 0.8;
+}
+
+/* Examples */
+.healthcare-core-values-value-examples {
+  margin-bottom: 16px;
+  padding: 16px;
+  background-color: #fffbeb;
+  border-radius: 8px;
+  border: 1px solid #fed7aa;
+}
+
+.healthcare-core-values-value-examples h4 {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #92400e;
+}
+
+.healthcare-core-values-value-examples ul {
+  margin: 0;
+  padding-left: 16px;
+  list-style-type: none;
+}
+
+.healthcare-core-values-value-examples li {
+  position: relative;
+  font-size: 13px;
+  color: #78350f;
+  line-height: 1.4;
+  margin-bottom: 6px;
+}
+
+.healthcare-core-values-value-examples li::before {
+  content: '✓';
+  position: absolute;
+  left: -16px;
+  color: #d97706;
+  font-weight: 600;
+}
+
+/* Certifications */
+.healthcare-core-values-value-certifications {
+  margin-bottom: 16px;
+}
+
+.healthcare-core-values-value-certifications-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.healthcare-core-values-value-certification {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+  border: 2px solid #c7d2fe;
+  border-radius: 20px;
+  color: #3730a3;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.healthcare-core-values-value-certification:hover {
+  background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+  border-color: #a5b4fc;
+  transform: scale(1.05);
+}
+
+.healthcare-core-values-value-certification:focus {
+  outline: 2px solid #4f46e5;
+  outline-offset: 2px;
+}
+
+.healthcare-core-values-value-certification-icon {
+  width: 12px;
+  height: 12px;
+}
+
+/* Actions */
+.healthcare-core-values-value-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.healthcare-core-values-value-learn-more {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, #1278B3 0%, #004166 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.healthcare-core-values-value-learn-more:hover {
+  background: linear-gradient(135deg, #004166 0%, #1278B3 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(18, 120, 179, 0.25);
+}
+
+.healthcare-core-values-value-learn-more:focus {
+  outline: 2px solid #10b981;
+  outline-offset: 2px;
+}
+
+.healthcare-core-values-value-learn-more-icon {
+  width: 14px;
+  height: 14px;
+}
+
+.healthcare-core-values-value-learn-more-arrow {
+  width: 12px;
+  height: 12px;
+  transition: transform 0.2s ease;
+}
+
+.healthcare-core-values-value-learn-more:hover .healthcare-core-values-value-learn-more-arrow {
+  transform: translateX(2px);
+}
+
+/* Disclaimer */
+.healthcare-core-values-disclaimer {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 40px;
+  padding: 20px;
+  background-color: #f0fdf4;
+  border: 2px solid #bbf7d0;
+  border-radius: 12px;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.healthcare-core-values-disclaimer-icon {
+  width: 20px;
+  height: 20px;
+  color: #059669;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.healthcare-core-values-disclaimer p {
+  margin: 0;
+  font-size: 14px;
+  color: #047857;
+  line-height: 1.5;
+}
+
+.healthcare-core-values-disclaimer strong {
+  font-weight: 600;
+}
+
+/* Loading Skeleton */
+.healthcare-core-values-skeleton {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.healthcare-core-values-skeleton-header {
+  height: 100px;
+  background-color: #e2e8f0;
+  border-radius: 12px;
+  margin-bottom: 40px;
+  animation: healthcare-core-values-skeleton-pulse 2s infinite;
+}
+
+.healthcare-core-values-skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 24px;
+}
+
+.healthcare-core-values-skeleton-card {
+  height: 250px;
+  background-color: #f1f5f9;
+  border-radius: 16px;
+  animation: healthcare-core-values-skeleton-pulse 2s infinite;
+}
+
+.healthcare-core-values-skeleton-card:nth-child(2n) {
+  animation-delay: 0.5s;
+}
+
+.healthcare-core-values-skeleton-card:nth-child(3n) {
+  animation-delay: 1s;
+}
+
+@keyframes healthcare-core-values-skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .healthcare-core-values-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+  }
+
+  .healthcare-core-values--featured .healthcare-core-values-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+
+  .healthcare-core-values--featured .healthcare-core-values-value:first-child {
+    grid-column: 1;
+    grid-row: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .healthcare-core-values {
+    padding: 20px 16px;
+  }
+
+  .healthcare-core-values-title {
+    font-size: 28px;
+  }
+
+  .healthcare-core-values-subtitle {
+    font-size: 18px;
+  }
+
+  .healthcare-core-values-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .healthcare-core-values-value {
+    padding: 20px;
+  }
+
+  .healthcare-core-values-value-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .healthcare-core-values-value-icon-container {
+    align-self: center;
+  }
+
+  .healthcare-core-values-value-header-content {
+    text-align: center;
+  }
+
+  .healthcare-core-values-value-toggle {
+    align-self: center;
+  }
+
+  .healthcare-core-values-value-metrics-grid {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 12px;
+  }
+
+  .healthcare-core-values-value-certifications-list {
+    justify-content: center;
+  }
+
+  .healthcare-core-values-value-actions {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .healthcare-core-values-value-header {
+    gap: 8px;
+  }
+
+  .healthcare-core-values-value-metrics-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .healthcare-core-values-value-metric {
+    padding: 8px;
+  }
+
+  .healthcare-core-values-value-metric-value {
+    font-size: 18px;
+  }
+
+  .healthcare-core-values-value-certifications-list {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .healthcare-core-values-value-learn-more {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .healthcare-core-values-value {
+    border-width: 3px;
+  }
+
+  .healthcare-core-values-value-toggle,
+  .healthcare-core-values-value-certification,
+  .healthcare-core-values-value-learn-more {
+    border-width: 3px;
+  }
+
+  .healthcare-core-values-value:focus,
+  .healthcare-core-values-value-toggle:focus,
+  .healthcare-core-values-value-certification:focus,
+  .healthcare-core-values-value-learn-more:focus {
+    outline-width: 3px;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .healthcare-core-values-value,
+  .healthcare-core-values-value-toggle,
+  .healthcare-core-values-value-certification,
+  .healthcare-core-values-value-learn-more,
+  .healthcare-core-values-value-toggle-icon,
+  .healthcare-core-values-value-learn-more-arrow,
+  .healthcare-core-values-skeleton-card {
+    transition: none;
+    animation: none;
+  }
+
+  .healthcare-core-values--interactive .healthcare-core-values-value:hover,
+  .healthcare-core-values-value--selected {
+    transform: none;
+  }
+
+  .healthcare-core-values-value-certification:hover {
+    transform: none;
+  }
+
+  .healthcare-core-values-value-learn-more:hover {
+    transform: none;
+  }
+
+  .healthcare-core-values-value-toggle-icon--expanded {
+    transform: none;
+  }
+
+  .healthcare-core-values-value-learn-more:hover .healthcare-core-values-value-learn-more-arrow {
+    transform: none;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .healthcare-core-values {
+    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+    color: #e5e7eb;
+  }
+
+  .healthcare-core-values--medical {
+    background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+    border-color: #3b82f6;
+  }
+
+  .healthcare-core-values-title {
+    color: #f3f4f6;
+  }
+
+  .healthcare-core-values-subtitle {
+    color: #9ca3af;
+  }
+
+  .healthcare-core-values-description {
+    color: #d1d5db;
+  }
+
+  .healthcare-core-values-value {
+    background-color: #374151;
+    border-color: #6b7280;
+  }
+
+  .healthcare-core-values-value:hover {
+    background-color: #4b5563;
+  }
+
+  .healthcare-core-values-value--selected {
+    background: linear-gradient(135deg, #064e3b 0%, #374151 100%);
+    border-color: #10b981;
+  }
+
+  .healthcare-core-values-value-name {
+    color: #f3f4f6;
+  }
+
+  .healthcare-core-values-value-description {
+    color: #9ca3af;
+  }
+
+  .healthcare-core-values-value-toggle {
+    background-color: #4b5563;
+    border-color: #6b7280;
+    color: #9ca3af;
+  }
+
+  .healthcare-core-values-value-toggle:hover {
+    background-color: #6b7280;
+    border-color: #3b82f6;
+    color: #bfdbfe;
+  }
+
+  .healthcare-core-values-value-details {
+    background-color: #1f2937;
+    border-color: #4b5563;
+  }
+
+  .healthcare-core-values-value-details p {
+    color: #d1d5db;
+  }
+
+  .healthcare-core-values-value-metric {
+    background: linear-gradient(135deg, #064e3b 0%, #065f46 100%);
+    border-color: #047857;
+  }
+
+  .healthcare-core-values-value-examples {
+    background-color: #451a03;
+    border-color: #d97706;
+  }
+
+  .healthcare-core-values-value-examples h4 {
+    color: #f59e0b;
+  }
+
+  .healthcare-core-values-value-examples li {
+    color: #fdba74;
+  }
+
+  .healthcare-core-values-value-certification {
+    background: linear-gradient(135deg, #312e81 0%, #3730a3 100%);
+    border-color: #6366f1;
+    color: #c7d2fe;
+  }
+
+  .healthcare-core-values-value-certification:hover {
+    background: linear-gradient(135deg, #3730a3 0%, #4338ca 100%);
+    border-color: #818cf8;
+  }
+
+  .healthcare-core-values-disclaimer {
+    background-color: #064e3b;
+    border-color: #059669;
+  }
+
+  .healthcare-core-values-disclaimer p {
+    color: #a7f3d0;
+  }
+
+  .healthcare-core-values-skeleton-header,
+  .healthcare-core-values-skeleton-card {
+    background-color: #4b5563;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .healthcare-core-values {
+    background: white !important;
+    color: black !important;
+    break-inside: avoid;
+  }
+
+  .healthcare-core-values-value {
+    break-inside: avoid;
+    border: 1px solid #000;
+    margin-bottom: 20px;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  .healthcare-core-values-value:hover {
+    transform: none;
+  }
+
+  .healthcare-core-values-value-toggle,
+  .healthcare-core-values-value-actions {
+    display: none;
+  }
+
+  .healthcare-core-values-value-details {
+    display: block !important;
+  }
+
+  .healthcare-core-values-skeleton-header,
+  .healthcare-core-values-skeleton-card {
+    animation: none;
+  }
+
+  .healthcare-core-values-title,
+  .healthcare-core-values-subtitle,
+  .healthcare-core-values-description,
+  .healthcare-core-values-value-name {
+    color: black !important;
+  }
+}

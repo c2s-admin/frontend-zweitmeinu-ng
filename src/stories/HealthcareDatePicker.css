@@ -1,0 +1,1148 @@
+/* Healthcare Date Picker Styles - WCAG 2.1 AA Compliant */
+
+.healthcare-datepicker-container {
+  position: relative;
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  background-color: white;
+  border: 2px solid #f1f5f9;
+  border-radius: 16px;
+  padding: 24px;
+  font-family: 'Roboto Condensed', sans-serif;
+}
+
+/* Container Sizes */
+.healthcare-datepicker-container--small {
+  padding: 16px;
+  max-width: 500px;
+  font-size: 14px;
+}
+
+.healthcare-datepicker-container--medium {
+  padding: 24px;
+  max-width: 700px;
+  font-size: 16px;
+}
+
+.healthcare-datepicker-container--large {
+  padding: 32px;
+  max-width: 900px;
+  font-size: 18px;
+}
+
+/* Container Variants */
+.healthcare-datepicker-container--compact {
+  padding: 16px;
+  max-width: 600px;
+}
+
+.healthcare-datepicker-container--inline {
+  border: none;
+  padding: 0;
+  max-width: none;
+}
+
+.healthcare-datepicker-container--modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* Emergency Mode */
+.healthcare-datepicker-container--emergency {
+  border-color: #dc2626;
+  background-color: #fef2f2;
+  border-width: 3px;
+}
+
+.healthcare-datepicker-container--emergency .healthcare-datepicker-title {
+  color: #dc2626;
+}
+
+/* Confirmation Step */
+.healthcare-datepicker-container--confirmation {
+  border-color: #10b981;
+  background-color: #f0fdf4;
+}
+
+/* Loading State */
+.healthcare-datepicker-container--loading {
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+/* Header */
+.healthcare-datepicker-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #f1f5f9;
+}
+
+.healthcare-datepicker-title-container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.healthcare-datepicker-title-icon {
+  width: 32px;
+  height: 32px;
+  color: #1278B3;
+  flex-shrink: 0;
+}
+
+.healthcare-datepicker-container--small .healthcare-datepicker-title-icon {
+  width: 28px;
+  height: 28px;
+}
+
+.healthcare-datepicker-container--large .healthcare-datepicker-title-icon {
+  width: 36px;
+  height: 36px;
+}
+
+.healthcare-datepicker-title {
+  margin: 0 0 4px 0;
+  font-size: 24px;
+  font-weight: 600;
+  color: #1f2937;
+  line-height: 1.2;
+}
+
+.healthcare-datepicker-container--small .healthcare-datepicker-title {
+  font-size: 20px;
+}
+
+.healthcare-datepicker-container--large .healthcare-datepicker-title {
+  font-size: 28px;
+}
+
+.healthcare-datepicker-subtitle {
+  margin: 0;
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+.healthcare-datepicker-close {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  border: none;
+  border-radius: 8px;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.healthcare-datepicker-close:hover {
+  background-color: #f3f4f6;
+  color: #1f2937;
+}
+
+.healthcare-datepicker-close:focus {
+  outline: 2px solid #1278B3;
+  outline-offset: 2px;
+}
+
+/* Section Titles */
+.healthcare-datepicker-section-title {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.healthcare-datepicker-container--small .healthcare-datepicker-section-title {
+  font-size: 16px;
+}
+
+.healthcare-datepicker-container--large .healthcare-datepicker-section-title {
+  font-size: 20px;
+}
+
+/* Doctor Selection */
+.healthcare-datepicker-doctors {
+  margin-bottom: 32px;
+}
+
+.healthcare-datepicker-doctor-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.healthcare-datepicker-doctor {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  background-color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 56px; /* Healthcare touch target */
+}
+
+.healthcare-datepicker-doctor:hover {
+  border-color: #1278B3;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.healthcare-datepicker-doctor:focus {
+  outline: 3px solid #1278B3;
+  outline-offset: 2px;
+}
+
+.healthcare-datepicker-doctor--selected {
+  border-color: #1278B3;
+  background-color: #f0f9ff;
+  box-shadow: 0 4px 6px rgba(18, 120, 179, 0.1);
+}
+
+.healthcare-datepicker-doctor-info h4 {
+  margin: 0 0 4px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.healthcare-datepicker-doctor-info span {
+  display: block;
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+.healthcare-datepicker-doctor-rating {
+  font-size: 12px;
+  color: #f59e0b;
+  font-weight: 500;
+}
+
+.healthcare-datepicker-doctor-check {
+  width: 20px;
+  height: 20px;
+  color: #10b981;
+}
+
+/* Calendar */
+.healthcare-datepicker-calendar {
+  margin-bottom: 32px;
+}
+
+.healthcare-datepicker-calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding: 0 8px;
+}
+
+.healthcare-datepicker-nav-button {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.healthcare-datepicker-nav-button:hover {
+  border-color: #1278B3;
+  color: #1278B3;
+  background-color: #f0f9ff;
+}
+
+.healthcare-datepicker-nav-button:focus {
+  outline: 2px solid #1278B3;
+  outline-offset: 2px;
+}
+
+.healthcare-datepicker-month-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  text-align: center;
+  flex: 1;
+}
+
+.healthcare-datepicker-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.healthcare-datepicker-weekday {
+  padding: 8px 4px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+  background-color: #f8fafc;
+  border-radius: 4px;
+}
+
+.healthcare-datepicker-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.healthcare-datepicker-day {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 8px 4px;
+  border-radius: 8px;
+  cursor: default;
+  transition: all 0.2s ease;
+  font-size: 14px;
+}
+
+.healthcare-datepicker-container--large .healthcare-datepicker-day {
+  min-height: 48px;
+  font-size: 16px;
+}
+
+.healthcare-datepicker-day--current-month {
+  color: #1f2937;
+}
+
+.healthcare-datepicker-day--other-month {
+  color: #d1d5db;
+}
+
+.healthcare-datepicker-day--available {
+  cursor: pointer;
+  background-color: #f0f9ff;
+  border: 2px solid transparent;
+}
+
+.healthcare-datepicker-day--available:hover {
+  background-color: #1278B3;
+  color: white;
+  transform: scale(1.05);
+}
+
+.healthcare-datepicker-day--available:focus {
+  outline: 2px solid #1278B3;
+  outline-offset: 2px;
+}
+
+.healthcare-datepicker-day--selected {
+  background-color: #1278B3 !important;
+  color: white !important;
+  font-weight: 600;
+  box-shadow: 0 4px 6px rgba(18, 120, 179, 0.3);
+}
+
+.healthcare-datepicker-day--past {
+  color: #d1d5db;
+  cursor: not-allowed;
+  background-color: transparent;
+}
+
+.healthcare-datepicker-day--weekend {
+  background-color: #fef3c7;
+}
+
+.healthcare-datepicker-day--weekend.healthcare-datepicker-day--available:hover {
+  background-color: #f59e0b;
+}
+
+.healthcare-datepicker-day--holiday {
+  background-color: #fee2e2;
+}
+
+.healthcare-datepicker-day--holiday.healthcare-datepicker-day--available:hover {
+  background-color: #dc2626;
+}
+
+.healthcare-datepicker-day-number {
+  position: relative;
+  z-index: 2;
+}
+
+.healthcare-datepicker-day-indicator {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.healthcare-datepicker-day-indicator--available {
+  background-color: #10b981;
+}
+
+.healthcare-datepicker-day-indicator--holiday {
+  background-color: #dc2626;
+}
+
+/* Time Slots */
+.healthcare-datepicker-slots {
+  margin-bottom: 24px;
+}
+
+.healthcare-datepicker-no-slots {
+  text-align: center;
+  padding: 32px 24px;
+  color: #6b7280;
+}
+
+.healthcare-datepicker-no-slots-icon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 16px;
+  color: #9ca3af;
+}
+
+.healthcare-datepicker-no-slots p {
+  margin: 8px 0;
+  font-size: 16px;
+}
+
+.healthcare-datepicker-no-slots-hint {
+  font-size: 14px;
+  color: #9ca3af;
+}
+
+.healthcare-datepicker-slot-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.healthcare-datepicker-slot {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px 20px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  background-color: white;
+  transition: all 0.2s ease;
+  cursor: default;
+}
+
+.healthcare-datepicker-slot--available {
+  cursor: pointer;
+}
+
+.healthcare-datepicker-slot--available:hover {
+  border-color: #1278B3;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transform: translateY(-2px);
+}
+
+.healthcare-datepicker-slot--available:focus {
+  outline: 3px solid #1278B3;
+  outline-offset: 2px;
+}
+
+.healthcare-datepicker-slot--selected {
+  border-color: #1278B3;
+  background-color: #f0f9ff;
+  box-shadow: 0 4px 6px rgba(18, 120, 179, 0.1);
+}
+
+.healthcare-datepicker-slot--unavailable {
+  background-color: #f9fafb;
+  border-color: #e5e7eb;
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.healthcare-datepicker-slot--emergency {
+  border-color: #dc2626;
+  background-color: #fef2f2;
+  position: relative;
+  overflow: hidden;
+}
+
+.healthcare-datepicker-slot--emergency::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background-color: #dc2626;
+}
+
+.healthcare-datepicker-slot-time {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.healthcare-datepicker-slot-time-icon {
+  width: 16px;
+  height: 16px;
+  color: #6b7280;
+  flex-shrink: 0;
+}
+
+.healthcare-datepicker-slot-time-text {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.healthcare-datepicker-slot-details {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.healthcare-datepicker-slot-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.healthcare-datepicker-slot-badge--emergency {
+  background-color: #dc2626;
+  color: white;
+}
+
+.healthcare-datepicker-slot-badge--emergency svg {
+  width: 12px;
+  height: 12px;
+}
+
+.healthcare-datepicker-slot-type {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.healthcare-datepicker-slot-location {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.healthcare-datepicker-slot-location-icon {
+  width: 12px;
+  height: 12px;
+}
+
+.healthcare-datepicker-slot-cost {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1278B3;
+  margin-left: auto;
+}
+
+.healthcare-datepicker-slot-notes {
+  font-size: 12px;
+  color: #6b7280;
+  font-style: italic;
+  margin-top: 4px;
+}
+
+.healthcare-datepicker-slot-preparation {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #f59e0b;
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+.healthcare-datepicker-slot-preparation-icon {
+  width: 14px;
+  height: 14px;
+}
+
+/* Actions */
+.healthcare-datepicker-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding-top: 24px;
+  border-top: 2px solid #f1f5f9;
+}
+
+.healthcare-datepicker-action {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+  text-decoration: none;
+  min-height: 44px; /* Healthcare touch target */
+}
+
+.healthcare-datepicker-action--primary {
+  background-color: #1278B3;
+  color: white;
+  border-color: #1278B3;
+}
+
+.healthcare-datepicker-action--primary:hover {
+  background-color: #004166;
+  border-color: #004166;
+}
+
+.healthcare-datepicker-action--secondary {
+  background-color: white;
+  color: #1278B3;
+  border-color: #1278B3;
+}
+
+.healthcare-datepicker-action--secondary:hover {
+  background-color: #f0f9ff;
+}
+
+.healthcare-datepicker-action:focus {
+  outline: 2px solid #1278B3;
+  outline-offset: 2px;
+}
+
+/* Confirmation Step */
+.healthcare-datepicker-confirmation {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.healthcare-datepicker-confirmation-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.healthcare-datepicker-confirmation-icon {
+  width: 32px;
+  height: 32px;
+  color: #10b981;
+}
+
+.healthcare-datepicker-confirmation-header h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.healthcare-datepicker-confirmation-details {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px;
+  background-color: #f8fafc;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.healthcare-datepicker-confirmation-doctor,
+.healthcare-datepicker-confirmation-datetime,
+.healthcare-datepicker-confirmation-location {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.healthcare-datepicker-confirmation-detail-icon {
+  width: 20px;
+  height: 20px;
+  color: #1278B3;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.healthcare-datepicker-confirmation-doctor div,
+.healthcare-datepicker-confirmation-datetime div,
+.healthcare-datepicker-confirmation-location div {
+  display: flex;
+  flex-direction: column;
+}
+
+.healthcare-datepicker-confirmation-doctor strong,
+.healthcare-datepicker-confirmation-datetime strong,
+.healthcare-datepicker-confirmation-location strong {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 2px;
+}
+
+.healthcare-datepicker-confirmation-doctor span,
+.healthcare-datepicker-confirmation-datetime span,
+.healthcare-datepicker-confirmation-location span {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.healthcare-datepicker-confirmation-cost {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.healthcare-datepicker-confirmation-cost-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.healthcare-datepicker-confirmation-cost-value {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1278B3;
+}
+
+.healthcare-datepicker-confirmation-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.healthcare-datepicker-confirmation-actions .healthcare-datepicker-action {
+  flex: 1;
+  justify-content: center;
+}
+
+/* Loading Skeleton */
+.healthcare-datepicker-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.healthcare-datepicker-skeleton-header {
+  height: 60px;
+  background-color: #e2e8f0;
+  border-radius: 12px;
+  animation: healthcare-datepicker-skeleton-pulse 2s infinite;
+}
+
+.healthcare-datepicker-skeleton-calendar {
+  height: 300px;
+  background-color: #f1f5f9;
+  border-radius: 12px;
+  animation: healthcare-datepicker-skeleton-pulse 2s infinite;
+}
+
+.healthcare-datepicker-skeleton-slots {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.healthcare-datepicker-skeleton-slots::before,
+.healthcare-datepicker-skeleton-slots::after {
+  content: '';
+  height: 80px;
+  background-color: #e2e8f0;
+  border-radius: 12px;
+  animation: healthcare-datepicker-skeleton-pulse 2s infinite;
+}
+
+@keyframes healthcare-datepicker-skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .healthcare-datepicker-container {
+    padding: 16px;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+
+  .healthcare-datepicker-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .healthcare-datepicker-title-container {
+    width: 100%;
+  }
+
+  .healthcare-datepicker-close {
+    align-self: flex-end;
+  }
+
+  .healthcare-datepicker-doctor-list {
+    gap: 8px;
+  }
+
+  .healthcare-datepicker-doctor {
+    padding: 12px 16px;
+  }
+
+  .healthcare-datepicker-calendar-header {
+    padding: 0 4px;
+  }
+
+  .healthcare-datepicker-nav-button {
+    width: 36px;
+    height: 36px;
+  }
+
+  .healthcare-datepicker-day {
+    min-height: 36px;
+    font-size: 12px;
+  }
+
+  .healthcare-datepicker-slot {
+    padding: 12px 16px;
+  }
+
+  .healthcare-datepicker-actions {
+    flex-direction: column;
+  }
+
+  .healthcare-datepicker-action {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .healthcare-datepicker-container {
+    padding: 12px;
+  }
+
+  .healthcare-datepicker-title {
+    font-size: 18px;
+  }
+
+  .healthcare-datepicker-doctor {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .healthcare-datepicker-doctor-check {
+    align-self: flex-end;
+  }
+
+  .healthcare-datepicker-weekday {
+    font-size: 10px;
+    padding: 6px 2px;
+  }
+
+  .healthcare-datepicker-day {
+    min-height: 32px;
+    font-size: 11px;
+    padding: 4px 2px;
+  }
+
+  .healthcare-datepicker-slot-details {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .healthcare-datepicker-slot-cost {
+    margin-left: 0;
+  }
+
+  .healthcare-datepicker-confirmation-details {
+    padding: 16px;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .healthcare-datepicker-container {
+    border-width: 3px;
+  }
+
+  .healthcare-datepicker-doctor,
+  .healthcare-datepicker-slot {
+    border-width: 3px;
+  }
+
+  .healthcare-datepicker-day--available,
+  .healthcare-datepicker-nav-button,
+  .healthcare-datepicker-action {
+    border-width: 3px;
+  }
+
+  .healthcare-datepicker-action:focus,
+  .healthcare-datepicker-doctor:focus,
+  .healthcare-datepicker-day--available:focus {
+    outline-width: 3px;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .healthcare-datepicker-day,
+  .healthcare-datepicker-slot,
+  .healthcare-datepicker-doctor,
+  .healthcare-datepicker-action,
+  .healthcare-datepicker-skeleton-header,
+  .healthcare-datepicker-skeleton-calendar,
+  .healthcare-datepicker-skeleton-slots::before,
+  .healthcare-datepicker-skeleton-slots::after {
+    animation: none;
+    transition: none;
+  }
+
+  .healthcare-datepicker-day--available:hover,
+  .healthcare-datepicker-slot--available:hover {
+    transform: none;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .healthcare-datepicker-container {
+    background-color: #1f2937;
+    border-color: #374151;
+    color: #e5e7eb;
+  }
+
+  .healthcare-datepicker-container--emergency {
+    background-color: #7f1d1d;
+    border-color: #dc2626;
+  }
+
+  .healthcare-datepicker-container--confirmation {
+    background-color: #064e3b;
+    border-color: #059669;
+  }
+
+  .healthcare-datepicker-title {
+    color: #f3f4f6;
+  }
+
+  .healthcare-datepicker-subtitle {
+    color: #9ca3af;
+  }
+
+  .healthcare-datepicker-section-title {
+    color: #f3f4f6;
+  }
+
+  .healthcare-datepicker-close:hover {
+    background-color: #4b5563;
+    color: #e5e7eb;
+  }
+
+  .healthcare-datepicker-doctor {
+    background-color: #374151;
+    border-color: #4b5563;
+  }
+
+  .healthcare-datepicker-doctor:hover {
+    border-color: #60a5fa;
+  }
+
+  .healthcare-datepicker-doctor--selected {
+    background-color: #1e3a8a;
+    border-color: #3b82f6;
+  }
+
+  .healthcare-datepicker-doctor-info h4 {
+    color: #f3f4f6;
+  }
+
+  .healthcare-datepicker-doctor-info span {
+    color: #9ca3af;
+  }
+
+  .healthcare-datepicker-nav-button {
+    background-color: #374151;
+    border-color: #4b5563;
+    color: #9ca3af;
+  }
+
+  .healthcare-datepicker-nav-button:hover {
+    background-color: #1e3a8a;
+    border-color: #3b82f6;
+    color: #93c5fd;
+  }
+
+  .healthcare-datepicker-month-title {
+    color: #f3f4f6;
+  }
+
+  .healthcare-datepicker-weekday {
+    background-color: #374151;
+    color: #9ca3af;
+  }
+
+  .healthcare-datepicker-day--current-month {
+    color: #e5e7eb;
+  }
+
+  .healthcare-datepicker-day--available {
+    background-color: #1e3a8a;
+  }
+
+  .healthcare-datepicker-day--available:hover {
+    background-color: #3b82f6;
+  }
+
+  .healthcare-datepicker-day--selected {
+    background-color: #3b82f6 !important;
+  }
+
+  .healthcare-datepicker-day--weekend {
+    background-color: #451a03;
+  }
+
+  .healthcare-datepicker-day--weekend.healthcare-datepicker-day--available:hover {
+    background-color: #f59e0b;
+  }
+
+  .healthcare-datepicker-day--holiday {
+    background-color: #7f1d1d;
+  }
+
+  .healthcare-datepicker-slot {
+    background-color: #374151;
+    border-color: #4b5563;
+  }
+
+  .healthcare-datepicker-slot--available:hover {
+    border-color: #60a5fa;
+  }
+
+  .healthcare-datepicker-slot--selected {
+    background-color: #1e3a8a;
+    border-color: #3b82f6;
+  }
+
+  .healthcare-datepicker-slot--unavailable {
+    background-color: #1f2937;
+    border-color: #374151;
+  }
+
+  .healthcare-datepicker-slot--emergency {
+    background-color: #7f1d1d;
+    border-color: #dc2626;
+  }
+
+  .healthcare-datepicker-slot-time-text {
+    color: #f3f4f6;
+  }
+
+  .healthcare-datepicker-slot-type {
+    color: #d1d5db;
+  }
+
+  .healthcare-datepicker-slot-cost {
+    color: #93c5fd;
+  }
+
+  .healthcare-datepicker-action--secondary {
+    background-color: #374151;
+    color: #93c5fd;
+    border-color: #60a5fa;
+  }
+
+  .healthcare-datepicker-action--secondary:hover {
+    background-color: #4b5563;
+  }
+
+  .healthcare-datepicker-confirmation-details {
+    background-color: #374151;
+    border-color: #4b5563;
+  }
+
+  .healthcare-datepicker-confirmation-doctor strong,
+  .healthcare-datepicker-confirmation-datetime strong,
+  .healthcare-datepicker-confirmation-location strong {
+    color: #f3f4f6;
+  }
+
+  .healthcare-datepicker-confirmation-cost-label {
+    color: #d1d5db;
+  }
+
+  .healthcare-datepicker-confirmation-cost-value {
+    color: #93c5fd;
+  }
+
+  .healthcare-datepicker-skeleton-header,
+  .healthcare-datepicker-skeleton-slots::before,
+  .healthcare-datepicker-skeleton-slots::after {
+    background-color: #4b5563;
+  }
+
+  .healthcare-datepicker-skeleton-calendar {
+    background-color: #374151;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .healthcare-datepicker-container {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 2px solid #000;
+  }
+
+  .healthcare-datepicker-close,
+  .healthcare-datepicker-nav-button,
+  .healthcare-datepicker-actions {
+    display: none;
+  }
+
+  .healthcare-datepicker-day--available:hover,
+  .healthcare-datepicker-slot--available:hover {
+    transform: none;
+  }
+
+  .healthcare-datepicker-skeleton-header,
+  .healthcare-datepicker-skeleton-calendar,
+  .healthcare-datepicker-skeleton-slots::before,
+  .healthcare-datepicker-skeleton-slots::after {
+    animation: none;
+  }
+}

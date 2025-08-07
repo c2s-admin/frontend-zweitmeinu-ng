@@ -13,7 +13,13 @@
     "test:e2e": "playwright test",
     "ts:generate-types": "strapi typescript:generate --out-dir src/types/generated",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "analyze": "ANALYZE=true npm run build",
+    "analyze:server": "BUNDLE_ANALYZE=server npm run build",
+    "build:performance": "NODE_ENV=production npm run build && npm run analyze",
+    "perf:audit": "npm run build && npx lighthouse http://localhost:3000 --output html --output-path ./healthcare-lighthouse-report.html",
+    "perf:components": "npm run build-storybook && npx size-limit",
+    "optimize": "npm run build:performance && npm run perf:components"
   },
   "dependencies": {
     "@hcaptcha/react-hcaptcha": "^1.12.0",
@@ -58,6 +64,7 @@
     "postcss": "^8.5.3",
     "storybook": "^9.1.1",
     "tailwindcss": "^3.4.17",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "webpack-bundle-analyzer": "^4.10.1"
   }
 }

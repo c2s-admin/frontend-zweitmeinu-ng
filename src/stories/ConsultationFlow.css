@@ -1,0 +1,1001 @@
+/* Healthcare Consultation Flow Styles - WCAG 2.1 AA Compliant */
+
+.consultation-flow-container {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: white;
+  border: 2px solid #f1f5f9;
+  border-radius: 16px;
+  padding: 24px;
+  font-family: 'Roboto Condensed', sans-serif;
+}
+
+/* Container Variants */
+.consultation-flow-container--default {
+  padding: 24px;
+}
+
+.consultation-flow-container--compact {
+  padding: 16px;
+  max-width: 600px;
+}
+
+.consultation-flow-container--mobile {
+  padding: 16px;
+  max-width: 100%;
+  border-radius: 0;
+  border-left: none;
+  border-right: none;
+}
+
+.consultation-flow-container--emergency {
+  border-color: #dc2626;
+  background-color: #fef2f2;
+  border-width: 3px;
+}
+
+/* Container Sizes */
+.consultation-flow-container--small {
+  padding: 16px;
+  font-size: 14px;
+}
+
+.consultation-flow-container--medium {
+  padding: 24px;
+  font-size: 16px;
+}
+
+.consultation-flow-container--large {
+  padding: 32px;
+  font-size: 18px;
+  max-width: 900px;
+}
+
+/* Medical Context */
+.consultation-flow-container--medical {
+  border-color: #10b981;
+  background-color: #f0fdf4;
+}
+
+/* Loading State */
+.consultation-flow-container--loading {
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+/* Emergency Banner */
+.consultation-flow-emergency-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: -24px -24px 24px;
+  padding: 16px 24px;
+  background-color: #dc2626;
+  color: white;
+  border-radius: 16px 16px 0 0;
+  font-weight: 600;
+  animation: consultation-emergency-pulse 3s infinite;
+}
+
+@keyframes consultation-emergency-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.95; }
+}
+
+.consultation-flow-emergency-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.consultation-flow-emergency-text {
+  flex: 1;
+  font-size: 14px;
+}
+
+.consultation-flow-emergency-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.consultation-flow-emergency-button:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: scale(1.05);
+}
+
+.consultation-flow-emergency-button-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* Progress Container */
+.consultation-flow-progress-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+/* Progress Bar */
+.consultation-flow-progress-bar {
+  width: 100%;
+  height: 8px;
+  background-color: #f1f5f9;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.consultation-flow-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #1278B3 0%, #004166 100%);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+/* Progress Text */
+.consultation-flow-progress-text {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1f2937;
+  justify-content: center;
+}
+
+.consultation-flow-estimated-time {
+  color: #6b7280;
+  font-weight: 400;
+}
+
+/* Steps Indicator */
+.consultation-flow-steps-indicator {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.consultation-flow-container--mobile .consultation-flow-steps-indicator {
+  gap: 4px;
+}
+
+.consultation-flow-step-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 60px;
+  cursor: default;
+  transition: all 0.2s ease;
+}
+
+.consultation-flow-step-indicator--accessible {
+  cursor: pointer;
+}
+
+.consultation-flow-step-indicator--accessible:hover {
+  transform: translateY(-2px);
+}
+
+.consultation-flow-step-indicator--accessible:focus {
+  outline: 2px solid #1278B3;
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+.consultation-flow-step-indicator-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Step Number/Icon */
+.consultation-flow-step-number,
+.consultation-flow-step-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.consultation-flow-container--small .consultation-flow-step-number,
+.consultation-flow-container--small .consultation-flow-step-icon {
+  width: 32px;
+  height: 32px;
+  font-size: 12px;
+}
+
+.consultation-flow-container--large .consultation-flow-step-number,
+.consultation-flow-container--large .consultation-flow-step-icon {
+  width: 48px;
+  height: 48px;
+  font-size: 16px;
+}
+
+/* Step States */
+.consultation-flow-step-indicator--pending .consultation-flow-step-number,
+.consultation-flow-step-indicator--pending .consultation-flow-step-icon {
+  background-color: #f8fafc;
+  border: 2px solid #e2e8f0;
+  color: #9ca3af;
+}
+
+.consultation-flow-step-indicator--current .consultation-flow-step-number,
+.consultation-flow-step-indicator--current .consultation-flow-step-icon {
+  background-color: #1278B3;
+  border: 2px solid #1278B3;
+  color: white;
+}
+
+.consultation-flow-step-indicator--completed .consultation-flow-step-number,
+.consultation-flow-step-indicator--completed .consultation-flow-step-icon {
+  background-color: #10b981;
+  border: 2px solid #10b981;
+  color: white;
+}
+
+.consultation-flow-step-indicator--error .consultation-flow-step-number,
+.consultation-flow-step-indicator--error .consultation-flow-step-icon {
+  background-color: #dc2626;
+  border: 2px solid #dc2626;
+  color: white;
+}
+
+/* Step Title */
+.consultation-flow-step-title {
+  font-size: 12px;
+  font-weight: 500;
+  color: #1f2937;
+  text-align: center;
+  line-height: 1.2;
+  max-width: 80px;
+}
+
+.consultation-flow-container--small .consultation-flow-step-title {
+  font-size: 10px;
+  max-width: 60px;
+}
+
+.consultation-flow-container--large .consultation-flow-step-title {
+  font-size: 14px;
+  max-width: 100px;
+}
+
+.consultation-flow-step-indicator--pending .consultation-flow-step-title {
+  color: #9ca3af;
+}
+
+.consultation-flow-step-indicator--current .consultation-flow-step-title {
+  color: #1278B3;
+  font-weight: 600;
+}
+
+.consultation-flow-step-indicator--completed .consultation-flow-step-title {
+  color: #10b981;
+}
+
+.consultation-flow-step-indicator--error .consultation-flow-step-title {
+  color: #dc2626;
+}
+
+/* Content */
+.consultation-flow-content {
+  margin-bottom: 32px;
+}
+
+/* Step Header */
+.consultation-flow-step-header {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  align-items: flex-start;
+}
+
+.consultation-flow-step-icon-container {
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8fafc;
+  border-radius: 16px;
+  color: #1278B3;
+}
+
+.consultation-flow-container--small .consultation-flow-step-icon-container {
+  width: 48px;
+  height: 48px;
+}
+
+.consultation-flow-container--large .consultation-flow-step-icon-container {
+  width: 64px;
+  height: 64px;
+}
+
+.consultation-flow-step-icon {
+  width: 28px;
+  height: 28px;
+}
+
+.consultation-flow-step-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.consultation-flow-step-title {
+  margin: 0 0 8px 0;
+  font-size: 24px;
+  font-weight: 600;
+  color: #1f2937;
+  line-height: 1.2;
+}
+
+.consultation-flow-container--small .consultation-flow-step-title {
+  font-size: 20px;
+}
+
+.consultation-flow-container--large .consultation-flow-step-title {
+  font-size: 28px;
+}
+
+.consultation-flow-step-description {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+.consultation-flow-container--small .consultation-flow-step-description {
+  font-size: 14px;
+}
+
+.consultation-flow-container--large .consultation-flow-step-description {
+  font-size: 18px;
+}
+
+/* Required Indicator */
+.consultation-flow-required-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #f59e0b;
+  font-weight: 500;
+}
+
+.consultation-flow-required-icon {
+  width: 14px;
+  height: 14px;
+}
+
+/* Validation Error */
+.consultation-flow-validation-error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background-color: #fef2f2;
+  border: 2px solid #fecaca;
+  border-radius: 8px;
+  color: #dc2626;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.consultation-flow-validation-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* Step Content */
+.consultation-flow-step-content {
+  padding: 20px;
+  background-color: #f8fafc;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.consultation-flow-placeholder {
+  text-align: center;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+/* Demo Form Elements */
+.consultation-flow-demo-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 500px;
+}
+
+.consultation-flow-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.consultation-flow-form-group label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.consultation-flow-input,
+.consultation-flow-textarea {
+  padding: 12px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 16px;
+  color: #1f2937;
+  background-color: white;
+  transition: border-color 0.2s ease;
+  min-height: 44px; /* Healthcare touch target */
+}
+
+.consultation-flow-input:focus,
+.consultation-flow-textarea:focus {
+  outline: none;
+  border-color: #1278B3;
+  box-shadow: 0 0 0 3px rgba(18, 120, 179, 0.1);
+}
+
+.consultation-flow-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Checkbox Group */
+.consultation-flow-checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.consultation-flow-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #1f2937;
+  line-height: 1.4;
+}
+
+.consultation-flow-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  cursor: pointer;
+}
+
+/* Privacy Notice */
+.consultation-flow-privacy-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 20px;
+  padding: 12px;
+  background-color: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+  font-size: 12px;
+  color: #166534;
+  line-height: 1.4;
+}
+
+.consultation-flow-privacy-icon {
+  width: 16px;
+  height: 16px;
+  color: #10b981;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* Actions */
+.consultation-flow-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding-top: 24px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.consultation-flow-actions-left,
+.consultation-flow-actions-right {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.consultation-flow-action {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+  text-decoration: none;
+  min-height: 44px; /* Healthcare touch target */
+}
+
+.consultation-flow-action-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* Action Variants */
+.consultation-flow-action--primary {
+  background-color: #1278B3;
+  color: white;
+  border-color: #1278B3;
+}
+
+.consultation-flow-action--primary:hover {
+  background-color: #004166;
+  border-color: #004166;
+}
+
+.consultation-flow-action--secondary {
+  background-color: white;
+  color: #1278B3;
+  border-color: #1278B3;
+}
+
+.consultation-flow-action--secondary:hover {
+  background-color: #f8fafc;
+}
+
+.consultation-flow-action--tertiary {
+  background-color: transparent;
+  color: #6b7280;
+  border-color: transparent;
+}
+
+.consultation-flow-action--tertiary:hover {
+  color: #1f2937;
+  background-color: #f8fafc;
+}
+
+/* Medical Footer */
+.consultation-flow-medical-footer {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 24px;
+  padding: 16px;
+  background-color: #f0fdf4;
+  border: 2px solid #bbf7d0;
+  border-radius: 12px;
+}
+
+.consultation-flow-medical-footer-icon {
+  width: 20px;
+  height: 20px;
+  color: #10b981;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.consultation-flow-medical-footer-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.consultation-flow-medical-footer-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #064e3b;
+}
+
+.consultation-flow-medical-footer-text {
+  font-size: 12px;
+  color: #166534;
+  line-height: 1.4;
+}
+
+/* Loading Skeleton */
+.consultation-flow-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.consultation-flow-skeleton-progress {
+  height: 8px;
+  background-color: #e2e8f0;
+  border-radius: 4px;
+  animation: consultation-skeleton-pulse 2s infinite;
+}
+
+.consultation-flow-skeleton-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.consultation-flow-skeleton-title {
+  height: 28px;
+  background-color: #e2e8f0;
+  border-radius: 4px;
+  width: 60%;
+  animation: consultation-skeleton-pulse 2s infinite;
+}
+
+.consultation-flow-skeleton-description {
+  height: 16px;
+  background-color: #f1f5f9;
+  border-radius: 4px;
+  width: 80%;
+  animation: consultation-skeleton-pulse 2s infinite;
+}
+
+.consultation-flow-skeleton-form {
+  height: 200px;
+  background-color: #f8fafc;
+  border-radius: 12px;
+  animation: consultation-skeleton-pulse 2s infinite;
+}
+
+.consultation-flow-skeleton-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.consultation-flow-skeleton-actions::before,
+.consultation-flow-skeleton-actions::after {
+  content: '';
+  height: 44px;
+  width: 100px;
+  background-color: #e2e8f0;
+  border-radius: 8px;
+  animation: consultation-skeleton-pulse 2s infinite;
+}
+
+@keyframes consultation-skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .consultation-flow-container {
+    padding: 16px;
+  }
+
+  .consultation-flow-step-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 12px;
+  }
+
+  .consultation-flow-steps-indicator {
+    gap: 2px;
+  }
+
+  .consultation-flow-step-title {
+    font-size: 10px;
+    max-width: 50px;
+  }
+
+  .consultation-flow-actions {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .consultation-flow-actions-left,
+  .consultation-flow-actions-right {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .consultation-flow-action {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .consultation-flow-emergency-banner {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .consultation-flow-container {
+    padding: 12px;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+
+  .consultation-flow-step-title {
+    font-size: 18px;
+  }
+
+  .consultation-flow-step-description {
+    font-size: 14px;
+  }
+
+  .consultation-flow-step-icon-container {
+    width: 48px;
+    height: 48px;
+  }
+
+  .consultation-flow-steps-indicator {
+    overflow-x: auto;
+    padding-bottom: 8px;
+    justify-content: flex-start;
+    gap: 8px;
+  }
+
+  .consultation-flow-step-indicator {
+    flex-shrink: 0;
+    min-width: 50px;
+  }
+
+  .consultation-flow-demo-form {
+    max-width: none;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .consultation-flow-container {
+    border-width: 3px;
+  }
+
+  .consultation-flow-step-number,
+  .consultation-flow-step-icon {
+    border-width: 3px;
+  }
+
+  .consultation-flow-action {
+    border-width: 3px;
+  }
+
+  .consultation-flow-step-indicator--accessible:focus {
+    outline-width: 3px;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .consultation-flow-progress-fill,
+  .consultation-flow-step-number,
+  .consultation-flow-step-icon,
+  .consultation-flow-step-indicator,
+  .consultation-flow-action,
+  .consultation-flow-emergency-banner,
+  .consultation-flow-skeleton-progress,
+  .consultation-flow-skeleton-title,
+  .consultation-flow-skeleton-description,
+  .consultation-flow-skeleton-form,
+  .consultation-flow-skeleton-actions::before,
+  .consultation-flow-skeleton-actions::after {
+    animation: none;
+    transition: none;
+  }
+
+  .consultation-flow-step-indicator--accessible:hover {
+    transform: none;
+  }
+
+  .consultation-flow-emergency-button:hover {
+    transform: none;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .consultation-flow-container {
+    background-color: #1f2937;
+    border-color: #374151;
+    color: #e5e7eb;
+  }
+
+  .consultation-flow-container--medical {
+    background-color: #064e3b;
+    border-color: #059669;
+  }
+
+  .consultation-flow-container--emergency {
+    background-color: #7f1d1d;
+    border-color: #dc2626;
+  }
+
+  .consultation-flow-progress-bar {
+    background-color: #374151;
+  }
+
+  .consultation-flow-progress-text {
+    color: #f3f4f6;
+  }
+
+  .consultation-flow-estimated-time {
+    color: #9ca3af;
+  }
+
+  .consultation-flow-step-title {
+    color: #f3f4f6;
+  }
+
+  .consultation-flow-step-description {
+    color: #9ca3af;
+  }
+
+  .consultation-flow-step-icon-container {
+    background-color: #374151;
+    color: #93c5fd;
+  }
+
+  .consultation-flow-step-content {
+    background-color: #374151;
+    border-color: #4b5563;
+  }
+
+  .consultation-flow-placeholder {
+    color: #9ca3af;
+  }
+
+  .consultation-flow-input,
+  .consultation-flow-textarea {
+    background-color: #374151;
+    border-color: #4b5563;
+    color: #e5e7eb;
+  }
+
+  .consultation-flow-input:focus,
+  .consultation-flow-textarea:focus {
+    border-color: #60a5fa;
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+  }
+
+  .consultation-flow-checkbox {
+    color: #e5e7eb;
+  }
+
+  .consultation-flow-form-group label {
+    color: #f3f4f6;
+  }
+
+  .consultation-flow-actions {
+    border-top-color: #374151;
+  }
+
+  .consultation-flow-action--secondary {
+    background-color: #374151;
+    color: #93c5fd;
+    border-color: #60a5fa;
+  }
+
+  .consultation-flow-action--secondary:hover {
+    background-color: #4b5563;
+  }
+
+  .consultation-flow-action--tertiary {
+    color: #9ca3af;
+  }
+
+  .consultation-flow-action--tertiary:hover {
+    color: #e5e7eb;
+    background-color: #374151;
+  }
+
+  .consultation-flow-step-indicator--pending .consultation-flow-step-number,
+  .consultation-flow-step-indicator--pending .consultation-flow-step-icon {
+    background-color: #374151;
+    border-color: #4b5563;
+    color: #9ca3af;
+  }
+
+  .consultation-flow-validation-error {
+    background-color: #7f1d1d;
+    border-color: #dc2626;
+  }
+
+  .consultation-flow-privacy-notice {
+    background-color: #064e3b;
+    border-color: #059669;
+  }
+
+  .consultation-flow-medical-footer {
+    background-color: #064e3b;
+    border-color: #059669;
+  }
+
+  .consultation-flow-medical-footer-title {
+    color: #bbf7d0;
+  }
+
+  .consultation-flow-medical-footer-text {
+    color: #86efac;
+  }
+
+  .consultation-flow-skeleton-progress,
+  .consultation-flow-skeleton-title {
+    background-color: #374151;
+  }
+
+  .consultation-flow-skeleton-description {
+    background-color: #4b5563;
+  }
+
+  .consultation-flow-skeleton-form {
+    background-color: #374151;
+  }
+
+  .consultation-flow-skeleton-actions::before,
+  .consultation-flow-skeleton-actions::after {
+    background-color: #374151;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .consultation-flow-container {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 2px solid #000;
+  }
+
+  .consultation-flow-actions {
+    display: none;
+  }
+
+  .consultation-flow-emergency-banner {
+    background-color: #000 !important;
+    color: #fff !important;
+    animation: none;
+  }
+
+  .consultation-flow-emergency-button:hover {
+    transform: none;
+  }
+
+  .consultation-flow-skeleton-progress,
+  .consultation-flow-skeleton-title,
+  .consultation-flow-skeleton-description,
+  .consultation-flow-skeleton-form,
+  .consultation-flow-skeleton-actions::before,
+  .consultation-flow-skeleton-actions::after {
+    animation: none;
+  }
+}

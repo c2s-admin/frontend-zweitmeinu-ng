@@ -66,10 +66,97 @@ const nextConfig = {
       },
     ]
   },
-  // Optimize bundling
+  // Healthcare-optimized bundling
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
   },
+  
+  // Performance optimization for healthcare mobile users
+  webpack: (config, { buildId, dev, isServer, defaultLoaders, nextRuntime, webpack }) => {
+    // Healthcare-specific optimizations
+    if (!dev && !isServer) {
+      // Split healthcare components into optimized chunks
+      config.optimization.splitChunks = {
+        ...config.optimization.splitChunks,
+        cacheGroups: {
+          ...config.optimization.splitChunks.cacheGroups,
+          
+          // Emergency components - highest priority, separate chunk
+          emergency: {
+            name: 'emergency',
+            test: /[\\/]stories[\\/](Emergency|HealthcareModal)/,
+            chunks: 'all',
+            priority: 50,
+            enforce: true
+          },
+          
+          // Core healthcare components
+          healthcareCore: {
+            name: 'healthcare-core',
+            test: /[\\/]stories[\\/](Healthcare|Button|Card|Input)/,
+            chunks: 'all',
+            priority: 40,
+            minChunks: 1,
+            maxSize: 100000 // 100KB max for mobile
+          },
+          
+          // Medical consultation components
+          consultation: {
+            name: 'consultation',
+            test: /[\\/]stories[\\/](Consultation|Doctor|Specialty|MedicalFAQ)/,
+            chunks: 'all',
+            priority: 30,
+            maxSize: 150000 // 150KB max
+          },
+          
+          // Content sections
+          content: {
+            name: 'content',
+            test: /[\\/]stories[\\/](Motivation|Story|CoreValues)/,
+            chunks: 'all',
+            priority: 20,
+            maxSize: 200000 // 200KB max
+          },
+          
+          // Utilities and forms
+          utils: {
+            name: 'utils',
+            test: /[\\/]stories[\\/](FileUpload|DatePicker|Progress)/,
+            chunks: 'all',
+            priority: 10,
+            maxSize: 100000
+          }
+        }
+      }
+      
+      // Optimize for mobile healthcare users
+      config.optimization.usedExports = true
+      config.optimization.sideEffects = false
+      
+      // Tree shake unused icons (important for healthcare mobile performance)
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        'lucide-react': 'lucide-react/dist/esm/icons'
+      }
+    }
+    
+    // Bundle analyzer for healthcare performance monitoring
+    if (process.env.ANALYZE === 'true') {
+      const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
+      config.plugins.push(
+        new BundleAnalyzerPlugin({
+          analyzerMode: 'static',
+          reportFilename: 'healthcare-bundle-report.html',
+          openAnalyzer: false,
+          generateStatsFile: true,
+          statsFilename: 'healthcare-stats.json'
+        })
+      )
+    }
+    
+    return config
+  },
+  
   // Output configuration for static deployment
   // output: 'export',  // Uncomment for static export
   // distDir: 'out',     // Uncomment for static export

@@ -1,0 +1,1185 @@
+/* Healthcare Consent Manager Styles - WCAG 2.1 AA Compliant */
+
+.healthcare-consent-container {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  background-color: white;
+  border: 2px solid #f1f5f9;
+  border-radius: 16px;
+  padding: 24px;
+  font-family: 'Roboto Condensed', sans-serif;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Container Sizes */
+.healthcare-consent-container--small {
+  padding: 16px;
+  max-width: 600px;
+  font-size: 14px;
+}
+
+.healthcare-consent-container--medium {
+  padding: 24px;
+  max-width: 900px;
+  font-size: 16px;
+}
+
+.healthcare-consent-container--large {
+  padding: 32px;
+  max-width: 1200px;
+  font-size: 18px;
+}
+
+/* Container Variants */
+.healthcare-consent-container--banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-width: none;
+  border-radius: 0;
+  border: none;
+  border-top: 3px solid #1278B3;
+  z-index: 1000;
+  box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.healthcare-consent-container--modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1001;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.healthcare-consent-container--settings {
+  position: relative;
+  max-width: 1000px;
+  box-shadow: none;
+  border: 1px solid #e2e8f0;
+}
+
+.healthcare-consent-container--inline {
+  border: none;
+  padding: 16px 0;
+  box-shadow: none;
+  max-width: none;
+}
+
+/* GDPR Mode */
+.healthcare-consent-container--gdpr {
+  border-color: #10b981;
+  background-color: #f0fdf4;
+  border-width: 3px;
+}
+
+.healthcare-consent-container--gdpr::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  background: linear-gradient(135deg, #10b981, #059669);
+  border-radius: 18px;
+  z-index: -1;
+  opacity: 0.1;
+}
+
+/* Medical Mode */
+.healthcare-consent-container--medical {
+  border-color: #1278B3;
+  background-color: #f8faff;
+}
+
+.healthcare-consent-container--medical .healthcare-consent-title {
+  color: #1278B3;
+}
+
+/* Loading State */
+.healthcare-consent-container--loading {
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+/* Header */
+.healthcare-consent-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #f1f5f9;
+}
+
+.healthcare-consent-title-container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.healthcare-consent-title-icon {
+  width: 32px;
+  height: 32px;
+  color: #10b981;
+  flex-shrink: 0;
+}
+
+.healthcare-consent-container--small .healthcare-consent-title-icon {
+  width: 28px;
+  height: 28px;
+}
+
+.healthcare-consent-container--large .healthcare-consent-title-icon {
+  width: 36px;
+  height: 36px;
+}
+
+.healthcare-consent-title {
+  margin: 0 0 4px 0;
+  font-size: 24px;
+  font-weight: 600;
+  color: #1f2937;
+  line-height: 1.2;
+}
+
+.healthcare-consent-container--small .healthcare-consent-title {
+  font-size: 20px;
+}
+
+.healthcare-consent-container--large .healthcare-consent-title {
+  font-size: 28px;
+}
+
+.healthcare-consent-subtitle {
+  margin: 0;
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+.healthcare-consent-close {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  border: none;
+  border-radius: 8px;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.healthcare-consent-close:hover {
+  background-color: #f3f4f6;
+  color: #1f2937;
+}
+
+.healthcare-consent-close:focus {
+  outline: 2px solid #10b981;
+  outline-offset: 2px;
+}
+
+.healthcare-consent-gdpr-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background-color: #10b981;
+  color: white;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.healthcare-consent-gdpr-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* Organization Info */
+.healthcare-consent-organization {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  padding: 16px;
+  background-color: #f8fafc;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.healthcare-consent-organization-icon {
+  width: 20px;
+  height: 20px;
+  color: #1278B3;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.healthcare-consent-organization p {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  color: #374151;
+  line-height: 1.5;
+}
+
+.healthcare-consent-policy-link {
+  font-size: 12px;
+  color: #6b7280;
+  margin: 8px 0 0 0;
+}
+
+.healthcare-consent-link {
+  color: #1278B3;
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+.healthcare-consent-link:hover {
+  color: #004166;
+}
+
+.healthcare-consent-link:focus {
+  outline: 2px solid #1278B3;
+  outline-offset: 2px;
+}
+
+/* Consent Statistics */
+.healthcare-consent-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+  padding: 16px;
+  background-color: #f0fdf4;
+  border-radius: 12px;
+  border: 1px solid #bbf7d0;
+}
+
+.healthcare-consent-stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+
+.healthcare-consent-stat-label {
+  color: #374151;
+  font-weight: 500;
+}
+
+.healthcare-consent-stat-value {
+  color: #059669;
+  font-weight: 600;
+}
+
+.healthcare-consent-stat-progress {
+  height: 8px;
+  background-color: #dcfce7;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 8px 0;
+}
+
+.healthcare-consent-stat-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981, #059669);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.healthcare-consent-stat-breakdown {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* Categories */
+.healthcare-consent-categories {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.healthcare-consent-category {
+  background-color: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.healthcare-consent-category:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  border-color: #cbd5e1;
+}
+
+.healthcare-consent-category--essential {
+  border-color: #f59e0b;
+  background-color: #fffbeb;
+}
+
+.healthcare-consent-category--consented {
+  border-color: #10b981;
+  background-color: #f0fdf4;
+}
+
+.healthcare-consent-category--expanded {
+  border-color: #1278B3;
+}
+
+.healthcare-consent-category-header {
+  display: flex;
+  align-items: center;
+  padding: 16px 20px;
+}
+
+.healthcare-consent-category-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  gap: 16px;
+}
+
+.healthcare-consent-category-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.healthcare-consent-category-name {
+  margin: 0 0 4px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.healthcare-consent-category-essential-badge {
+  padding: 2px 8px;
+  background-color: #f59e0b;
+  color: white;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 8px;
+}
+
+.healthcare-consent-category-description {
+  margin: 0;
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+.healthcare-consent-category-control {
+  flex-shrink: 0;
+}
+
+.healthcare-consent-category-essential {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background-color: #10b981;
+  color: white;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.healthcare-consent-category-essential-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.healthcare-consent-category-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  position: relative;
+}
+
+.healthcare-consent-category-checkbox {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.healthcare-consent-category-toggle-slider {
+  position: relative;
+  width: 48px;
+  height: 24px;
+  background-color: #e5e7eb;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.healthcare-consent-category-toggle-slider::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.healthcare-consent-category-checkbox:checked + .healthcare-consent-category-toggle-slider {
+  background-color: #10b981;
+}
+
+.healthcare-consent-category-checkbox:checked + .healthcare-consent-category-toggle-slider::before {
+  transform: translateX(24px);
+}
+
+.healthcare-consent-category-checkbox:focus + .healthcare-consent-category-toggle-slider {
+  outline: 2px solid #10b981;
+  outline-offset: 2px;
+}
+
+.healthcare-consent-category-checkbox:disabled + .healthcare-consent-category-toggle-slider {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.healthcare-consent-category-toggle-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.healthcare-consent-category-expand {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  border: none;
+  border-radius: 8px;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-left: 16px;
+}
+
+.healthcare-consent-category-expand:hover {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+.healthcare-consent-category-expand:focus {
+  outline: 2px solid #1278B3;
+  outline-offset: 2px;
+}
+
+/* Category Details */
+.healthcare-consent-category-details {
+  padding: 0 20px 20px;
+  border-top: 1px solid #e5e7eb;
+  background-color: #f9fafb;
+}
+
+.healthcare-consent-detail {
+  margin-bottom: 16px;
+}
+
+.healthcare-consent-detail h4 {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.healthcare-consent-detail p {
+  margin: 0;
+  font-size: 13px;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+.healthcare-consent-detail ul {
+  margin: 0;
+  padding-left: 16px;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.healthcare-consent-detail li {
+  margin-bottom: 4px;
+}
+
+.healthcare-consent-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin: 16px 0;
+}
+
+/* Advanced Settings */
+.healthcare-consent-advanced {
+  margin-bottom: 24px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.healthcare-consent-advanced-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background-color: #f8fafc;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.healthcare-consent-advanced-toggle:hover {
+  background-color: #f1f5f9;
+}
+
+.healthcare-consent-advanced-toggle:focus {
+  outline: 2px solid #1278B3;
+  outline-offset: -2px;
+}
+
+.healthcare-consent-advanced-toggle-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+}
+
+.healthcare-consent-advanced-content {
+  padding: 20px;
+  background-color: white;
+}
+
+.healthcare-consent-advanced-content h4 {
+  margin: 0 0 16px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.healthcare-consent-rights {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.healthcare-consent-right-button {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background-color: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 56px;
+}
+
+.healthcare-consent-right-button:hover:not(:disabled) {
+  border-color: #1278B3;
+  background-color: #f0f9ff;
+}
+
+.healthcare-consent-right-button:focus {
+  outline: 2px solid #1278B3;
+  outline-offset: 2px;
+}
+
+.healthcare-consent-right-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.healthcare-consent-right-button--danger:hover:not(:disabled) {
+  border-color: #dc2626;
+  background-color: #fef2f2;
+}
+
+.healthcare-consent-right-icon {
+  width: 24px;
+  height: 24px;
+  color: #6b7280;
+  flex-shrink: 0;
+}
+
+.healthcare-consent-right-button--danger .healthcare-consent-right-icon {
+  color: #dc2626;
+}
+
+.healthcare-consent-right-button strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 4px;
+}
+
+.healthcare-consent-right-button p {
+  margin: 0;
+  font-size: 12px;
+  color: #6b7280;
+  line-height: 1.3;
+}
+
+.healthcare-consent-contact {
+  padding: 16px;
+  background-color: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+}
+
+.healthcare-consent-contact p {
+  margin: 0;
+  font-size: 13px;
+  color: #059669;
+  line-height: 1.4;
+}
+
+/* Actions */
+.healthcare-consent-actions {
+  padding-top: 20px;
+  border-top: 2px solid #f1f5f9;
+}
+
+.healthcare-consent-banner-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.healthcare-consent-settings-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.healthcare-consent-action-group {
+  display: flex;
+  gap: 12px;
+}
+
+.healthcare-consent-action {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+  text-decoration: none;
+  min-height: 44px;
+  white-space: nowrap;
+}
+
+.healthcare-consent-action--primary {
+  background-color: #10b981;
+  color: white;
+  border-color: #10b981;
+}
+
+.healthcare-consent-action--primary:hover {
+  background-color: #059669;
+  border-color: #059669;
+}
+
+.healthcare-consent-action--secondary {
+  background-color: white;
+  color: #6b7280;
+  border-color: #d1d5db;
+}
+
+.healthcare-consent-action--secondary:hover {
+  background-color: #f9fafb;
+  color: #374151;
+  border-color: #9ca3af;
+}
+
+.healthcare-consent-action--tertiary {
+  background-color: #1278B3;
+  color: white;
+  border-color: #1278B3;
+}
+
+.healthcare-consent-action--tertiary:hover {
+  background-color: #004166;
+  border-color: #004166;
+}
+
+.healthcare-consent-action:focus {
+  outline: 2px solid #10b981;
+  outline-offset: 2px;
+}
+
+/* Footer */
+.healthcare-consent-footer {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.healthcare-consent-footer-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.healthcare-consent-footer-icon {
+  width: 16px;
+  height: 16px;
+  color: #6b7280;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.healthcare-consent-footer p {
+  margin: 0;
+  font-size: 12px;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+/* Loading Skeleton */
+.healthcare-consent-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.healthcare-consent-skeleton-header {
+  height: 80px;
+  background-color: #e2e8f0;
+  border-radius: 12px;
+  animation: healthcare-consent-skeleton-pulse 2s infinite;
+}
+
+.healthcare-consent-skeleton-categories {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.healthcare-consent-skeleton-categories::before,
+.healthcare-consent-skeleton-categories::after {
+  content: '';
+  height: 80px;
+  background-color: #f1f5f9;
+  border-radius: 12px;
+  animation: healthcare-consent-skeleton-pulse 2s infinite;
+}
+
+.healthcare-consent-skeleton-actions {
+  height: 60px;
+  background-color: #e2e8f0;
+  border-radius: 12px;
+  animation: healthcare-consent-skeleton-pulse 2s infinite;
+}
+
+@keyframes healthcare-consent-skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .healthcare-consent-container {
+    padding: 16px;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+
+  .healthcare-consent-container--modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transform: none;
+    max-width: none;
+    max-height: none;
+    border-radius: 0;
+  }
+
+  .healthcare-consent-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .healthcare-consent-title-container {
+    width: 100%;
+  }
+
+  .healthcare-consent-gdpr-badge {
+    align-self: flex-end;
+  }
+
+  .healthcare-consent-organization {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .healthcare-consent-organization-icon {
+    align-self: center;
+  }
+
+  .healthcare-consent-category-main {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .healthcare-consent-category-control {
+    align-self: flex-end;
+  }
+
+  .healthcare-consent-detail-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .healthcare-consent-banner-actions {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .healthcare-consent-settings-actions {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .healthcare-consent-action-group {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .healthcare-consent-action {
+    flex: 1;
+    justify-content: center;
+    min-width: 0;
+    padding: 12px 16px;
+  }
+
+  .healthcare-consent-rights {
+    gap: 8px;
+  }
+
+  .healthcare-consent-right-button {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .healthcare-consent-container {
+    padding: 12px;
+  }
+
+  .healthcare-consent-title {
+    font-size: 20px;
+  }
+
+  .healthcare-consent-category {
+    border-radius: 8px;
+  }
+
+  .healthcare-consent-category-header {
+    padding: 12px 16px;
+  }
+
+  .healthcare-consent-category-details {
+    padding: 0 16px 16px;
+  }
+
+  .healthcare-consent-advanced-toggle {
+    padding: 12px 16px;
+  }
+
+  .healthcare-consent-advanced-content {
+    padding: 16px;
+  }
+
+  .healthcare-consent-right-button {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+
+  .healthcare-consent-action {
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .healthcare-consent-container {
+    border-width: 3px;
+  }
+
+  .healthcare-consent-category {
+    border-width: 3px;
+  }
+
+  .healthcare-consent-action {
+    border-width: 3px;
+  }
+
+  .healthcare-consent-category-toggle-slider {
+    border: 2px solid #374151;
+  }
+
+  .healthcare-consent-action:focus,
+  .healthcare-consent-category-expand:focus,
+  .healthcare-consent-close:focus {
+    outline-width: 3px;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .healthcare-consent-category,
+  .healthcare-consent-action,
+  .healthcare-consent-category-toggle-slider,
+  .healthcare-consent-category-toggle-slider::before,
+  .healthcare-consent-stat-progress-bar,
+  .healthcare-consent-skeleton-header,
+  .healthcare-consent-skeleton-categories::before,
+  .healthcare-consent-skeleton-categories::after,
+  .healthcare-consent-skeleton-actions {
+    animation: none;
+    transition: none;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .healthcare-consent-container {
+    background-color: #1f2937;
+    border-color: #374151;
+    color: #e5e7eb;
+  }
+
+  .healthcare-consent-container--gdpr {
+    background-color: #064e3b;
+    border-color: #059669;
+  }
+
+  .healthcare-consent-container--medical {
+    background-color: #1e3a8a;
+    border-color: #3b82f6;
+  }
+
+  .healthcare-consent-title {
+    color: #f3f4f6;
+  }
+
+  .healthcare-consent-subtitle {
+    color: #9ca3af;
+  }
+
+  .healthcare-consent-close:hover {
+    background-color: #4b5563;
+    color: #e5e7eb;
+  }
+
+  .healthcare-consent-organization {
+    background-color: #374151;
+    border-color: #4b5563;
+  }
+
+  .healthcare-consent-organization p {
+    color: #d1d5db;
+  }
+
+  .healthcare-consent-stats {
+    background-color: #064e3b;
+    border-color: #059669;
+  }
+
+  .healthcare-consent-stat-label {
+    color: #d1d5db;
+  }
+
+  .healthcare-consent-stat-progress {
+    background-color: #047857;
+  }
+
+  .healthcare-consent-category {
+    background-color: #374151;
+    border-color: #4b5563;
+  }
+
+  .healthcare-consent-category-name {
+    color: #f3f4f6;
+  }
+
+  .healthcare-consent-category-description {
+    color: #9ca3af;
+  }
+
+  .healthcare-consent-category-details {
+    background-color: #1f2937;
+    border-color: #4b5563;
+  }
+
+  .healthcare-consent-detail h4 {
+    color: #e5e7eb;
+  }
+
+  .healthcare-consent-detail p,
+  .healthcare-consent-detail ul {
+    color: #9ca3af;
+  }
+
+  .healthcare-consent-advanced {
+    border-color: #4b5563;
+  }
+
+  .healthcare-consent-advanced-toggle {
+    background-color: #374151;
+    color: #e5e7eb;
+  }
+
+  .healthcare-consent-advanced-toggle:hover {
+    background-color: #4b5563;
+  }
+
+  .healthcare-consent-advanced-content {
+    background-color: #1f2937;
+  }
+
+  .healthcare-consent-advanced-content h4 {
+    color: #f3f4f6;
+  }
+
+  .healthcare-consent-right-button {
+    background-color: #374151;
+    border-color: #4b5563;
+  }
+
+  .healthcare-consent-right-button:hover:not(:disabled) {
+    background-color: #4b5563;
+    border-color: #6b7280;
+  }
+
+  .healthcare-consent-right-button--danger:hover:not(:disabled) {
+    background-color: #7f1d1d;
+    border-color: #dc2626;
+  }
+
+  .healthcare-consent-right-button strong {
+    color: #f3f4f6;
+  }
+
+  .healthcare-consent-right-button p {
+    color: #9ca3af;
+  }
+
+  .healthcare-consent-contact {
+    background-color: #064e3b;
+    border-color: #059669;
+  }
+
+  .healthcare-consent-contact p {
+    color: #a7f3d0;
+  }
+
+  .healthcare-consent-action--secondary {
+    background-color: #374151;
+    color: #9ca3af;
+    border-color: #6b7280;
+  }
+
+  .healthcare-consent-action--secondary:hover {
+    background-color: #4b5563;
+    color: #e5e7eb;
+    border-color: #9ca3af;
+  }
+
+  .healthcare-consent-footer p {
+    color: #9ca3af;
+  }
+
+  .healthcare-consent-skeleton-header,
+  .healthcare-consent-skeleton-actions {
+    background-color: #4b5563;
+  }
+
+  .healthcare-consent-skeleton-categories::before,
+  .healthcare-consent-skeleton-categories::after {
+    background-color: #374151;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .healthcare-consent-container {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 2px solid #000;
+    position: static;
+    transform: none;
+    max-width: none;
+  }
+
+  .healthcare-consent-close,
+  .healthcare-consent-actions,
+  .healthcare-consent-category-expand,
+  .healthcare-consent-category-toggle {
+    display: none;
+  }
+
+  .healthcare-consent-category:hover {
+    transform: none;
+  }
+
+  .healthcare-consent-skeleton-header,
+  .healthcare-consent-skeleton-categories::before,
+  .healthcare-consent-skeleton-categories::after,
+  .healthcare-consent-skeleton-actions {
+    animation: none;
+  }
+}

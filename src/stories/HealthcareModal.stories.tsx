@@ -76,6 +76,35 @@ Healthcare Modal Component - Dialoge für medizinische Inhalte und Zustimmungsfo
     gdprCompliant: {
       control: 'boolean',
       description: 'GDPR-Compliance Hinweis anzeigen'
+    },
+    onClose: {
+      action: 'closed',
+      description: 'Wird aufgerufen, wenn das Modal geschlossen wird',
+      table: {
+        category: 'Events',
+      }
+    },
+    onAfterClose: {
+      action: 'after-closed',
+      description: 'Wird nach dem Schließen des Modals aufgerufen',
+      table: {
+        category: 'Events',
+      }
+    },
+    onBeforeClose: {
+      action: 'before-close',
+      description: 'Wird vor dem Schließen aufgerufen, kann Schließen verhindern',
+      table: {
+        category: 'Events',
+      }
+    },
+    children: {
+      control: false,
+      description: 'Modal Inhalt'
+    },
+    footer: {
+      control: false,
+      description: 'Modal Footer Inhalt'
     }
   },
   args: {
@@ -87,8 +116,7 @@ Healthcare Modal Component - Dialoge für medizinische Inhalte und Zustimmungsfo
     closeOnOutsideClick: true,
     closeOnEscape: true,
     medicalContext: false,
-    gdprCompliant: false,
-    onClose: () => console.log('Modal closed')
+    gdprCompliant: false
   },
   tags: ['autodocs']
 }
@@ -99,6 +127,7 @@ type Story = StoryObj<typeof HealthcareModal>
 // Default Story - Basic Medical Information
 export const Default: Story = {
   args: {
+    onClose: () => console.log('Modal closed'),
     children: React.createElement('div', { style: { padding: '20px' } }, [
       React.createElement('p', { key: 1 }, 'Dies ist ein grundlegender medizinischer Informationsdialog.'),
       React.createElement('p', { key: 2 }, 'Hier können wichtige Informationen für Patienten angezeigt werden.'),
@@ -117,6 +146,7 @@ export const Default: Story = {
 // Consent Modal - GDPR Compliance
 export const ConsentModal: Story = {
   args: {
+    onClose: () => console.log('Consent modal closed'),
     title: 'Einverständniserklärung für medizinische Zweitmeinung',
     type: 'consent',
     medicalContext: true,
@@ -172,6 +202,7 @@ export const ConsentModal: Story = {
 // Emergency Modal - Critical Medical Situation
 export const EmergencyModal: Story = {
   args: {
+    onClose: () => console.log('Emergency modal closed'),
     title: 'Medizinischer Notfall erkannt',
     type: 'emergency',
     size: 'medium',
@@ -224,6 +255,7 @@ export const EmergencyModal: Story = {
 // Success Modal - Treatment Confirmation  
 export const SuccessModal: Story = {
   args: {
+    onClose: () => console.log('Success modal closed'),
     title: 'Medizinische Anfrage erfolgreich übermittelt',
     type: 'success',
     size: 'medium',
@@ -265,6 +297,7 @@ export const SuccessModal: Story = {
 // Error Modal - Medical Data Validation Error
 export const ErrorModal: Story = {
   args: {
+    onClose: () => console.log('Error modal closed'),
     title: 'Unvollständige medizinische Angaben',
     type: 'error', 
     size: 'medium',
@@ -313,6 +346,7 @@ export const ErrorModal: Story = {
 // Info Modal - Medical Process Information
 export const InfoModal: Story = {
   args: {
+    onClose: () => console.log('Info modal closed'),
     title: 'Ablauf einer medizinischen Zweitmeinung',
     type: 'info',
     size: 'large',
@@ -364,6 +398,7 @@ export const InfoModal: Story = {
 // Small Size - Quick Confirmation
 export const SmallSize: Story = {
   args: {
+    onClose: () => console.log('Small modal closed'),
     title: 'Termin bestätigen',
     size: 'small',
     children: React.createElement('div', { style: { textAlign: 'center', padding: '16px' } }, [
@@ -407,6 +442,7 @@ export const SmallSize: Story = {
 // Fullscreen Modal - Comprehensive Medical Form
 export const FullscreenModal: Story = {
   args: {
+    onClose: () => console.log('Fullscreen modal closed'),
     title: 'Umfassende medizinische Anamnese',
     size: 'fullscreen',
     type: 'consent',
@@ -478,6 +514,7 @@ export const FullscreenModal: Story = {
 // No Close Button - Critical Information
 export const NoCloseButton: Story = {
   args: {
+    onClose: () => console.log('No close button modal closed'),
     title: 'Wichtige medizinische Informationen',
     showCloseButton: false,
     closeOnOutsideClick: false,

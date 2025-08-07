@@ -1,0 +1,1086 @@
+/* Healthcare File Upload Styles - WCAG 2.1 AA Compliant */
+
+.healthcare-fileupload-container {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: white;
+  border: 2px solid #f1f5f9;
+  border-radius: 16px;
+  padding: 24px;
+  font-family: 'Roboto Condensed', sans-serif;
+}
+
+/* Container Sizes */
+.healthcare-fileupload-container--small {
+  padding: 16px;
+  max-width: 600px;
+  font-size: 14px;
+}
+
+.healthcare-fileupload-container--medium {
+  padding: 24px;
+  max-width: 800px;
+  font-size: 16px;
+}
+
+.healthcare-fileupload-container--large {
+  padding: 32px;
+  max-width: 1000px;
+  font-size: 18px;
+}
+
+/* Container Variants */
+.healthcare-fileupload-container--compact {
+  padding: 16px;
+  max-width: 700px;
+}
+
+.healthcare-fileupload-container--grid .healthcare-fileupload-files-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.healthcare-fileupload-container--list .healthcare-fileupload-file {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+}
+
+/* Medical Mode */
+.healthcare-fileupload-container--medical {
+  border-color: #1278B3;
+  background-color: #f8faff;
+}
+
+.healthcare-fileupload-container--medical .healthcare-fileupload-title {
+  color: #1278B3;
+}
+
+/* HIPAA Mode */
+.healthcare-fileupload-container--hipaa {
+  border-color: #10b981;
+  background-color: #f0fdf4;
+  border-width: 3px;
+}
+
+.healthcare-fileupload-container--hipaa::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  background: linear-gradient(45deg, #10b981, #059669);
+  border-radius: 18px;
+  z-index: -1;
+  opacity: 0.1;
+}
+
+/* Loading State */
+.healthcare-fileupload-container--loading {
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+/* Drag Over State */
+.healthcare-fileupload-container--dragover {
+  border-color: #1278B3;
+  background-color: #f0f9ff;
+  transform: scale(1.02);
+  transition: all 0.2s ease;
+}
+
+/* Header */
+.healthcare-fileupload-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #f1f5f9;
+}
+
+.healthcare-fileupload-title-container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.healthcare-fileupload-title-icon {
+  width: 32px;
+  height: 32px;
+  color: #1278B3;
+  flex-shrink: 0;
+}
+
+.healthcare-fileupload-container--small .healthcare-fileupload-title-icon {
+  width: 28px;
+  height: 28px;
+}
+
+.healthcare-fileupload-container--large .healthcare-fileupload-title-icon {
+  width: 36px;
+  height: 36px;
+}
+
+.healthcare-fileupload-title {
+  margin: 0 0 4px 0;
+  font-size: 24px;
+  font-weight: 600;
+  color: #1f2937;
+  line-height: 1.2;
+}
+
+.healthcare-fileupload-container--small .healthcare-fileupload-title {
+  font-size: 20px;
+}
+
+.healthcare-fileupload-container--large .healthcare-fileupload-title {
+  font-size: 28px;
+}
+
+.healthcare-fileupload-subtitle {
+  margin: 0;
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+.healthcare-fileupload-hipaa-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background-color: #10b981;
+  color: white;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.healthcare-fileupload-hipaa-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* Upload Stats */
+.healthcare-fileupload-stats {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  margin-bottom: 24px;
+  padding: 16px;
+  background-color: #f8fafc;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.healthcare-fileupload-stat {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.healthcare-fileupload-stat-label {
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.healthcare-fileupload-stat-value {
+  color: #1f2937;
+  font-weight: 600;
+}
+
+.healthcare-fileupload-stat-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.healthcare-fileupload-stat--uploading {
+  color: #f59e0b;
+  font-weight: 500;
+}
+
+.healthcare-fileupload-stat--error {
+  color: #dc2626;
+  font-weight: 500;
+}
+
+/* Drop Zone */
+.healthcare-fileupload-dropzone {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  padding: 32px 24px;
+  border: 3px dashed #d1d5db;
+  border-radius: 16px;
+  background-color: #fafbfc;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 24px;
+}
+
+.healthcare-fileupload-container--small .healthcare-fileupload-dropzone {
+  min-height: 160px;
+  padding: 24px 16px;
+}
+
+.healthcare-fileupload-container--large .healthcare-fileupload-dropzone {
+  min-height: 240px;
+  padding: 40px 32px;
+}
+
+.healthcare-fileupload-dropzone:hover {
+  border-color: #1278B3;
+  background-color: #f0f9ff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(18, 120, 179, 0.1);
+}
+
+.healthcare-fileupload-dropzone:focus {
+  outline: 3px solid #1278B3;
+  outline-offset: 2px;
+  border-color: #1278B3;
+}
+
+.healthcare-fileupload-dropzone-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.healthcare-fileupload-dropzone-icon {
+  width: 48px;
+  height: 48px;
+  color: #9ca3af;
+  margin-bottom: 16px;
+  transition: all 0.3s ease;
+}
+
+.healthcare-fileupload-dropzone:hover .healthcare-fileupload-dropzone-icon {
+  color: #1278B3;
+  transform: scale(1.1);
+}
+
+.healthcare-fileupload-dropzone-text h3 {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.healthcare-fileupload-container--small .healthcare-fileupload-dropzone-text h3 {
+  font-size: 16px;
+}
+
+.healthcare-fileupload-container--large .healthcare-fileupload-dropzone-text h3 {
+  font-size: 20px;
+}
+
+.healthcare-fileupload-dropzone-text p {
+  margin: 0;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.healthcare-fileupload-medical-info {
+  width: 100%;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.healthcare-fileupload-medical-types {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.healthcare-fileupload-medical-type {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 12px;
+  background-color: white;
+  border: 1px solid #e2e8f0;
+  font-size: 12px;
+  color: #6b7280;
+  transition: all 0.2s ease;
+}
+
+.healthcare-fileupload-medical-type:hover {
+  background-color: #f0f9ff;
+  border-color: #1278B3;
+  color: #1278B3;
+}
+
+.healthcare-fileupload-medical-type-icon {
+  width: 24px;
+  height: 24px;
+}
+
+/* File Input */
+.healthcare-fileupload-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Files Section */
+.healthcare-fileupload-files {
+  margin-top: 32px;
+}
+
+.healthcare-fileupload-files-title {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.healthcare-fileupload-files-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Individual File */
+.healthcare-fileupload-file {
+  display: flex;
+  flex-direction: column;
+  padding: 16px 20px;
+  background-color: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.healthcare-fileupload-file:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  border-color: #cbd5e1;
+}
+
+.healthcare-fileupload-file--uploading {
+  border-color: #f59e0b;
+  background-color: #fffbeb;
+}
+
+.healthcare-fileupload-file--validating {
+  border-color: #8b5cf6;
+  background-color: #faf5ff;
+}
+
+.healthcare-fileupload-file--encrypted {
+  border-color: #8b5cf6;
+  background-color: #faf5ff;
+  position: relative;
+}
+
+.healthcare-fileupload-file--encrypted::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background-color: #8b5cf6;
+  border-radius: 2px 0 0 2px;
+}
+
+.healthcare-fileupload-file--completed {
+  border-color: #10b981;
+  background-color: #f0fdf4;
+}
+
+.healthcare-fileupload-file--error {
+  border-color: #dc2626;
+  background-color: #fef2f2;
+}
+
+.healthcare-fileupload-file--invalid {
+  border-color: #dc2626;
+  background-color: #fef2f2;
+}
+
+.healthcare-fileupload-file-main {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.healthcare-fileupload-file-icon-container {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.healthcare-fileupload-file-icon {
+  width: 32px;
+  height: 32px;
+  color: #6b7280;
+  flex-shrink: 0;
+}
+
+.healthcare-fileupload-file--completed .healthcare-fileupload-file-icon {
+  color: #10b981;
+}
+
+.healthcare-fileupload-file--error .healthcare-fileupload-file-icon {
+  color: #dc2626;
+}
+
+.healthcare-fileupload-file-category {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  padding: 2px 6px;
+  background-color: #6b7280;
+  color: white;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 8px;
+}
+
+.healthcare-fileupload-file-category--radiology {
+  background-color: #dc2626;
+}
+
+.healthcare-fileupload-file-category--laboratory {
+  background-color: #059669;
+}
+
+.healthcare-fileupload-file-category--pathology {
+  background-color: #7c3aed;
+}
+
+.healthcare-fileupload-file-category--cardiology {
+  background-color: #dc2626;
+}
+
+.healthcare-fileupload-file-category--report {
+  background-color: #1278B3;
+}
+
+.healthcare-fileupload-file-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.healthcare-fileupload-file-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 4px;
+  word-break: break-all;
+}
+
+.healthcare-fileupload-file-details {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 8px;
+}
+
+.healthcare-fileupload-file-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.healthcare-fileupload-file-status-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.healthcare-fileupload-file-status-text {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Progress Bar */
+.healthcare-fileupload-progress {
+  position: relative;
+  width: 100%;
+  height: 8px;
+  background-color: #e5e7eb;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.healthcare-fileupload-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #1278B3, #60a5fa);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+  position: relative;
+}
+
+.healthcare-fileupload-progress-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  animation: healthcare-fileupload-progress-shimmer 1.5s infinite;
+}
+
+.healthcare-fileupload-progress-text {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  font-size: 10px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+@keyframes healthcare-fileupload-progress-shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Validation Messages */
+.healthcare-fileupload-validation {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  margin-top: 8px;
+}
+
+.healthcare-fileupload-validation--error {
+  background-color: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fed7d7;
+}
+
+.healthcare-fileupload-validation--warning {
+  background-color: #fffbeb;
+  color: #d97706;
+  border: 1px solid #fed7aa;
+}
+
+.healthcare-fileupload-validation-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+/* File Actions */
+.healthcare-fileupload-file-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.healthcare-fileupload-file-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background-color: #f3f4f6;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.healthcare-fileupload-file-action:hover {
+  background-color: #e5e7eb;
+  border-color: #d1d5db;
+  color: #374151;
+}
+
+.healthcare-fileupload-file-action:focus {
+  outline: 2px solid #1278B3;
+  outline-offset: 2px;
+}
+
+.healthcare-fileupload-file-action--delete {
+  background-color: #fef2f2;
+  border-color: #fecaca;
+  color: #dc2626;
+}
+
+.healthcare-fileupload-file-action--delete:hover {
+  background-color: #fee2e2;
+  border-color: #fca5a5;
+}
+
+.healthcare-fileupload-file-action svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* HIPAA Compliance Badge */
+.healthcare-fileupload-hipaa-compliance {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background-color: #10b981;
+  color: white;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.healthcare-fileupload-hipaa-compliance-icon {
+  width: 12px;
+  height: 12px;
+}
+
+/* Privacy Notice */
+.healthcare-fileupload-privacy {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 20px;
+  background-color: #f0fdf4;
+  border: 2px solid #bbf7d0;
+  border-radius: 12px;
+  margin-top: 24px;
+}
+
+.healthcare-fileupload-privacy-icon {
+  width: 24px;
+  height: 24px;
+  color: #059669;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.healthcare-fileupload-privacy h4 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #065f46;
+}
+
+.healthcare-fileupload-privacy p {
+  margin: 0;
+  font-size: 14px;
+  color: #047857;
+  line-height: 1.5;
+}
+
+/* Loading Skeleton */
+.healthcare-fileupload-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.healthcare-fileupload-skeleton-header {
+  height: 80px;
+  background-color: #e2e8f0;
+  border-radius: 12px;
+  animation: healthcare-fileupload-skeleton-pulse 2s infinite;
+}
+
+.healthcare-fileupload-skeleton-dropzone {
+  height: 200px;
+  background-color: #f1f5f9;
+  border-radius: 16px;
+  border: 3px dashed #d1d5db;
+  animation: healthcare-fileupload-skeleton-pulse 2s infinite;
+}
+
+.healthcare-fileupload-skeleton-files {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.healthcare-fileupload-skeleton-files::before,
+.healthcare-fileupload-skeleton-files::after {
+  content: '';
+  height: 80px;
+  background-color: #e2e8f0;
+  border-radius: 12px;
+  animation: healthcare-fileupload-skeleton-pulse 2s infinite;
+}
+
+@keyframes healthcare-fileupload-skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .healthcare-fileupload-container {
+    padding: 16px;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+
+  .healthcare-fileupload-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .healthcare-fileupload-title-container {
+    width: 100%;
+  }
+
+  .healthcare-fileupload-hipaa-badge {
+    align-self: flex-end;
+  }
+
+  .healthcare-fileupload-stats {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .healthcare-fileupload-dropzone {
+    min-height: 160px;
+    padding: 24px 16px;
+  }
+
+  .healthcare-fileupload-medical-types {
+    gap: 16px;
+    justify-content: center;
+  }
+
+  .healthcare-fileupload-medical-type {
+    padding: 8px;
+    min-width: 80px;
+  }
+
+  .healthcare-fileupload-file-main {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .healthcare-fileupload-file-status {
+    margin-left: 0;
+    align-self: flex-start;
+  }
+
+  .healthcare-fileupload-file-actions {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .healthcare-fileupload-container {
+    padding: 12px;
+  }
+
+  .healthcare-fileupload-title {
+    font-size: 20px;
+  }
+
+  .healthcare-fileupload-dropzone {
+    min-height: 140px;
+    padding: 20px 12px;
+  }
+
+  .healthcare-fileupload-dropzone-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .healthcare-fileupload-file {
+    padding: 12px 16px;
+  }
+
+  .healthcare-fileupload-file-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .healthcare-fileupload-file-name {
+    font-size: 14px;
+  }
+
+  .healthcare-fileupload-file-details {
+    font-size: 11px;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .healthcare-fileupload-privacy {
+    padding: 16px;
+  }
+
+  .healthcare-fileupload-privacy h4 {
+    font-size: 14px;
+  }
+
+  .healthcare-fileupload-privacy p {
+    font-size: 13px;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .healthcare-fileupload-container {
+    border-width: 3px;
+  }
+
+  .healthcare-fileupload-dropzone {
+    border-width: 4px;
+  }
+
+  .healthcare-fileupload-file {
+    border-width: 3px;
+  }
+
+  .healthcare-fileupload-file-action {
+    border-width: 3px;
+  }
+
+  .healthcare-fileupload-file-action:focus,
+  .healthcare-fileupload-dropzone:focus {
+    outline-width: 3px;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .healthcare-fileupload-dropzone,
+  .healthcare-fileupload-file,
+  .healthcare-fileupload-file-action,
+  .healthcare-fileupload-progress-bar,
+  .healthcare-fileupload-skeleton-header,
+  .healthcare-fileupload-skeleton-dropzone,
+  .healthcare-fileupload-skeleton-files::before,
+  .healthcare-fileupload-skeleton-files::after {
+    animation: none;
+    transition: none;
+  }
+
+  .healthcare-fileupload-dropzone:hover {
+    transform: none;
+  }
+
+  .healthcare-fileupload-progress-bar::after {
+    display: none;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .healthcare-fileupload-container {
+    background-color: #1f2937;
+    border-color: #374151;
+    color: #e5e7eb;
+  }
+
+  .healthcare-fileupload-container--medical {
+    background-color: #1e3a8a;
+    border-color: #3b82f6;
+  }
+
+  .healthcare-fileupload-container--hipaa {
+    background-color: #064e3b;
+    border-color: #059669;
+  }
+
+  .healthcare-fileupload-title {
+    color: #f3f4f6;
+  }
+
+  .healthcare-fileupload-subtitle {
+    color: #9ca3af;
+  }
+
+  .healthcare-fileupload-stats {
+    background-color: #374151;
+    border-color: #4b5563;
+  }
+
+  .healthcare-fileupload-stat-label {
+    color: #9ca3af;
+  }
+
+  .healthcare-fileupload-stat-value {
+    color: #f3f4f6;
+  }
+
+  .healthcare-fileupload-dropzone {
+    background-color: #374151;
+    border-color: #4b5563;
+  }
+
+  .healthcare-fileupload-dropzone:hover {
+    background-color: #1e3a8a;
+    border-color: #3b82f6;
+  }
+
+  .healthcare-fileupload-dropzone-text h3 {
+    color: #f3f4f6;
+  }
+
+  .healthcare-fileupload-dropzone-text p {
+    color: #9ca3af;
+  }
+
+  .healthcare-fileupload-medical-type {
+    background-color: #374151;
+    border-color: #4b5563;
+    color: #9ca3af;
+  }
+
+  .healthcare-fileupload-medical-type:hover {
+    background-color: #1e3a8a;
+    border-color: #3b82f6;
+    color: #93c5fd;
+  }
+
+  .healthcare-fileupload-files-title {
+    color: #f3f4f6;
+  }
+
+  .healthcare-fileupload-file {
+    background-color: #374151;
+    border-color: #4b5563;
+  }
+
+  .healthcare-fileupload-file-name {
+    color: #f3f4f6;
+  }
+
+  .healthcare-fileupload-file-details {
+    color: #9ca3af;
+  }
+
+  .healthcare-fileupload-file-action {
+    background-color: #4b5563;
+    border-color: #6b7280;
+    color: #9ca3af;
+  }
+
+  .healthcare-fileupload-file-action:hover {
+    background-color: #6b7280;
+    border-color: #9ca3af;
+    color: #e5e7eb;
+  }
+
+  .healthcare-fileupload-file-action--delete {
+    background-color: #7f1d1d;
+    border-color: #dc2626;
+    color: #fca5a5;
+  }
+
+  .healthcare-fileupload-file-action--delete:hover {
+    background-color: #991b1b;
+    border-color: #ef4444;
+  }
+
+  .healthcare-fileupload-progress {
+    background-color: #4b5563;
+  }
+
+  .healthcare-fileupload-progress-text {
+    color: #f3f4f6;
+  }
+
+  .healthcare-fileupload-validation--error {
+    background-color: #7f1d1d;
+    border-color: #dc2626;
+    color: #fca5a5;
+  }
+
+  .healthcare-fileupload-validation--warning {
+    background-color: #451a03;
+    border-color: #d97706;
+    color: #fcd34d;
+  }
+
+  .healthcare-fileupload-privacy {
+    background-color: #064e3b;
+    border-color: #059669;
+  }
+
+  .healthcare-fileupload-privacy h4 {
+    color: #6ee7b7;
+  }
+
+  .healthcare-fileupload-privacy p {
+    color: #a7f3d0;
+  }
+
+  .healthcare-fileupload-skeleton-header,
+  .healthcare-fileupload-skeleton-files::before,
+  .healthcare-fileupload-skeleton-files::after {
+    background-color: #4b5563;
+  }
+
+  .healthcare-fileupload-skeleton-dropzone {
+    background-color: #374151;
+    border-color: #6b7280;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .healthcare-fileupload-container {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 2px solid #000;
+  }
+
+  .healthcare-fileupload-dropzone,
+  .healthcare-fileupload-file-actions,
+  .healthcare-fileupload-progress {
+    display: none;
+  }
+
+  .healthcare-fileupload-file:hover {
+    transform: none;
+  }
+
+  .healthcare-fileupload-skeleton-header,
+  .healthcare-fileupload-skeleton-dropzone,
+  .healthcare-fileupload-skeleton-files::before,
+  .healthcare-fileupload-skeleton-files::after {
+    animation: none;
+  }
+}

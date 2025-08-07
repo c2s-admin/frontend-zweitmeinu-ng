@@ -1,0 +1,597 @@
+/**
+ * Healthcare Advanced Accessibility Styles
+ * 
+ * Comprehensive accessibility enhancements for healthcare applications:
+ * - Screen reader optimizations
+ * - High contrast mode
+ * - Reduced motion mode
+ * - Text size adjustments
+ * - Enhanced focus indicators
+ * - Emergency accessibility features
+ */
+
+/* Screen Reader Only - Utility Class */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.sr-only-focusable:focus {
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+  padding: inherit !important;
+  margin: inherit !important;
+  overflow: visible !important;
+  clip: auto !important;
+  white-space: normal !important;
+}
+
+/* Skip Links for Screen Readers */
+.skip-links {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  width: 100%;
+  z-index: 9999;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  background: #004166;
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 0 0 4px 4px;
+  transition: all 0.2s ease;
+}
+
+.skip-link:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  left: 0;
+  top: 0;
+  padding: 12px 20px;
+  outline: 3px solid #1278B3;
+  outline-offset: 2px;
+}
+
+/* Enhanced Focus Indicators */
+.healthcare-enhanced-focus {
+  --focus-color: #1278B3;
+  --focus-width: 3px;
+  --focus-offset: 2px;
+  --focus-shadow: 0 0 0 6px rgba(18, 120, 179, 0.2);
+}
+
+.healthcare-enhanced-focus *:focus {
+  outline: var(--focus-width) solid var(--focus-color) !important;
+  outline-offset: var(--focus-offset) !important;
+  box-shadow: var(--focus-shadow) !important;
+}
+
+.healthcare-enhanced-focus button:focus {
+  --focus-color: #10b981;
+  --focus-shadow: 0 0 0 6px rgba(16, 185, 129, 0.2);
+}
+
+.healthcare-enhanced-focus .error:focus,
+.healthcare-enhanced-focus [aria-invalid="true"]:focus,
+.healthcare-enhanced-focus .healthcare-input--error input:focus {
+  --focus-color: #dc2626;
+  --focus-shadow: 0 0 0 6px rgba(220, 38, 38, 0.2);
+}
+
+.healthcare-enhanced-focus .emergency:focus,
+.healthcare-enhanced-focus .healthcare-emergency:focus {
+  --focus-color: #dc2626;
+  --focus-width: 4px;
+  --focus-shadow: 0 0 0 8px rgba(220, 38, 38, 0.3);
+}
+
+/* High Contrast Mode */
+.high-contrast {
+  --healthcare-primary: #000000;
+  --healthcare-primary-light: #000000;
+  --healthcare-accent-green: #000000;
+  --healthcare-background: #ffffff;
+  --healthcare-light: #ffffff;
+  --healthcare-text: #000000;
+  --healthcare-text-muted: #000000;
+  --healthcare-border: #000000;
+  --healthcare-error: #000000;
+  --healthcare-success: #000000;
+  --healthcare-warning: #000000;
+}
+
+.high-contrast * {
+  color: #000000 !important;
+  background-color: #ffffff !important;
+  border-color: #000000 !important;
+}
+
+.high-contrast button,
+.high-contrast .healthcare-button {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border: 2px solid #000000 !important;
+}
+
+.high-contrast button:hover,
+.high-contrast .healthcare-button:hover {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border-color: #000000 !important;
+}
+
+.high-contrast input,
+.high-contrast textarea,
+.high-contrast select {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border: 2px solid #000000 !important;
+}
+
+.high-contrast a {
+  color: #0000ee !important;
+  text-decoration: underline !important;
+}
+
+.high-contrast a:visited {
+  color: #551a8b !important;
+}
+
+.high-contrast .emergency,
+.high-contrast .healthcare-emergency,
+.high-contrast .error {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border: 3px solid #000000 !important;
+}
+
+/* High Contrast Focus Indicators */
+.high-contrast *:focus {
+  outline: 4px solid #000000 !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Reduced Motion Mode */
+.reduced-motion * {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+.reduced-motion .animate-spin,
+.reduced-motion .animate-pulse,
+.reduced-motion .animate-bounce {
+  animation: none !important;
+}
+
+.reduced-motion .healthcare-modal,
+.reduced-motion .healthcare-modal-overlay {
+  transition: none !important;
+}
+
+.reduced-motion .healthcare-button:hover,
+.reduced-motion .healthcare-card:hover,
+.reduced-motion .healthcare-input:focus {
+  transform: none !important;
+}
+
+/* Text Size Adjustments */
+.text-small {
+  font-size: 0.875rem; /* 14px */
+  line-height: 1.5;
+}
+
+.text-small .healthcare-title,
+.text-small h1 {
+  font-size: 1.5rem; /* 24px */
+}
+
+.text-small .healthcare-subtitle,
+.text-small h2 {
+  font-size: 1.25rem; /* 20px */
+}
+
+.text-small .healthcare-button {
+  padding: 10px 16px;
+  font-size: 0.875rem;
+}
+
+.text-medium {
+  font-size: 1rem; /* 16px */
+  line-height: 1.6;
+}
+
+.text-large {
+  font-size: 1.125rem; /* 18px */
+  line-height: 1.6;
+}
+
+.text-large .healthcare-title,
+.text-large h1 {
+  font-size: 2.5rem; /* 40px */
+}
+
+.text-large .healthcare-subtitle,
+.text-large h2 {
+  font-size: 2rem; /* 32px */
+}
+
+.text-large .healthcare-button {
+  padding: 14px 24px;
+  font-size: 1.125rem;
+}
+
+.text-extra-large {
+  font-size: 1.25rem; /* 20px */
+  line-height: 1.7;
+}
+
+.text-extra-large .healthcare-title,
+.text-extra-large h1 {
+  font-size: 3rem; /* 48px */
+}
+
+.text-extra-large .healthcare-subtitle,
+.text-extra-large h2 {
+  font-size: 2.5rem; /* 40px */
+}
+
+.text-extra-large .healthcare-button {
+  padding: 16px 28px;
+  font-size: 1.25rem;
+}
+
+/* Screen Reader Regions */
+.healthcare-screen-reader-region {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Keyboard Navigation Indicators */
+.keyboard-navigation .healthcare-keyboard-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #1278B3;
+  color: white;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  z-index: 9999;
+  transform: translateY(-100%);
+  transition: transform 0.2s ease;
+}
+
+.keyboard-navigation.show-shortcuts .healthcare-keyboard-indicator {
+  transform: translateY(0);
+}
+
+/* Focus Trap Styling */
+.focus-trap {
+  isolation: isolate;
+}
+
+.focus-trap::before,
+.focus-trap::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: transparent;
+  pointer-events: none;
+}
+
+.focus-trap::before {
+  left: -2px;
+}
+
+.focus-trap::after {
+  right: -2px;
+}
+
+.focus-trap:focus-within::before,
+.focus-trap:focus-within::after {
+  background: #1278B3;
+  animation: focus-trap-pulse 2s ease-in-out infinite;
+}
+
+@keyframes focus-trap-pulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+/* Reduced motion version */
+.reduced-motion .focus-trap:focus-within::before,
+.reduced-motion .focus-trap:focus-within::after {
+  animation: none;
+  opacity: 1;
+}
+
+/* Emergency Accessibility Features */
+.emergency-mode {
+  --healthcare-primary: #dc2626;
+  --healthcare-primary-light: #ef4444;
+  --healthcare-accent-green: #dc2626;
+  --focus-color: #dc2626;
+  --focus-width: 4px;
+}
+
+.emergency-mode .healthcare-emergency-banner {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 99999 !important;
+  background: #dc2626 !important;
+  color: white !important;
+  padding: 16px !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  text-align: center !important;
+  border: none !important;
+  box-shadow: 0 4px 8px rgba(220, 38, 38, 0.5) !important;
+}
+
+.emergency-mode .healthcare-emergency-button {
+  background: #ffffff !important;
+  color: #dc2626 !important;
+  border: 3px solid #dc2626 !important;
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  padding: 16px 32px !important;
+  margin: 8px !important;
+  border-radius: 8px !important;
+}
+
+.emergency-mode .healthcare-emergency-button:hover,
+.emergency-mode .healthcare-emergency-button:focus {
+  background: #fef2f2 !important;
+  outline: 4px solid #dc2626 !important;
+  outline-offset: 2px !important;
+}
+
+/* Voice Recognition Support */
+.voice-recognition-active {
+  position: relative;
+}
+
+.voice-recognition-active::after {
+  content: '🎤';
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  font-size: 16px;
+  animation: voice-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes voice-pulse {
+  0%, 100% { opacity: 0.5; transform: translateY(-50%) scale(1); }
+  50% { opacity: 1; transform: translateY(-50%) scale(1.1); }
+}
+
+.reduced-motion .voice-recognition-active::after {
+  animation: none;
+  opacity: 1;
+}
+
+/* Print Accessibility */
+@media print {
+  .sr-only {
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    clip: auto !important;
+    white-space: normal !important;
+    border: 1px solid #000 !important;
+    background: #f0f0f0 !important;
+    font-size: 12px !important;
+    line-height: 1.2 !important;
+  }
+
+  .sr-only::before {
+    content: '[Screen Reader: ';
+    font-weight: bold;
+  }
+
+  .sr-only::after {
+    content: ']';
+    font-weight: bold;
+  }
+
+  .skip-links,
+  .healthcare-screen-reader-region {
+    display: none !important;
+  }
+
+  /* Ensure important accessibility information is visible */
+  [aria-label]::after {
+    content: ' [' attr(aria-label) ']';
+    font-size: 10px;
+    font-style: italic;
+    color: #666;
+  }
+
+  [aria-describedby]::after {
+    content: ' [Weitere Informationen verfügbar]';
+    font-size: 10px;
+    font-style: italic;
+    color: #666;
+  }
+}
+
+/* Mobile Accessibility Enhancements */
+@media (max-width: 768px) {
+  .healthcare-enhanced-focus *:focus {
+    --focus-width: 2px;
+    --focus-offset: 1px;
+  }
+
+  .healthcare-button,
+  .healthcare-input,
+  .healthcare-select {
+    min-height: 44px !important; /* iOS accessibility minimum */
+    min-width: 44px !important;
+  }
+
+  /* Larger touch targets for better accessibility */
+  .text-large .healthcare-button,
+  .text-extra-large .healthcare-button {
+    min-height: 56px !important;
+    min-width: 56px !important;
+  }
+
+  /* Prevent zoom on focus for iOS (while maintaining accessibility) */
+  input, textarea, select {
+    font-size: 16px !important;
+  }
+
+  .text-small input,
+  .text-small textarea,
+  .text-small select {
+    font-size: 16px !important; /* Prevent zoom even in small text mode */
+  }
+}
+
+/* Tablet Accessibility */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .healthcare-button,
+  .healthcare-input,
+  .healthcare-select {
+    min-height: 48px !important;
+    min-width: 48px !important;
+  }
+}
+
+/* Dark Mode Accessibility */
+@media (prefers-color-scheme: dark) {
+  .healthcare-enhanced-focus {
+    --focus-color: #60a5fa;
+    --focus-shadow: 0 0 0 6px rgba(96, 165, 250, 0.2);
+  }
+
+  .healthcare-enhanced-focus button:focus {
+    --focus-color: #34d399;
+    --focus-shadow: 0 0 0 6px rgba(52, 211, 153, 0.2);
+  }
+
+  .healthcare-enhanced-focus .error:focus,
+  .healthcare-enhanced-focus [aria-invalid="true"]:focus {
+    --focus-color: #f87171;
+    --focus-shadow: 0 0 0 6px rgba(248, 113, 113, 0.2);
+  }
+
+  .skip-link {
+    background: #1f2937;
+    color: #f3f4f6;
+  }
+
+  .skip-link:focus {
+    outline-color: #60a5fa;
+  }
+}
+
+/* Contrast Preferences */
+@media (prefers-contrast: high) {
+  .healthcare-enhanced-focus *:focus {
+    --focus-width: 4px;
+    --focus-color: #000000;
+    --focus-shadow: 0 0 0 8px rgba(0, 0, 0, 0.5);
+  }
+
+  .healthcare-button,
+  .healthcare-input,
+  .healthcare-select {
+    border-width: 2px !important;
+  }
+
+  .emergency,
+  .healthcare-emergency {
+    border-width: 3px !important;
+  }
+}
+
+/* Forced Colors Mode (Windows High Contrast) */
+@media (forced-colors: active) {
+  .healthcare-enhanced-focus *:focus {
+    outline: 2px solid ButtonText !important;
+    outline-offset: 2px !important;
+  }
+
+  .healthcare-button {
+    border: 1px solid ButtonText !important;
+  }
+
+  .healthcare-input,
+  .healthcare-select,
+  .healthcare-textarea {
+    border: 1px solid ButtonText !important;
+  }
+
+  .emergency,
+  .healthcare-emergency {
+    border: 2px solid ButtonText !important;
+    background: Canvas !important;
+    color: CanvasText !important;
+  }
+}
+
+/* Animation Preferences */
+@media (prefers-reduced-motion: no-preference) {
+  .accessibility-transition {
+    transition: all 0.2s ease;
+  }
+
+  .focus-trap:focus-within::before,
+  .focus-trap:focus-within::after {
+    animation: focus-trap-pulse 2s ease-in-out infinite;
+  }
+}
+
+/* Browser-specific Accessibility Fixes */
+/* Firefox */
+@-moz-document url-prefix() {
+  .healthcare-enhanced-focus *:focus {
+    outline-style: solid !important;
+  }
+}
+
+/* Safari */
+@supports (-webkit-appearance: none) {
+  .healthcare-button:focus-visible {
+    outline: var(--focus-width) solid var(--focus-color) !important;
+    outline-offset: var(--focus-offset) !important;
+  }
+}

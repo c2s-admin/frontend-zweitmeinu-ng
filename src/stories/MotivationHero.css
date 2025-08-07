@@ -1,0 +1,1051 @@
+/* Healthcare Motivation Hero Styles - WCAG 2.1 AA Compliant */
+
+.healthcare-motivation-hero {
+  position: relative;
+  width: 100%;
+  min-height: 500px;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  font-family: 'Roboto Condensed', sans-serif;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Size Variants */
+.healthcare-motivation-hero--small {
+  min-height: 400px;
+  padding: 20px;
+  font-size: 14px;
+}
+
+.healthcare-motivation-hero--medium {
+  min-height: 500px;
+  padding: 40px 20px;
+  font-size: 16px;
+}
+
+.healthcare-motivation-hero--large {
+  min-height: 600px;
+  padding: 60px 20px;
+  font-size: 18px;
+}
+
+/* Layout Variants */
+.healthcare-motivation-hero--standard {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  color: #1f2937;
+}
+
+.healthcare-motivation-hero--centered {
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.healthcare-motivation-hero--split {
+  background: linear-gradient(90deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+.healthcare-motivation-hero--video {
+  background-color: #1f2937;
+  color: white;
+}
+
+.healthcare-motivation-hero--emergency {
+  background: linear-gradient(135deg, #7f1d1d 0%, #dc2626 100%);
+  color: white;
+  border: 3px solid #dc2626;
+}
+
+/* Medical Context */
+.healthcare-motivation-hero--medical {
+  background: linear-gradient(135deg, #f0f9ff 0%, #dbeafe 100%);
+  border-top: 4px solid #1278B3;
+}
+
+.healthcare-motivation-hero--medical .healthcare-motivation-hero-title {
+  color: #1278B3;
+}
+
+/* Loading State */
+.healthcare-motivation-hero--loading {
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+/* Background Media */
+.healthcare-motivation-hero-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+}
+
+.healthcare-motivation-hero-video,
+.healthcare-motivation-hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.healthcare-motivation-hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(0, 65, 102, 0.8) 0%, 
+    rgba(18, 120, 179, 0.6) 50%,
+    rgba(179, 175, 9, 0.4) 100%
+  );
+}
+
+/* Emergency Banner */
+.healthcare-motivation-hero-emergency-banner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: #dc2626;
+  color: white;
+  z-index: 1000;
+  padding: 8px 0;
+  animation: healthcare-motivation-hero-emergency-pulse 2s infinite;
+}
+
+@keyframes healthcare-motivation-hero-emergency-pulse {
+  0%, 100% { background-color: #dc2626; }
+  50% { background-color: #b91c1c; }
+}
+
+.healthcare-motivation-hero-emergency-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.healthcare-motivation-hero-emergency-icon {
+  width: 20px;
+  height: 20px;
+  color: #fbbf24;
+  animation: healthcare-motivation-hero-emergency-flash 1s infinite;
+}
+
+@keyframes healthcare-motivation-hero-emergency-flash {
+  0%, 50%, 100% { opacity: 1; }
+  25%, 75% { opacity: 0.5; }
+}
+
+.healthcare-motivation-hero-emergency-contacts {
+  display: flex;
+  gap: 12px;
+}
+
+.healthcare-motivation-hero-emergency-contact {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.healthcare-motivation-hero-emergency-contact:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: scale(1.05);
+}
+
+.healthcare-motivation-hero-emergency-contact:focus {
+  outline: 2px solid white;
+  outline-offset: 2px;
+}
+
+.healthcare-motivation-hero-emergency-contact-icon {
+  width: 14px;
+  height: 14px;
+}
+
+/* Main Content */
+.healthcare-motivation-hero-content {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.healthcare-motivation-hero-main {
+  display: flex;
+  align-items: center;
+  gap: 60px;
+  flex: 1;
+  margin-top: 60px;
+}
+
+.healthcare-motivation-hero--centered .healthcare-motivation-hero-main {
+  flex-direction: column;
+  text-align: center;
+  gap: 40px;
+}
+
+/* Text Content */
+.healthcare-motivation-hero-text {
+  flex: 1;
+  max-width: 600px;
+}
+
+.healthcare-motivation-hero-title {
+  margin: 0 0 16px 0;
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: #1f2937;
+}
+
+.healthcare-motivation-hero--small .healthcare-motivation-hero-title {
+  font-size: 36px;
+}
+
+.healthcare-motivation-hero--large .healthcare-motivation-hero-title {
+  font-size: 56px;
+}
+
+.healthcare-motivation-hero--emergency .healthcare-motivation-hero-title,
+.healthcare-motivation-hero--video .healthcare-motivation-hero-title {
+  color: white;
+}
+
+.healthcare-motivation-hero-subtitle {
+  margin: 0 0 24px 0;
+  font-size: 24px;
+  font-weight: 500;
+  color: #6b7280;
+  line-height: 1.3;
+}
+
+.healthcare-motivation-hero--emergency .healthcare-motivation-hero-subtitle,
+.healthcare-motivation-hero--video .healthcare-motivation-hero-subtitle {
+  color: #e5e7eb;
+}
+
+.healthcare-motivation-hero-description {
+  margin: 0 0 32px 0;
+  font-size: 18px;
+  color: #374151;
+  line-height: 1.6;
+  max-width: 500px;
+}
+
+.healthcare-motivation-hero--emergency .healthcare-motivation-hero-description,
+.healthcare-motivation-hero--video .healthcare-motivation-hero-description {
+  color: #d1d5db;
+}
+
+/* Trust Indicators */
+.healthcare-motivation-hero-trust {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+
+.healthcare-motivation-hero-trust-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background-color: rgba(16, 185, 129, 0.1);
+  border: 2px solid #10b981;
+  border-radius: 20px;
+  color: #047857;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.healthcare-motivation-hero--emergency .healthcare-motivation-hero-trust-item {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+.healthcare-motivation-hero-trust-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* Actions */
+.healthcare-motivation-hero-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.healthcare-motivation-hero-cta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 32px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+  text-decoration: none;
+  min-height: 56px;
+  position: relative;
+  overflow: hidden;
+}
+
+.healthcare-motivation-hero-cta--primary {
+  background: linear-gradient(135deg, #1278B3 0%, #004166 100%);
+  color: white;
+  border-color: #1278B3;
+  box-shadow: 0 4px 6px rgba(18, 120, 179, 0.25);
+}
+
+.healthcare-motivation-hero-cta--primary:hover {
+  background: linear-gradient(135deg, #004166 0%, #1278B3 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 12px rgba(18, 120, 179, 0.35);
+}
+
+.healthcare-motivation-hero-cta--primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.healthcare-motivation-hero-cta--primary:hover::before {
+  left: 100%;
+}
+
+.healthcare-motivation-hero-cta--secondary {
+  background-color: transparent;
+  color: #1278B3;
+  border-color: #1278B3;
+}
+
+.healthcare-motivation-hero-cta--secondary:hover {
+  background-color: #f0f9ff;
+  transform: translateY(-1px);
+}
+
+.healthcare-motivation-hero--emergency .healthcare-motivation-hero-cta--secondary {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.healthcare-motivation-hero-cta:focus {
+  outline: 3px solid #10b981;
+  outline-offset: 2px;
+}
+
+.healthcare-motivation-hero-cta-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.healthcare-motivation-hero-cta-arrow {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.2s ease;
+}
+
+.healthcare-motivation-hero-cta:hover .healthcare-motivation-hero-cta-arrow {
+  transform: translateX(4px);
+}
+
+/* Media Content */
+.healthcare-motivation-hero-media {
+  flex: 1;
+  max-width: 500px;
+}
+
+.healthcare-motivation-hero-video-container {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.healthcare-motivation-hero-preview-video {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16/9;
+  border-radius: 16px;
+}
+
+.healthcare-motivation-hero-video-controls {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  display: flex;
+  gap: 8px;
+}
+
+.healthcare-motivation-hero-video-control {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.7);
+  border: none;
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.healthcare-motivation-hero-video-control:hover {
+  background-color: rgba(0, 0, 0, 0.9);
+  transform: scale(1.1);
+}
+
+.healthcare-motivation-hero-video-control:focus {
+  outline: 2px solid white;
+  outline-offset: 2px;
+}
+
+/* Statistics */
+.healthcare-motivation-hero-statistics {
+  margin-top: 60px;
+  padding: 40px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.9) 100%);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.healthcare-motivation-hero--emergency .healthcare-motivation-hero-statistics {
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.1) 100%);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.healthcare-motivation-hero-statistics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+}
+
+.healthcare-motivation-hero-statistic {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(248, 250, 252, 0.8) 100%);
+  border-radius: 16px;
+  border: 2px solid #e5e7eb;
+  transition: all 0.3s ease;
+}
+
+.healthcare-motivation-hero-statistic:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  border-color: #1278B3;
+}
+
+.healthcare-motivation-hero--emergency .healthcare-motivation-hero-statistic {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.healthcare-motivation-hero-statistic-icon-container {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.healthcare-motivation-hero-statistic-icon {
+  width: 40px;
+  height: 40px;
+  color: #1278B3;
+}
+
+.healthcare-motivation-hero--emergency .healthcare-motivation-hero-statistic-icon {
+  color: #fbbf24;
+}
+
+.healthcare-motivation-hero-statistic-trend {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 6px;
+  background-color: #10b981;
+  color: white;
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: 8px;
+}
+
+.healthcare-motivation-hero-statistic-trend-icon {
+  width: 10px;
+  height: 10px;
+}
+
+.healthcare-motivation-hero-statistic-content {
+  flex: 1;
+}
+
+.healthcare-motivation-hero-statistic-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1f2937;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.healthcare-motivation-hero--emergency .healthcare-motivation-hero-statistic-value {
+  color: white;
+}
+
+.healthcare-motivation-hero-statistic-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+.healthcare-motivation-hero--emergency .healthcare-motivation-hero-statistic-label {
+  color: #e5e7eb;
+}
+
+.healthcare-motivation-hero-statistic-description {
+  font-size: 12px;
+  color: #9ca3af;
+  line-height: 1.3;
+}
+
+.healthcare-motivation-hero--emergency .healthcare-motivation-hero-statistic-description {
+  color: #d1d5db;
+}
+
+/* Testimonials */
+.healthcare-motivation-hero-testimonials {
+  margin-top: 40px;
+  padding: 40px;
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  border-radius: 20px;
+  border: 2px solid #bbf7d0;
+}
+
+.healthcare-motivation-hero--emergency .healthcare-motivation-hero-testimonials {
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.1) 100%);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.healthcare-motivation-hero-testimonial-container {
+  position: relative;
+  overflow: hidden;
+  min-height: 120px;
+}
+
+.healthcare-motivation-hero-testimonial {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: all 0.5s ease;
+  cursor: pointer;
+}
+
+.healthcare-motivation-hero-testimonial--active {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.healthcare-motivation-hero-testimonial-content {
+  padding: 20px;
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  border: 2px solid #e5e7eb;
+}
+
+.healthcare-motivation-hero--emergency .healthcare-motivation-hero-testimonial-content {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.healthcare-motivation-hero-testimonial-quote {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #374151;
+  margin-bottom: 16px;
+  font-style: italic;
+}
+
+.healthcare-motivation-hero--emergency .healthcare-motivation-hero-testimonial-quote {
+  color: #e5e7eb;
+}
+
+.healthcare-motivation-hero-testimonial-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.healthcare-motivation-hero-testimonial-author strong {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.healthcare-motivation-hero--emergency .healthcare-motivation-hero-testimonial-author strong {
+  color: white;
+}
+
+.healthcare-motivation-hero-testimonial-author span {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.healthcare-motivation-hero--emergency .healthcare-motivation-hero-testimonial-author span {
+  color: #d1d5db;
+}
+
+.healthcare-motivation-hero-testimonial-rating {
+  display: flex;
+  gap: 2px;
+}
+
+.healthcare-motivation-hero-testimonial-star {
+  width: 16px;
+  height: 16px;
+  color: #fbbf24;
+  fill: currentColor;
+}
+
+.healthcare-motivation-hero-testimonial-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.healthcare-motivation-hero-testimonial-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #d1d5db;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.healthcare-motivation-hero-testimonial-dot--active {
+  background-color: #10b981;
+  transform: scale(1.2);
+}
+
+.healthcare-motivation-hero-testimonial-next {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #10b981;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-left: 8px;
+}
+
+.healthcare-motivation-hero-testimonial-next:hover {
+  background-color: #059669;
+  transform: scale(1.1);
+}
+
+.healthcare-motivation-hero-testimonial-next:focus {
+  outline: 2px solid #10b981;
+  outline-offset: 2px;
+}
+
+/* Disclaimer */
+.healthcare-motivation-hero-disclaimer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 40px;
+  padding: 16px 20px;
+  background-color: #f0fdf4;
+  border: 2px solid #bbf7d0;
+  border-radius: 12px;
+}
+
+.healthcare-motivation-hero--emergency .healthcare-motivation-hero-disclaimer {
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.1) 100%);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.healthcare-motivation-hero-disclaimer-icon {
+  width: 20px;
+  height: 20px;
+  color: #059669;
+  flex-shrink: 0;
+}
+
+.healthcare-motivation-hero--emergency .healthcare-motivation-hero-disclaimer-icon {
+  color: #fbbf24;
+}
+
+.healthcare-motivation-hero-disclaimer p {
+  margin: 0;
+  font-size: 13px;
+  color: #047857;
+  line-height: 1.4;
+}
+
+.healthcare-motivation-hero--emergency .healthcare-motivation-hero-disclaimer p {
+  color: #e5e7eb;
+}
+
+/* Loading Skeleton */
+.healthcare-motivation-hero-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding: 60px 40px;
+}
+
+.healthcare-motivation-hero-skeleton-content {
+  height: 200px;
+  background-color: #e2e8f0;
+  border-radius: 16px;
+  animation: healthcare-motivation-hero-skeleton-pulse 2s infinite;
+}
+
+.healthcare-motivation-hero-skeleton-stats {
+  height: 120px;
+  background-color: #f1f5f9;
+  border-radius: 16px;
+  animation: healthcare-motivation-hero-skeleton-pulse 2s infinite 0.5s;
+}
+
+@keyframes healthcare-motivation-hero-skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .healthcare-motivation-hero-main {
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .healthcare-motivation-hero-title {
+    font-size: 40px;
+  }
+
+  .healthcare-motivation-hero-statistics-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .healthcare-motivation-hero {
+    min-height: 400px;
+  }
+
+  .healthcare-motivation-hero--small,
+  .healthcare-motivation-hero--medium,
+  .healthcare-motivation-hero--large {
+    padding: 20px;
+  }
+
+  .healthcare-motivation-hero-main {
+    margin-top: 40px;
+    gap: 30px;
+  }
+
+  .healthcare-motivation-hero-title {
+    font-size: 32px;
+  }
+
+  .healthcare-motivation-hero-subtitle {
+    font-size: 20px;
+  }
+
+  .healthcare-motivation-hero-description {
+    font-size: 16px;
+  }
+
+  .healthcare-motivation-hero-actions {
+    flex-direction: column;
+  }
+
+  .healthcare-motivation-hero-cta {
+    padding: 14px 24px;
+    justify-content: center;
+  }
+
+  .healthcare-motivation-hero-trust {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .healthcare-motivation-hero-statistics {
+    padding: 20px;
+    margin-top: 30px;
+  }
+
+  .healthcare-motivation-hero-statistics-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .healthcare-motivation-hero-statistic {
+    gap: 16px;
+    padding: 16px;
+  }
+
+  .healthcare-motivation-hero-testimonials {
+    padding: 20px;
+    margin-top: 30px;
+  }
+
+  .healthcare-motivation-hero-emergency-content {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+
+  .healthcare-motivation-hero-emergency-contacts {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .healthcare-motivation-hero-title {
+    font-size: 28px;
+  }
+
+  .healthcare-motivation-hero-subtitle {
+    font-size: 18px;
+  }
+
+  .healthcare-motivation-hero-cta {
+    padding: 12px 20px;
+    font-size: 14px;
+  }
+
+  .healthcare-motivation-hero-statistic {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+
+  .healthcare-motivation-hero-statistic-value {
+    font-size: 28px;
+  }
+
+  .healthcare-motivation-hero-testimonial-content {
+    padding: 16px;
+  }
+
+  .healthcare-motivation-hero-testimonial-quote {
+    font-size: 16px;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .healthcare-motivation-hero {
+    border: 3px solid #000;
+  }
+
+  .healthcare-motivation-hero-cta {
+    border-width: 3px;
+  }
+
+  .healthcare-motivation-hero-statistic,
+  .healthcare-motivation-hero-testimonial-content {
+    border-width: 3px;
+  }
+
+  .healthcare-motivation-hero-cta:focus,
+  .healthcare-motivation-hero-emergency-contact:focus {
+    outline-width: 3px;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .healthcare-motivation-hero-emergency-banner,
+  .healthcare-motivation-hero-emergency-icon,
+  .healthcare-motivation-hero-testimonial,
+  .healthcare-motivation-hero-skeleton-content,
+  .healthcare-motivation-hero-skeleton-stats {
+    animation: none;
+  }
+
+  .healthcare-motivation-hero-cta:hover,
+  .healthcare-motivation-hero-emergency-contact:hover,
+  .healthcare-motivation-hero-statistic:hover {
+    transform: none;
+  }
+
+  .healthcare-motivation-hero-cta--primary::before {
+    display: none;
+  }
+
+  .healthcare-motivation-hero-cta:hover .healthcare-motivation-hero-cta-arrow {
+    transform: none;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .healthcare-motivation-hero {
+    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+    color: #e5e7eb;
+  }
+
+  .healthcare-motivation-hero--standard .healthcare-motivation-hero-title,
+  .healthcare-motivation-hero--centered .healthcare-motivation-hero-title,
+  .healthcare-motivation-hero--split .healthcare-motivation-hero-title {
+    color: #f3f4f6;
+  }
+
+  .healthcare-motivation-hero--standard .healthcare-motivation-hero-subtitle,
+  .healthcare-motivation-hero--standard .healthcare-motivation-hero-description {
+    color: #d1d5db;
+  }
+
+  .healthcare-motivation-hero-trust-item {
+    background-color: rgba(16, 185, 129, 0.2);
+    border-color: #10b981;
+    color: #10b981;
+  }
+
+  .healthcare-motivation-hero-statistics {
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.3) 100%);
+    border-color: #374151;
+  }
+
+  .healthcare-motivation-hero-statistic {
+    background: linear-gradient(135deg, rgba(55, 65, 81, 0.8) 0%, rgba(31, 41, 55, 0.8) 100%);
+    border-color: #4b5563;
+  }
+
+  .healthcare-motivation-hero-statistic-value {
+    color: #f3f4f6;
+  }
+
+  .healthcare-motivation-hero-statistic-label {
+    color: #9ca3af;
+  }
+
+  .healthcare-motivation-hero-testimonials {
+    background: linear-gradient(135deg, rgba(5, 150, 105, 0.1) 0%, rgba(4, 120, 87, 0.1) 100%);
+    border-color: #047857;
+  }
+
+  .healthcare-motivation-hero-testimonial-content {
+    background: linear-gradient(135deg, rgba(55, 65, 81, 0.8) 0%, rgba(31, 41, 55, 0.8) 100%);
+    border-color: #4b5563;
+  }
+
+  .healthcare-motivation-hero-testimonial-quote {
+    color: #d1d5db;
+  }
+
+  .healthcare-motivation-hero-testimonial-author strong {
+    color: #f3f4f6;
+  }
+
+  .healthcare-motivation-hero-testimonial-author span {
+    color: #9ca3af;
+  }
+
+  .healthcare-motivation-hero-disclaimer {
+    background: linear-gradient(135deg, rgba(5, 150, 105, 0.1) 0%, rgba(4, 120, 87, 0.1) 100%);
+    border-color: #047857;
+  }
+
+  .healthcare-motivation-hero-disclaimer p {
+    color: #10b981;
+  }
+
+  .healthcare-motivation-hero-skeleton-content,
+  .healthcare-motivation-hero-skeleton-stats {
+    background-color: #374151;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .healthcare-motivation-hero {
+    break-inside: avoid;
+    position: static !important;
+    min-height: auto;
+    background: white !important;
+    color: black !important;
+    border: 2px solid #000;
+    page-break-inside: avoid;
+  }
+
+  .healthcare-motivation-hero-background,
+  .healthcare-motivation-hero-emergency-banner,
+  .healthcare-motivation-hero-video-controls,
+  .healthcare-motivation-hero-testimonial-controls {
+    display: none;
+  }
+
+  .healthcare-motivation-hero-cta:hover,
+  .healthcare-motivation-hero-statistic:hover {
+    transform: none;
+  }
+
+  .healthcare-motivation-hero-emergency-banner,
+  .healthcare-motivation-hero-emergency-icon,
+  .healthcare-motivation-hero-skeleton-content,
+  .healthcare-motivation-hero-skeleton-stats {
+    animation: none;
+  }
+
+  .healthcare-motivation-hero-title,
+  .healthcare-motivation-hero-subtitle,
+  .healthcare-motivation-hero-description {
+    color: black !important;
+  }
+}

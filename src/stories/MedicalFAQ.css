@@ -1,0 +1,931 @@
+/* Healthcare Medical FAQ Styles - WCAG 2.1 AA Compliant */
+
+.medical-faq-container {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  background-color: white;
+  border: 2px solid #f1f5f9;
+  border-radius: 16px;
+  padding: 24px;
+  font-family: 'Roboto Condensed', sans-serif;
+}
+
+/* Container Sizes */
+.medical-faq-container--small {
+  padding: 16px;
+  max-width: 600px;
+  font-size: 14px;
+}
+
+.medical-faq-container--medium {
+  padding: 24px;
+  max-width: 900px;
+  font-size: 16px;
+}
+
+.medical-faq-container--large {
+  padding: 32px;
+  max-width: 1200px;
+  font-size: 18px;
+}
+
+/* Container Variants */
+.medical-faq-container--default {
+  /* Default styling already applied */
+}
+
+.medical-faq-container--compact {
+  padding: 16px;
+  max-width: 700px;
+}
+
+.medical-faq-container--cards .medical-faq-item {
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  padding: 0;
+  overflow: hidden;
+}
+
+.medical-faq-container--list .medical-faq-item {
+  border-left: 4px solid #e2e8f0;
+  border-radius: 0;
+  margin-bottom: 8px;
+  padding-left: 16px;
+}
+
+/* Emergency Mode */
+.medical-faq-container--emergency {
+  border-color: #dc2626;
+  background-color: #fef2f2;
+  border-width: 3px;
+}
+
+.medical-faq-container--emergency .medical-faq-title {
+  color: #dc2626;
+}
+
+/* Loading State */
+.medical-faq-container--loading {
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+/* Header */
+.medical-faq-header {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 2px solid #f1f5f9;
+}
+
+.medical-faq-title-container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.medical-faq-title-icon {
+  width: 32px;
+  height: 32px;
+  color: #1278B3;
+  flex-shrink: 0;
+}
+
+.medical-faq-container--small .medical-faq-title-icon {
+  width: 28px;
+  height: 28px;
+}
+
+.medical-faq-container--large .medical-faq-title-icon {
+  width: 36px;
+  height: 36px;
+}
+
+.medical-faq-title {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 600;
+  color: #1f2937;
+  line-height: 1.2;
+}
+
+.medical-faq-container--small .medical-faq-title {
+  font-size: 24px;
+}
+
+.medical-faq-container--large .medical-faq-title {
+  font-size: 32px;
+}
+
+.medical-faq-subtitle {
+  margin: 4px 0 0 0;
+  font-size: 16px;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+.medical-faq-container--small .medical-faq-subtitle {
+  font-size: 14px;
+}
+
+.medical-faq-container--large .medical-faq-subtitle {
+  font-size: 18px;
+}
+
+/* Search */
+.medical-faq-search {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.medical-faq-search-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.medical-faq-search-input {
+  width: 100%;
+  padding: 12px 16px 12px 48px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 16px;
+  color: #1f2937;
+  background-color: white;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  min-height: 44px; /* Healthcare touch target */
+}
+
+.medical-faq-search-input:focus {
+  outline: none;
+  border-color: #1278B3;
+  box-shadow: 0 0 0 3px rgba(18, 120, 179, 0.1);
+}
+
+.medical-faq-search-icon {
+  position: absolute;
+  left: 16px;
+  width: 20px;
+  height: 20px;
+  color: #6b7280;
+  pointer-events: none;
+}
+
+.medical-faq-search-clear {
+  position: absolute;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  border: none;
+  border-radius: 8px;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.medical-faq-search-clear:hover {
+  background-color: #f3f4f6;
+  color: #1f2937;
+}
+
+.medical-faq-search-clear:focus {
+  outline: 2px solid #1278B3;
+  outline-offset: 2px;
+}
+
+/* Filters */
+.medical-faq-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding: 16px;
+  background-color: #f8fafc;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.medical-faq-filter-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.medical-faq-filter-icon {
+  width: 16px;
+  height: 16px;
+  color: #6b7280;
+  flex-shrink: 0;
+}
+
+.medical-faq-filter-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.medical-faq-filter-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.medical-faq-filter-tag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 2px solid #e2e8f0;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #6b7280;
+  background-color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 32px; /* Healthcare touch target */
+}
+
+.medical-faq-filter-tag:hover {
+  border-color: #1278B3;
+  color: #1278B3;
+}
+
+.medical-faq-filter-tag--active {
+  border-color: #1278B3;
+  background-color: #1278B3;
+  color: white;
+}
+
+.medical-faq-filter-tag-icon {
+  width: 12px;
+  height: 12px;
+}
+
+.medical-faq-clear-filters {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: 1px solid #dc2626;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #dc2626;
+  background-color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  align-self: flex-start;
+}
+
+.medical-faq-clear-filters:hover {
+  background-color: #dc2626;
+  color: white;
+}
+
+.medical-faq-clear-filters-icon {
+  width: 14px;
+  height: 14px;
+}
+
+/* Results Summary */
+.medical-faq-results-summary {
+  margin-bottom: 24px;
+  padding: 12px 16px;
+  background-color: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #166534;
+}
+
+/* FAQ List */
+.medical-faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* FAQ Item */
+.medical-faq-item {
+  border: 2px solid #f1f5f9;
+  border-radius: 12px;
+  background-color: white;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.medical-faq-item:hover {
+  border-color: #e2e8f0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.medical-faq-item--expanded {
+  border-color: #1278B3;
+  box-shadow: 0 8px 25px rgba(18, 120, 179, 0.1);
+}
+
+.medical-faq-item--critical {
+  border-color: #dc2626;
+  background-color: #fef2f2;
+}
+
+.medical-faq-item--critical .medical-faq-question {
+  background-color: rgba(220, 38, 38, 0.05);
+}
+
+.medical-faq-item--high {
+  border-color: #f59e0b;
+}
+
+/* Question Header */
+.medical-faq-question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  min-height: 56px; /* Healthcare touch target */
+}
+
+.medical-faq-question:hover {
+  background-color: #f8fafc;
+}
+
+.medical-faq-question:focus {
+  outline: 3px solid #1278B3;
+  outline-offset: -3px;
+}
+
+.medical-faq-question-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.medical-faq-question-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.medical-faq-question-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.medical-faq-question-text {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+  line-height: 1.3;
+}
+
+.medical-faq-container--small .medical-faq-question-text {
+  font-size: 14px;
+}
+
+.medical-faq-container--large .medical-faq-question-text {
+  font-size: 18px;
+}
+
+.medical-faq-question-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Importance Badge */
+.medical-faq-importance {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 10px;
+  color: white;
+  font-weight: 600;
+}
+
+/* Medical Verification Badge */
+.medical-faq-verified {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  background-color: #10b981;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 500;
+  color: white;
+}
+
+.medical-faq-verified-icon {
+  width: 12px;
+  height: 12px;
+}
+
+/* Category Badge */
+.medical-faq-category-badge {
+  padding: 2px 8px;
+  background-color: #e2e8f0;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 500;
+  color: #374151;
+}
+
+/* View Count */
+.medical-faq-view-count {
+  font-size: 10px;
+  color: #6b7280;
+}
+
+/* Toggle Icon */
+.medical-faq-toggle-icon {
+  width: 24px;
+  height: 24px;
+  color: #6b7280;
+  margin-left: 16px;
+  transition: transform 0.2s ease;
+}
+
+.medical-faq-item--expanded .medical-faq-toggle-icon {
+  transform: rotate(180deg);
+}
+
+/* Answer Content */
+.medical-faq-answer {
+  border-top: 1px solid #f1f5f9;
+  animation: medical-faq-expand 0.3s ease;
+}
+
+@keyframes medical-faq-expand {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 1000px;
+  }
+}
+
+.medical-faq-answer-content {
+  padding: 20px;
+}
+
+.medical-faq-answer-content p {
+  margin: 0 0 16px 0;
+  font-size: 15px;
+  color: #374151;
+  line-height: 1.6;
+}
+
+.medical-faq-container--small .medical-faq-answer-content p {
+  font-size: 14px;
+}
+
+.medical-faq-container--large .medical-faq-answer-content p {
+  font-size: 16px;
+}
+
+/* Tags */
+.medical-faq-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.medical-faq-tags-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.medical-faq-tag {
+  padding: 2px 8px;
+  background-color: #f3f4f6;
+  border-radius: 12px;
+  font-size: 11px;
+  color: #6b7280;
+  border: 1px solid #e5e7eb;
+}
+
+/* Related Questions */
+.medical-faq-related {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 2px solid #f1f5f9;
+}
+
+.medical-faq-related-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.medical-faq-related-icon {
+  width: 16px;
+  height: 16px;
+  color: #1278B3;
+}
+
+.medical-faq-related-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.medical-faq-related-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background-color: #f8fafc;
+  color: #1278B3;
+  font-size: 13px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  text-align: left;
+}
+
+.medical-faq-related-link:hover {
+  background-color: #1278B3;
+  color: white;
+  border-color: #1278B3;
+}
+
+.medical-faq-related-link:focus {
+  outline: 2px solid #1278B3;
+  outline-offset: 2px;
+}
+
+.medical-faq-related-link-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+/* Empty State */
+.medical-faq-empty-state {
+  text-align: center;
+  padding: 48px 24px;
+  color: #6b7280;
+}
+
+.medical-faq-empty-icon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 16px;
+  color: #9ca3af;
+}
+
+.medical-faq-empty-state p {
+  margin: 8px 0;
+  font-size: 16px;
+}
+
+.medical-faq-empty-hint {
+  font-size: 14px;
+  color: #9ca3af;
+}
+
+/* Loading Skeleton */
+.medical-faq-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.medical-faq-skeleton-header {
+  height: 60px;
+  background-color: #e2e8f0;
+  border-radius: 12px;
+  animation: medical-faq-skeleton-pulse 2s infinite;
+}
+
+.medical-faq-skeleton-item {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border: 2px solid #f1f5f9;
+  border-radius: 12px;
+}
+
+.medical-faq-skeleton-question {
+  height: 24px;
+  background-color: #e2e8f0;
+  border-radius: 4px;
+  width: 70%;
+  animation: medical-faq-skeleton-pulse 2s infinite;
+}
+
+.medical-faq-skeleton-answer {
+  height: 16px;
+  background-color: #f1f5f9;
+  border-radius: 4px;
+  width: 90%;
+  animation: medical-faq-skeleton-pulse 2s infinite;
+}
+
+@keyframes medical-faq-skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .medical-faq-container {
+    padding: 16px;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+
+  .medical-faq-header {
+    gap: 16px;
+  }
+
+  .medical-faq-title-container {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .medical-faq-filter-group {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .medical-faq-question-content {
+    gap: 12px;
+  }
+
+  .medical-faq-question-main {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .medical-faq-question-meta {
+    align-self: stretch;
+  }
+
+  .medical-faq-related-link {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .medical-faq-container {
+    padding: 12px;
+  }
+
+  .medical-faq-title {
+    font-size: 20px;
+  }
+
+  .medical-faq-subtitle {
+    font-size: 14px;
+  }
+
+  .medical-faq-search-input {
+    font-size: 14px;
+    padding: 10px 14px 10px 40px;
+  }
+
+  .medical-faq-question {
+    padding: 12px 16px;
+  }
+
+  .medical-faq-question-text {
+    font-size: 14px;
+  }
+
+  .medical-faq-answer-content {
+    padding: 16px;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .medical-faq-container {
+    border-width: 3px;
+  }
+
+  .medical-faq-item {
+    border-width: 3px;
+  }
+
+  .medical-faq-search-input:focus,
+  .medical-faq-question:focus,
+  .medical-faq-related-link:focus {
+    outline-width: 3px;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .medical-faq-answer,
+  .medical-faq-toggle-icon,
+  .medical-faq-skeleton-header,
+  .medical-faq-skeleton-question,
+  .medical-faq-skeleton-answer {
+    animation: none;
+    transition: none;
+  }
+
+  .medical-faq-item--expanded .medical-faq-toggle-icon {
+    transform: none;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .medical-faq-container {
+    background-color: #1f2937;
+    border-color: #374151;
+    color: #e5e7eb;
+  }
+
+  .medical-faq-title {
+    color: #f3f4f6;
+  }
+
+  .medical-faq-subtitle {
+    color: #9ca3af;
+  }
+
+  .medical-faq-search-input {
+    background-color: #374151;
+    border-color: #4b5563;
+    color: #e5e7eb;
+  }
+
+  .medical-faq-search-input:focus {
+    border-color: #60a5fa;
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+  }
+
+  .medical-faq-filters {
+    background-color: #374151;
+    border-color: #4b5563;
+  }
+
+  .medical-faq-filter-label {
+    color: #f3f4f6;
+  }
+
+  .medical-faq-filter-tag {
+    background-color: #374151;
+    border-color: #4b5563;
+    color: #9ca3af;
+  }
+
+  .medical-faq-filter-tag:hover {
+    border-color: #60a5fa;
+    color: #93c5fd;
+  }
+
+  .medical-faq-filter-tag--active {
+    background-color: #60a5fa;
+    border-color: #60a5fa;
+    color: #1f2937;
+  }
+
+  .medical-faq-results-summary {
+    background-color: #064e3b;
+    border-color: #059669;
+    color: #bbf7d0;
+  }
+
+  .medical-faq-item {
+    background-color: #374151;
+    border-color: #4b5563;
+  }
+
+  .medical-faq-item:hover {
+    border-color: #6b7280;
+  }
+
+  .medical-faq-item--expanded {
+    border-color: #60a5fa;
+  }
+
+  .medical-faq-question:hover {
+    background-color: #4b5563;
+  }
+
+  .medical-faq-question-text {
+    color: #f3f4f6;
+  }
+
+  .medical-faq-answer {
+    border-top-color: #4b5563;
+  }
+
+  .medical-faq-answer-content p {
+    color: #d1d5db;
+  }
+
+  .medical-faq-tag {
+    background-color: #4b5563;
+    border-color: #6b7280;
+    color: #9ca3af;
+  }
+
+  .medical-faq-related {
+    border-top-color: #4b5563;
+  }
+
+  .medical-faq-related-title {
+    color: #f3f4f6;
+  }
+
+  .medical-faq-related-link {
+    background-color: #4b5563;
+    border-color: #6b7280;
+    color: #93c5fd;
+  }
+
+  .medical-faq-related-link:hover {
+    background-color: #60a5fa;
+    color: #1f2937;
+  }
+
+  .medical-faq-skeleton-header,
+  .medical-faq-skeleton-question {
+    background-color: #4b5563;
+  }
+
+  .medical-faq-skeleton-answer {
+    background-color: #374151;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .medical-faq-container {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 2px solid #000;
+  }
+
+  .medical-faq-search,
+  .medical-faq-filters,
+  .medical-faq-toggle-icon,
+  .medical-faq-search-clear {
+    display: none;
+  }
+
+  .medical-faq-item {
+    break-inside: avoid;
+    border: 1px solid #000;
+    margin-bottom: 16px;
+  }
+
+  .medical-faq-answer {
+    display: block !important;
+    animation: none;
+  }
+
+  .medical-faq-question {
+    background-color: #f5f5f5 !important;
+  }
+}

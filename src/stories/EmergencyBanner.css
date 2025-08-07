@@ -1,0 +1,1070 @@
+/* Healthcare Emergency Banner Styles - WCAG 2.1 AA Compliant */
+
+.healthcare-emergency-banner {
+  position: relative;
+  width: 100%;
+  background-color: white;
+  border: 2px solid #dc2626;
+  border-radius: 12px;
+  font-family: 'Roboto Condensed', sans-serif;
+  box-shadow: 0 4px 6px rgba(220, 38, 38, 0.1);
+  z-index: 1000;
+}
+
+/* Position Variants */
+.healthcare-emergency-banner--top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  border-radius: 0 0 12px 12px;
+  border-top: none;
+}
+
+.healthcare-emergency-banner--bottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-radius: 12px 12px 0 0;
+  border-bottom: none;
+}
+
+.healthcare-emergency-banner--floating {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: auto;
+  max-width: 400px;
+  border-radius: 12px;
+  z-index: 1001;
+}
+
+/* Sticky Behavior */
+.healthcare-emergency-banner--sticky {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+
+/* Size Variants */
+.healthcare-emergency-banner--small {
+  padding: 12px 16px;
+  font-size: 14px;
+}
+
+.healthcare-emergency-banner--medium {
+  padding: 16px 20px;
+  font-size: 16px;
+}
+
+.healthcare-emergency-banner--large {
+  padding: 20px 24px;
+  font-size: 18px;
+}
+
+/* Layout Variants */
+.healthcare-emergency-banner--minimal {
+  background-color: #fef2f2;
+  border-color: #fca5a5;
+  border-width: 1px;
+}
+
+.healthcare-emergency-banner--standard {
+  background-color: #fee2e2;
+  border-color: #dc2626;
+  border-width: 2px;
+}
+
+.healthcare-emergency-banner--expanded {
+  background-color: #fef2f2;
+  border-color: #dc2626;
+  border-width: 3px;
+}
+
+.healthcare-emergency-banner--floating {
+  background-color: #7f1d1d;
+  color: white;
+  border-color: #dc2626;
+  border-width: 2px;
+}
+
+/* Emergency Mode */
+.healthcare-emergency-banner--emergency {
+  background-color: #7f1d1d;
+  color: white;
+  border-color: #dc2626;
+  border-width: 3px;
+  animation: healthcare-emergency-banner-pulse 2s infinite;
+}
+
+.healthcare-emergency-banner--emergency .healthcare-emergency-banner-title {
+  color: white;
+}
+
+.healthcare-emergency-banner--emergency .healthcare-emergency-banner-location {
+  color: #fca5a5;
+}
+
+@keyframes healthcare-emergency-banner-pulse {
+  0%, 100% { 
+    box-shadow: 0 4px 6px rgba(220, 38, 38, 0.3);
+  }
+  50% { 
+    box-shadow: 0 8px 12px rgba(220, 38, 38, 0.5);
+  }
+}
+
+/* Medical Context */
+.healthcare-emergency-banner--medical {
+  background: linear-gradient(135deg, #fef2f2, #fee2e2);
+  border-color: #dc2626;
+}
+
+/* Minimized State */
+.healthcare-emergency-banner--minimized .healthcare-emergency-banner-contacts,
+.healthcare-emergency-banner--minimized .healthcare-emergency-banner-notifications,
+.healthcare-emergency-banner--minimized .healthcare-emergency-banner-disclaimer {
+  display: none;
+}
+
+.healthcare-emergency-banner--minimized {
+  padding: 8px 16px;
+}
+
+/* Loading State */
+.healthcare-emergency-banner--loading {
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+/* Critical Notifications */
+.healthcare-emergency-banner-critical {
+  background-color: #7f1d1d;
+  color: white;
+  margin: -2px -2px 0;
+  border-radius: 12px 12px 0 0;
+  overflow: hidden;
+}
+
+.healthcare-emergency-banner-critical-notification {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(248, 113, 113, 0.2);
+  animation: healthcare-emergency-banner-critical-flash 3s infinite;
+}
+
+.healthcare-emergency-banner-critical-notification:last-child {
+  border-bottom: none;
+}
+
+@keyframes healthcare-emergency-banner-critical-flash {
+  0%, 90%, 100% { 
+    background-color: transparent;
+  }
+  5%, 10% { 
+    background-color: rgba(248, 113, 113, 0.3);
+  }
+}
+
+.healthcare-emergency-banner-critical-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.healthcare-emergency-banner-critical-icon {
+  width: 20px;
+  height: 20px;
+  color: #fbbf24;
+  flex-shrink: 0;
+  animation: healthcare-emergency-banner-critical-bounce 1s infinite;
+}
+
+@keyframes healthcare-emergency-banner-critical-bounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+.healthcare-emergency-banner-critical-content strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.healthcare-emergency-banner-critical-content p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.3;
+  opacity: 0.9;
+}
+
+.healthcare-emergency-banner-critical-close {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.healthcare-emergency-banner-critical-close:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.healthcare-emergency-banner-critical-close:focus {
+  outline: 2px solid white;
+  outline-offset: 2px;
+}
+
+/* Main Banner Content */
+.healthcare-emergency-banner-main {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Header */
+.healthcare-emergency-banner-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.healthcare-emergency-banner-title-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.healthcare-emergency-banner-title-icon {
+  width: 24px;
+  height: 24px;
+  color: #dc2626;
+  flex-shrink: 0;
+}
+
+.healthcare-emergency-banner--emergency .healthcare-emergency-banner-title-icon {
+  color: #fbbf24;
+  animation: healthcare-emergency-banner-title-pulse 1.5s infinite;
+}
+
+@keyframes healthcare-emergency-banner-title-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.1); }
+}
+
+.healthcare-emergency-banner-title {
+  margin: 0 0 4px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  line-height: 1.2;
+}
+
+.healthcare-emergency-banner--small .healthcare-emergency-banner-title {
+  font-size: 16px;
+}
+
+.healthcare-emergency-banner--large .healthcare-emergency-banner-title {
+  font-size: 20px;
+}
+
+.healthcare-emergency-banner-location {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.healthcare-emergency-banner-location-icon {
+  width: 12px;
+  height: 12px;
+}
+
+.healthcare-emergency-banner-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.healthcare-emergency-banner-control {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.healthcare-emergency-banner-control:hover {
+  border-color: #dc2626;
+  background-color: #fef2f2;
+  color: #dc2626;
+}
+
+.healthcare-emergency-banner-control:focus {
+  outline: 2px solid #dc2626;
+  outline-offset: 2px;
+}
+
+.healthcare-emergency-banner-control--active {
+  border-color: #dc2626;
+  background-color: #dc2626;
+  color: white;
+}
+
+.healthcare-emergency-banner--emergency .healthcare-emergency-banner-control {
+  border-color: rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+.healthcare-emergency-banner--emergency .healthcare-emergency-banner-control:hover {
+  border-color: white;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Emergency Contacts */
+.healthcare-emergency-banner-contacts {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.healthcare-emergency-banner-contacts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.healthcare-emergency-banner--floating .healthcare-emergency-banner-contacts-grid {
+  grid-template-columns: 1fr;
+}
+
+.healthcare-emergency-banner-contact {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background-color: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  min-height: 56px;
+  position: relative;
+}
+
+.healthcare-emergency-banner-contact:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.healthcare-emergency-banner-contact:focus {
+  outline: 3px solid #dc2626;
+  outline-offset: 2px;
+}
+
+.healthcare-emergency-banner-contact--emergency {
+  border-color: #dc2626;
+  background: linear-gradient(135deg, #fef2f2, white);
+}
+
+.healthcare-emergency-banner-contact--emergency:hover {
+  background: linear-gradient(135deg, #fee2e2, #fef2f2);
+  box-shadow: 0 8px 16px rgba(220, 38, 38, 0.2);
+}
+
+.healthcare-emergency-banner-contact--medical {
+  border-color: #059669;
+  background: linear-gradient(135deg, #f0fdf4, white);
+}
+
+.healthcare-emergency-banner-contact--poison {
+  border-color: #7c2d12;
+  background: linear-gradient(135deg, #fef7ed, white);
+}
+
+.healthcare-emergency-banner-contact--crisis {
+  border-color: #1d4ed8;
+  background: linear-gradient(135deg, #eff6ff, white);
+}
+
+.healthcare-emergency-banner-contact--telehealth {
+  border-color: #1278B3;
+  background: linear-gradient(135deg, #f0f9ff, white);
+}
+
+.healthcare-emergency-banner-contact-icon-container {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.healthcare-emergency-banner-contact-icon {
+  width: 32px;
+  height: 32px;
+}
+
+.healthcare-emergency-banner-contact-24-7 {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  padding: 2px 4px;
+  background-color: #059669;
+  color: white;
+  font-size: 8px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 4px;
+}
+
+.healthcare-emergency-banner-contact-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.healthcare-emergency-banner-contact-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 4px;
+}
+
+.healthcare-emergency-banner-contact-phone {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #059669;
+  margin-bottom: 4px;
+}
+
+.healthcare-emergency-banner-contact-phone-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.healthcare-emergency-banner-contact-description {
+  font-size: 12px;
+  color: #6b7280;
+  line-height: 1.3;
+}
+
+.healthcare-emergency-banner-contact-emergency-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background-color: #dc2626;
+  color: white;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 8px;
+  animation: healthcare-emergency-banner-badge-glow 2s infinite;
+}
+
+@keyframes healthcare-emergency-banner-badge-glow {
+  0%, 100% { box-shadow: 0 0 0 rgba(220, 38, 38, 0.5); }
+  50% { box-shadow: 0 0 8px rgba(220, 38, 38, 0.8); }
+}
+
+.healthcare-emergency-banner-contact-emergency-icon {
+  width: 10px;
+  height: 10px;
+}
+
+/* Contact Details */
+.healthcare-emergency-banner-contact-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+  padding: 16px;
+  background-color: rgba(0, 0, 0, 0.02);
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.healthcare-emergency-banner-contact-detail {
+  padding: 12px;
+  background-color: white;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.healthcare-emergency-banner-contact-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.healthcare-emergency-banner-contact-detail-header strong {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.healthcare-emergency-banner-contact-detail-availability {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #059669;
+  font-weight: 500;
+}
+
+.healthcare-emergency-banner-contact-detail-icon {
+  width: 12px;
+  height: 12px;
+}
+
+.healthcare-emergency-banner-contact-detail-languages {
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 8px;
+}
+
+.healthcare-emergency-banner-contact-detail-website {
+  margin-bottom: 8px;
+}
+
+.healthcare-emergency-banner-contact-detail-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #1278B3;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.healthcare-emergency-banner-contact-detail-link:hover {
+  color: #004166;
+  text-decoration: underline;
+}
+
+.healthcare-emergency-banner-contact-detail-link-icon {
+  width: 12px;
+  height: 12px;
+}
+
+.healthcare-emergency-banner-contact-detail-notes {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 12px;
+  color: #6b7280;
+  line-height: 1.4;
+  background-color: #f8fafc;
+  padding: 8px;
+  border-radius: 6px;
+}
+
+/* Notifications */
+.healthcare-emergency-banner-notifications {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.healthcare-emergency-banner-notification {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background-color: white;
+  border: 2px solid;
+  border-radius: 8px;
+  gap: 12px;
+}
+
+.healthcare-emergency-banner-notification--warning {
+  border-color: #d97706;
+  background-color: #fffbeb;
+}
+
+.healthcare-emergency-banner-notification--info {
+  border-color: #1278B3;
+  background-color: #f0f9ff;
+}
+
+.healthcare-emergency-banner-notification--maintenance {
+  border-color: #6b7280;
+  background-color: #f9fafb;
+}
+
+.healthcare-emergency-banner-notification-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.healthcare-emergency-banner-notification-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.healthcare-emergency-banner-notification-header strong {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.healthcare-emergency-banner-notification-timestamp {
+  font-size: 11px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.healthcare-emergency-banner-notification p {
+  margin: 0 0 8px 0;
+  font-size: 13px;
+  color: #374151;
+  line-height: 1.4;
+}
+
+.healthcare-emergency-banner-notification-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.healthcare-emergency-banner-notification-action {
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background-color: white;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.healthcare-emergency-banner-notification-action:hover {
+  background-color: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+.healthcare-emergency-banner-notification-action--primary {
+  background-color: #1278B3;
+  color: white;
+  border-color: #1278B3;
+}
+
+.healthcare-emergency-banner-notification-action--primary:hover {
+  background-color: #004166;
+  border-color: #004166;
+}
+
+.healthcare-emergency-banner-notification-close {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  border: none;
+  border-radius: 4px;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.healthcare-emergency-banner-notification-close:hover {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+.healthcare-emergency-banner-notification-close:focus {
+  outline: 2px solid #1278B3;
+  outline-offset: 2px;
+}
+
+/* Medical Disclaimer */
+.healthcare-emergency-banner-disclaimer {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  background-color: #f0fdf4;
+  border: 2px solid #bbf7d0;
+  border-radius: 8px;
+}
+
+.healthcare-emergency-banner-disclaimer-icon {
+  width: 20px;
+  height: 20px;
+  color: #059669;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.healthcare-emergency-banner-disclaimer p {
+  margin: 0;
+  font-size: 13px;
+  color: #047857;
+  line-height: 1.4;
+}
+
+.healthcare-emergency-banner-disclaimer strong {
+  font-weight: 600;
+}
+
+/* Loading Skeleton */
+.healthcare-emergency-banner-skeleton {
+  padding: 16px;
+}
+
+.healthcare-emergency-banner-skeleton-content {
+  height: 60px;
+  background-color: #e2e8f0;
+  border-radius: 8px;
+  animation: healthcare-emergency-banner-skeleton-pulse 2s infinite;
+}
+
+@keyframes healthcare-emergency-banner-skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .healthcare-emergency-banner {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+
+  .healthcare-emergency-banner--top {
+    border-radius: 0;
+  }
+
+  .healthcare-emergency-banner--bottom {
+    border-radius: 0;
+  }
+
+  .healthcare-emergency-banner--floating {
+    position: fixed;
+    top: auto;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    max-width: none;
+  }
+
+  .healthcare-emergency-banner-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .healthcare-emergency-banner-title-container {
+    width: 100%;
+  }
+
+  .healthcare-emergency-banner-controls {
+    align-self: flex-end;
+  }
+
+  .healthcare-emergency-banner-contacts-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .healthcare-emergency-banner-contact {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .healthcare-emergency-banner-contact-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .healthcare-emergency-banner-contact-name {
+    font-size: 14px;
+  }
+
+  .healthcare-emergency-banner-contact-phone {
+    font-size: 14px;
+  }
+
+  .healthcare-emergency-banner-contact-details {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .healthcare-emergency-banner-contact-emergency-badge {
+    position: relative;
+    top: auto;
+    right: auto;
+    margin-top: 8px;
+    align-self: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .healthcare-emergency-banner {
+    padding: 12px;
+  }
+
+  .healthcare-emergency-banner-title {
+    font-size: 16px;
+  }
+
+  .healthcare-emergency-banner-contact {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 12px;
+  }
+
+  .healthcare-emergency-banner-contact-icon-container {
+    align-self: center;
+  }
+
+  .healthcare-emergency-banner-contact-info {
+    text-align: center;
+    width: 100%;
+  }
+
+  .healthcare-emergency-banner-disclaimer {
+    padding: 12px;
+  }
+
+  .healthcare-emergency-banner-disclaimer p {
+    font-size: 12px;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .healthcare-emergency-banner {
+    border-width: 3px;
+  }
+
+  .healthcare-emergency-banner-contact {
+    border-width: 3px;
+  }
+
+  .healthcare-emergency-banner-control {
+    border-width: 3px;
+  }
+
+  .healthcare-emergency-banner-notification {
+    border-width: 3px;
+  }
+
+  .healthcare-emergency-banner-contact:focus,
+  .healthcare-emergency-banner-control:focus,
+  .healthcare-emergency-banner-critical-close:focus {
+    outline-width: 3px;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .healthcare-emergency-banner--emergency,
+  .healthcare-emergency-banner-critical-notification,
+  .healthcare-emergency-banner-critical-icon,
+  .healthcare-emergency-banner-title-icon,
+  .healthcare-emergency-banner-contact-emergency-badge,
+  .healthcare-emergency-banner-skeleton-content {
+    animation: none;
+  }
+
+  .healthcare-emergency-banner-contact:hover {
+    transform: none;
+  }
+
+  .healthcare-emergency-banner-contact-emergency-badge {
+    box-shadow: none;
+  }
+
+  .healthcare-emergency-banner {
+    box-shadow: 0 4px 6px rgba(220, 38, 38, 0.2);
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .healthcare-emergency-banner {
+    background-color: #1f2937;
+    border-color: #ef4444;
+    color: #e5e7eb;
+  }
+
+  .healthcare-emergency-banner--standard {
+    background-color: #7f1d1d;
+  }
+
+  .healthcare-emergency-banner--expanded {
+    background-color: #7f1d1d;
+  }
+
+  .healthcare-emergency-banner-title {
+    color: #f3f4f6;
+  }
+
+  .healthcare-emergency-banner-location {
+    color: #9ca3af;
+  }
+
+  .healthcare-emergency-banner-control {
+    background-color: #374151;
+    border-color: #6b7280;
+    color: #9ca3af;
+  }
+
+  .healthcare-emergency-banner-control:hover {
+    background-color: #4b5563;
+    border-color: #ef4444;
+    color: #fca5a5;
+  }
+
+  .healthcare-emergency-banner-contact {
+    background-color: #374151;
+    border-color: #6b7280;
+  }
+
+  .healthcare-emergency-banner-contact--emergency {
+    background: linear-gradient(135deg, #7f1d1d, #374151);
+    border-color: #ef4444;
+  }
+
+  .healthcare-emergency-banner-contact--medical {
+    background: linear-gradient(135deg, #064e3b, #374151);
+    border-color: #10b981;
+  }
+
+  .healthcare-emergency-banner-contact-name {
+    color: #f3f4f6;
+  }
+
+  .healthcare-emergency-banner-contact-phone {
+    color: #10b981;
+  }
+
+  .healthcare-emergency-banner-contact-description {
+    color: #9ca3af;
+  }
+
+  .healthcare-emergency-banner-contact-detail {
+    background-color: #374151;
+    border-color: #6b7280;
+  }
+
+  .healthcare-emergency-banner-contact-detail-header strong {
+    color: #f3f4f6;
+  }
+
+  .healthcare-emergency-banner-contact-detail-notes {
+    background-color: #1f2937;
+    color: #9ca3af;
+  }
+
+  .healthcare-emergency-banner-notification {
+    background-color: #374151;
+  }
+
+  .healthcare-emergency-banner-notification--warning {
+    background-color: #451a03;
+    border-color: #d97706;
+  }
+
+  .healthcare-emergency-banner-notification--info {
+    background-color: #1e3a8a;
+    border-color: #3b82f6;
+  }
+
+  .healthcare-emergency-banner-notification-header strong {
+    color: #f3f4f6;
+  }
+
+  .healthcare-emergency-banner-notification p {
+    color: #d1d5db;
+  }
+
+  .healthcare-emergency-banner-notification-action {
+    background-color: #4b5563;
+    border-color: #6b7280;
+    color: #e5e7eb;
+  }
+
+  .healthcare-emergency-banner-notification-action:hover {
+    background-color: #6b7280;
+    border-color: #9ca3af;
+  }
+
+  .healthcare-emergency-banner-disclaimer {
+    background-color: #064e3b;
+    border-color: #059669;
+  }
+
+  .healthcare-emergency-banner-disclaimer p {
+    color: #a7f3d0;
+  }
+
+  .healthcare-emergency-banner-skeleton-content {
+    background-color: #4b5563;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .healthcare-emergency-banner {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 2px solid #000;
+    position: static !important;
+  }
+
+  .healthcare-emergency-banner-controls,
+  .healthcare-emergency-banner-critical-close,
+  .healthcare-emergency-banner-notification-close {
+    display: none;
+  }
+
+  .healthcare-emergency-banner-contact:hover {
+    transform: none;
+  }
+
+  .healthcare-emergency-banner--emergency,
+  .healthcare-emergency-banner-critical-notification,
+  .healthcare-emergency-banner-critical-icon,
+  .healthcare-emergency-banner-contact-emergency-badge,
+  .healthcare-emergency-banner-skeleton-content {
+    animation: none;
+  }
+}
