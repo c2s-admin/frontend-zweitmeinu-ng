@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { HealthcareTextarea } from './HealthcareTextarea'
-import * as React from 'react'
+
 
 const meta: Meta<typeof HealthcareTextarea> = {
   title: 'Healthcare/Textarea',

@@ -16,7 +16,7 @@ export interface HealthcareStatistic {
   /** Description text */
   description?: string
   /** Icon component */
-  icon?: React.ComponentType<any>
+  icon?: React.ComponentType<{ className?: string }>
   /** Trend direction */
   trend?: 'up' | 'down' | 'stable'
   /** Trend value */

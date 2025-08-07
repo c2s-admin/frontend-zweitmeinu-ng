@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import { Search, ChevronDown, ChevronUp, HelpCircle, FileText, User, Heart, Activity, Filter, X, CheckCircle, AlertTriangle, ArrowRight } from 'lucide-react'
+import { Search, ChevronDown, ChevronUp, HelpCircle, FileText,  Heart, Activity, Filter, X, CheckCircle, AlertTriangle, ArrowRight } from 'lucide-react'
 import './MedicalFAQ.css'
 
 export interface FAQ {
@@ -281,7 +281,7 @@ export const MedicalFAQ = ({
     return cats.sort()
   }, [faqs])
 
-  const specialties = useMemo(() => {
+  const _specialties = useMemo(() => {
     const specs = Array.from(new Set(faqs.map(faq => faq.specialty).filter(Boolean)))
     return specs.sort()
   }, [faqs])

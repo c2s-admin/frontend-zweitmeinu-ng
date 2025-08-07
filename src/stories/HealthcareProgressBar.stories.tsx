@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { HealthcareProgressBar, HealthcareProgressStep } from './HealthcareProgressBar'
-import { Calendar, FileText, Stethoscope, Heart, UserCheck, CheckCircle } from 'lucide-react'
+import { Calendar, FileText, Stethoscope, Heart, CheckCircle } from 'lucide-react'
 import * as React from 'react'
 
 // Sample data for different medical processes

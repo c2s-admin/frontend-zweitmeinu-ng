@@ -1,5 +1,5 @@
 import React from 'react'
-import { ChevronRight, User, Calendar, FileText, Heart, Stethoscope, Pill, AlertTriangle, CheckCircle, Clock, Shield } from 'lucide-react'
+import { ChevronRight, User, Calendar, FileText, Stethoscope, Pill, AlertTriangle, CheckCircle, Clock, Shield } from 'lucide-react'
 import './HealthcareList.css'
 
 export interface HealthcareListItem {

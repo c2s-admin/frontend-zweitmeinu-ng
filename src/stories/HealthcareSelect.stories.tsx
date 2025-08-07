@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { HealthcareSelect, HealthcareSelectOption } from './HealthcareSelect'
-import * as React from 'react'
 
 const medicalSpecialties: HealthcareSelectOption[] = [
   {

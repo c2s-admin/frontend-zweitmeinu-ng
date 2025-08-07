@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { HealthcareList, HealthcareListItem } from './HealthcareList'
-import { User, Calendar, FileText, Heart, Stethoscope, Pill, Phone, TestTube, Clock, AlertTriangle } from 'lucide-react'
+import { User, Calendar, Stethoscope, Pill, Phone, TestTube, AlertTriangle } from 'lucide-react'
 import * as React from 'react'
 
 // Sample data for different healthcare list types

@@ -226,7 +226,7 @@ export const StorySection = ({
   showRatings = true,
   enableAudio = false,
   medicalContext = true,
-  autoPlayVideo = false,
+  autoPlayVideo: _autoPlayVideo = false,
   loading = false,
   className = '',
   'aria-label': ariaLabel,

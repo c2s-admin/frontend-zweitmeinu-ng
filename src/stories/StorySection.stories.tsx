@@ -60,11 +60,11 @@ const comprehensivePatientStories: PatientStory[] = [
 ]
 
 // Filtered story collections for different scenarios
-const cardiacStories = comprehensivePatientStories.filter(story => 
+const _cardiacStories = comprehensivePatientStories.filter(story => 
   story.specialty?.includes('Kardiologie') || story.condition.includes('Herz')
 )
 
-const oncologyStories = comprehensivePatientStories.filter(story =>
+const _oncologyStories = comprehensivePatientStories.filter(story =>
   story.specialty?.includes('Onkologie') || story.tags?.some(tag => tag.includes('Krebs') || tag.includes('Onkologie'))
 )
 
@@ -72,7 +72,7 @@ const surgeryAvoidedStories = comprehensivePatientStories.filter(story =>
   story.tags?.some(tag => tag.includes('Operation vermieden') || tag.includes('Konservative Therapie'))
 )
 
-const pediatricStories = comprehensivePatientStories.filter(story =>
+const _pediatricStories = comprehensivePatientStories.filter(story =>
   story.specialty?.includes('Kinder') || story.ageRange?.includes('0-10')
 )
 
