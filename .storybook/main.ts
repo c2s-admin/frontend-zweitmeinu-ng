@@ -15,6 +15,28 @@ const config: StorybookConfig = {
   "framework": {
     "name": "@storybook/nextjs",
     "options": {}
+  },
+  "webpackFinal": async (config) => {
+    // Fix for chunk loading issues
+    if (config.optimization) {
+      config.optimization.splitChunks = {
+        ...config.optimization.splitChunks,
+        chunks: 'all',
+        cacheGroups: {
+          default: {
+            enforce: true,
+            priority: 1,
+          },
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            enforce: true,
+            priority: 10,
+          },
+        },
+      };
+    }
+    return config;
   }
 };
 export default config;

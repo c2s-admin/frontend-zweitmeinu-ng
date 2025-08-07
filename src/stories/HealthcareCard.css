@@ -1,0 +1,494 @@
+/* Healthcare Card Styles - WCAG 2.1 AA Compliant */
+
+.healthcare-card {
+  position: relative;
+  background-color: white;
+  border-radius: 16px;
+  border: 2px solid #f1f5f9;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 65, 102, 0.08);
+  display: flex;
+  flex-direction: column;
+  font-family: 'Roboto Condensed', sans-serif;
+}
+
+/* Card Sizes */
+.healthcare-card--small {
+  min-height: 200px;
+}
+
+.healthcare-card--medium {
+  min-height: 300px;
+}
+
+.healthcare-card--large {
+  min-height: 400px;
+}
+
+/* Card States */
+.healthcare-card--clickable {
+  cursor: pointer;
+}
+
+.healthcare-card--clickable:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 65, 102, 0.15);
+  border-color: #1278B3;
+}
+
+.healthcare-card--clickable:focus {
+  outline: 3px solid #1278B3;
+  outline-offset: 2px;
+}
+
+.healthcare-card--featured {
+  border-color: #B3AF09;
+  background: linear-gradient(135deg, #fff9c4 0%, white 100%);
+}
+
+.healthcare-card--urgent {
+  border-color: #dc2626;
+  background: linear-gradient(135deg, #fef2f2 0%, white 100%);
+}
+
+.healthcare-card--completed {
+  border-color: #10b981;
+  opacity: 0.8;
+}
+
+.healthcare-card--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.healthcare-card--loading {
+  pointer-events: none;
+}
+
+/* Status Indicator */
+.healthcare-card-status {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.healthcare-card-status--featured {
+  background-color: #B3AF09;
+  color: #004166;
+}
+
+.healthcare-card-status--urgent {
+  background-color: #dc2626;
+  color: white;
+}
+
+.healthcare-card-status--completed {
+  background-color: #10b981;
+  color: white;
+}
+
+.healthcare-card-status--disabled {
+  background-color: #6b7280;
+  color: white;
+}
+
+.healthcare-card-status-icon {
+  width: 14px;
+  height: 14px;
+}
+
+.healthcare-card-status-text {
+  font-size: 11px;
+  line-height: 1;
+}
+
+/* Image Section */
+.healthcare-card-image {
+  position: relative;
+  height: 160px;
+  overflow: hidden;
+  background-color: #f8fafc;
+}
+
+.healthcare-card--small .healthcare-card-image {
+  height: 120px;
+}
+
+.healthcare-card--large .healthcare-card-image {
+  height: 200px;
+}
+
+.healthcare-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Content Section */
+.healthcare-card-content {
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.healthcare-card--small .healthcare-card-content {
+  padding: 16px;
+  gap: 8px;
+}
+
+/* Specialty Badge */
+.healthcare-card-specialty {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  width: fit-content;
+}
+
+.healthcare-card-specialty--red {
+  background-color: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.healthcare-card-specialty--purple {
+  background-color: #faf5ff;
+  color: #7c3aed;
+  border: 1px solid #ddd6fe;
+}
+
+.healthcare-card-specialty--yellow {
+  background-color: #fffbeb;
+  color: #d97706;
+  border: 1px solid #fed7aa;
+}
+
+.healthcare-card-specialty--blue {
+  background-color: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
+}
+
+.healthcare-card-specialty--green {
+  background-color: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+}
+
+.healthcare-card-specialty--orange {
+  background-color: #fff7ed;
+  color: #ea580c;
+  border: 1px solid #fed7aa;
+}
+
+.healthcare-card-specialty--gray {
+  background-color: #f8fafc;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+}
+
+/* Title */
+.healthcare-card-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #004166;
+  line-height: 1.3;
+  margin: 0;
+}
+
+.healthcare-card--small .healthcare-card-title {
+  font-size: 18px;
+}
+
+.healthcare-card--large .healthcare-card-title {
+  font-size: 24px;
+}
+
+/* Rating */
+.healthcare-card-rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.healthcare-card-stars {
+  display: flex;
+  gap: 2px;
+}
+
+.healthcare-card-star {
+  width: 16px;
+  height: 16px;
+  color: #e5e7eb;
+  fill: currentColor;
+}
+
+.healthcare-card-star--filled {
+  color: #fbbf24;
+}
+
+.healthcare-card-rating-text {
+  font-size: 14px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* Description */
+.healthcare-card-description {
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.5;
+  margin: 0;
+  flex: 1;
+}
+
+.healthcare-card--large .healthcare-card-description {
+  font-size: 16px;
+}
+
+/* Medical Info */
+.healthcare-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.healthcare-card-info-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+}
+
+.healthcare-card-info-label {
+  font-weight: 600;
+  color: #004166;
+}
+
+.healthcare-card-info-value {
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.healthcare-card-info-icon {
+  width: 16px;
+  height: 16px;
+  color: #1278B3;
+  flex-shrink: 0;
+}
+
+/* Trust Indicators */
+.healthcare-card-trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-top: 8px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.healthcare-card-trust-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.healthcare-card-trust-icon {
+  width: 14px;
+  height: 14px;
+  color: #10b981;
+  flex-shrink: 0;
+}
+
+.healthcare-card-trust-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #004166;
+}
+
+/* Action Button */
+.healthcare-card-action {
+  padding: 16px 20px;
+  border-top: 1px solid #f1f5f9;
+  background-color: #f8fafc;
+}
+
+.healthcare-card--small .healthcare-card-action {
+  padding: 12px 16px;
+}
+
+.healthcare-card-action-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 56px; /* Healthcare touch target */
+  padding: 12px 24px;
+  background-color: #1278B3;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.healthcare-card-action-button:hover {
+  background-color: #004166;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(18, 120, 179, 0.3);
+}
+
+.healthcare-card-action-button:focus {
+  outline: 3px solid #1278B3;
+  outline-offset: 2px;
+}
+
+.healthcare-card-action-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.healthcare-card-action-icon {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.2s ease;
+}
+
+.healthcare-card-action-button:hover .healthcare-card-action-icon {
+  transform: translateX(2px);
+}
+
+/* Loading State */
+.healthcare-card-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  background-color: #f8fafc;
+}
+
+.healthcare-card-loading-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+}
+
+.healthcare-card-loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #e5e7eb;
+  border-top: 3px solid #1278B3;
+  border-radius: 50%;
+  animation: healthcare-card-spin 1s linear infinite;
+}
+
+@keyframes healthcare-card-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.healthcare-card-loading-text {
+  font-size: 14px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .healthcare-card-content {
+    padding: 16px;
+  }
+  
+  .healthcare-card-title {
+    font-size: 18px;
+  }
+  
+  .healthcare-card-action {
+    padding: 12px 16px;
+  }
+  
+  .healthcare-card-action-button {
+    font-size: 15px;
+    min-height: 56px; /* Maintain healthcare touch targets on mobile */
+  }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .healthcare-card {
+    border-width: 3px;
+    border-color: #000;
+  }
+  
+  .healthcare-card-action-button:focus {
+    outline-width: 4px;
+  }
+  
+  .healthcare-card--clickable:focus {
+    outline-width: 4px;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .healthcare-card,
+  .healthcare-card-action-button,
+  .healthcare-card-action-icon {
+    transition: none;
+  }
+  
+  .healthcare-card--clickable:hover {
+    transform: none;
+  }
+  
+  .healthcare-card-loading-spinner {
+    animation: none;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .healthcare-card {
+    background-color: #1f2937;
+    border-color: #374151;
+  }
+  
+  .healthcare-card-title {
+    color: #f9fafb;
+  }
+  
+  .healthcare-card-description,
+  .healthcare-card-info-value,
+  .healthcare-card-rating-text {
+    color: #d1d5db;
+  }
+  
+  .healthcare-card-info-label,
+  .healthcare-card-trust-label {
+    color: #f3f4f6;
+  }
+}

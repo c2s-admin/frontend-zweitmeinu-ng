@@ -1,0 +1,889 @@
+/* Healthcare List Styles - WCAG 2.1 AA Compliant */
+
+.healthcare-list-container {
+  position: relative;
+  width: 100%;
+  background-color: white;
+  border: 2px solid #f1f5f9;
+  border-radius: 16px;
+  padding: 20px;
+  font-family: 'Roboto Condensed', sans-serif;
+}
+
+/* Sizes */
+.healthcare-list-container--small {
+  padding: 16px;
+  font-size: 14px;
+}
+
+.healthcare-list-container--large {
+  padding: 24px;
+  font-size: 18px;
+}
+
+/* Types */
+.healthcare-list-container--medical-records {
+  border-color: #10b981;
+  background-color: #f0fdf4;
+}
+
+.healthcare-list-container--appointments {
+  border-color: #0ea5e9;
+  background-color: #f0f9ff;
+}
+
+.healthcare-list-container--medications {
+  border-color: #8b5cf6;
+  background-color: #f5f3ff;
+}
+
+.healthcare-list-container--test-results {
+  border-color: #f59e0b;
+  background-color: #fffbeb;
+}
+
+.healthcare-list-container--emergency-contacts {
+  border-color: #dc2626;
+  background-color: #fef2f2;
+}
+
+/* Medical Context */
+.healthcare-list-container--medical {
+  border-style: dashed;
+  border-width: 3px;
+}
+
+/* Emergency Contact */
+.healthcare-list-emergency {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 12px 16px;
+  background-color: #dc2626;
+  color: white;
+  border-radius: 8px;
+  animation: healthcare-list-emergency-pulse 2s infinite;
+}
+
+@keyframes healthcare-list-emergency-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.9; }
+}
+
+.healthcare-list-emergency-icon {
+  width: 20px;
+  height: 20px;
+  color: white;
+}
+
+.healthcare-list-emergency-text {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.healthcare-list-emergency-number {
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-weight: 700;
+  text-decoration: none;
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.healthcare-list-emergency-number:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+/* Header */
+.healthcare-list-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.healthcare-list-type-icon {
+  width: 24px;
+  height: 24px;
+  color: #1278B3;
+  flex-shrink: 0;
+}
+
+.healthcare-list-container--medical-records .healthcare-list-type-icon {
+  color: #10b981;
+}
+
+.healthcare-list-container--appointments .healthcare-list-type-icon {
+  color: #0ea5e9;
+}
+
+.healthcare-list-container--medications .healthcare-list-type-icon {
+  color: #8b5cf6;
+}
+
+.healthcare-list-container--test-results .healthcare-list-type-icon {
+  color: #f59e0b;
+}
+
+.healthcare-list-container--emergency-contacts .healthcare-list-type-icon {
+  color: #dc2626;
+}
+
+.healthcare-list-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  line-height: 1.3;
+  flex: 1;
+}
+
+.healthcare-list-count {
+  font-size: 14px;
+  color: #6b7280;
+  font-weight: 500;
+  padding: 4px 8px;
+  background-color: #f8fafc;
+  border-radius: 12px;
+}
+
+/* List */
+.healthcare-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* List Item */
+.healthcare-list-item {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  background-color: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  min-height: 56px; /* Healthcare touch target */
+}
+
+.healthcare-list-container--small .healthcare-list-item {
+  padding: 12px;
+  min-height: 48px;
+}
+
+.healthcare-list-container--large .healthcare-list-item {
+  padding: 20px;
+  min-height: 64px;
+}
+
+/* Item States */
+.healthcare-list-item--success {
+  border-color: #10b981;
+  background-color: #ecfdf5;
+}
+
+.healthcare-list-item--warning {
+  border-color: #f59e0b;
+  background-color: #fffbeb;
+}
+
+.healthcare-list-item--error {
+  border-color: #dc2626;
+  background-color: #fef2f2;
+}
+
+.healthcare-list-item--pending {
+  border-color: #6b7280;
+  background-color: #f9fafb;
+}
+
+/* Priority Levels */
+.healthcare-list-item--critical {
+  border-left: 4px solid #dc2626;
+  animation: healthcare-list-critical-pulse 3s infinite;
+}
+
+@keyframes healthcare-list-critical-pulse {
+  0%, 100% { border-left-color: #dc2626; }
+  50% { border-left-color: #b91c1c; }
+}
+
+.healthcare-list-item--high-priority {
+  border-left: 4px solid #f59e0b;
+}
+
+.healthcare-list-item--medium-priority {
+  border-left: 4px solid #0ea5e9;
+}
+
+.healthcare-list-item--low-priority {
+  border-left: 4px solid #10b981;
+}
+
+/* Specialty Colors */
+.healthcare-list-item--kardiologie {
+  border-left: 4px solid #dc2626;
+}
+
+.healthcare-list-item--onkologie {
+  border-left: 4px solid #7c3aed;
+}
+
+.healthcare-list-item--gallenblase {
+  border-left: 4px solid #f59e0b;
+}
+
+.healthcare-list-item--nephrologie {
+  border-left: 4px solid #2563eb;
+}
+
+.healthcare-list-item--schilddruese {
+  border-left: 4px solid #10b981;
+}
+
+.healthcare-list-item--intensivmedizin {
+  border-left: 4px solid #ea580c;
+}
+
+/* Clickable Items */
+.healthcare-list-item--clickable {
+  cursor: pointer;
+}
+
+.healthcare-list-item--clickable:hover {
+  border-color: #1278B3;
+  background-color: #f8fafc;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 65, 102, 0.1);
+}
+
+.healthcare-list-item--clickable:focus {
+  outline: 2px solid #1278B3;
+  outline-offset: 2px;
+  border-color: #1278B3;
+}
+
+.healthcare-list-item--clickable:active {
+  transform: translateY(0);
+}
+
+/* Priority Indicator */
+.healthcare-list-priority-indicator {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  border-radius: 12px 0 0 12px;
+}
+
+/* Item Icon */
+.healthcare-list-item-icon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8fafc;
+  border-radius: 10px;
+  color: #6b7280;
+}
+
+.healthcare-list-container--small .healthcare-list-item-icon {
+  width: 32px;
+  height: 32px;
+}
+
+.healthcare-list-container--large .healthcare-list-item-icon {
+  width: 48px;
+  height: 48px;
+}
+
+/* Item Content */
+.healthcare-list-item-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.healthcare-list-item-main {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.healthcare-list-item-title-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.healthcare-list-item-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+  line-height: 1.3;
+  flex: 1;
+  min-width: 0;
+}
+
+.healthcare-list-container--small .healthcare-list-item-title {
+  font-size: 14px;
+}
+
+.healthcare-list-container--large .healthcare-list-item-title {
+  font-size: 18px;
+}
+
+.healthcare-list-item-subtitle {
+  margin: 0;
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+/* Status Icons */
+.healthcare-list-status-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.healthcare-list-status-icon--success {
+  color: #10b981;
+}
+
+.healthcare-list-status-icon--warning {
+  color: #f59e0b;
+}
+
+.healthcare-list-status-icon--error {
+  color: #dc2626;
+}
+
+.healthcare-list-status-icon--pending {
+  color: #6b7280;
+}
+
+/* Specialty Indicator */
+.healthcare-list-item-specialty {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 2px 6px;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.healthcare-list-item-specialty-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+/* ICD Code */
+.healthcare-list-item-icd {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.healthcare-list-item-icd-label {
+  font-size: 10px;
+  color: #6b7280;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.healthcare-list-item-icd-code {
+  font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+  font-size: 11px;
+  padding: 2px 6px;
+  background-color: #f1f5f9;
+  border-radius: 4px;
+  color: #1f2937;
+  font-weight: 500;
+}
+
+/* Item Value */
+.healthcare-list-item-value {
+  padding: 8px 12px;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  font-weight: 500;
+  color: #1f2937;
+  border: 1px solid #e2e8f0;
+}
+
+/* Metadata */
+.healthcare-list-item-metadata {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  background-color: #f8fafc;
+  border-radius: 6px;
+  border: 1px solid #f1f5f9;
+}
+
+.healthcare-list-item-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.healthcare-list-item-meta-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.healthcare-list-item-notes {
+  font-size: 12px;
+  color: #6b7280;
+  line-height: 1.4;
+  font-style: italic;
+  margin-top: 4px;
+}
+
+/* Timestamp */
+.healthcare-list-item-timestamp {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+.healthcare-list-item-timestamp-icon {
+  width: 12px;
+  height: 12px;
+}
+
+/* Chevron */
+.healthcare-list-item-chevron {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 8px;
+}
+
+.healthcare-list-item-chevron-icon {
+  width: 16px;
+  height: 16px;
+  color: #6b7280;
+  transition: all 0.2s ease;
+}
+
+.healthcare-list-item--clickable:hover .healthcare-list-item-chevron-icon {
+  color: #1278B3;
+  transform: translateX(2px);
+}
+
+/* Loading State */
+.healthcare-list-loading {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.healthcare-list-skeleton {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background-color: #f8fafc;
+  border-radius: 12px;
+}
+
+.healthcare-list-skeleton-icon {
+  width: 40px;
+  height: 40px;
+  background-color: #e2e8f0;
+  border-radius: 10px;
+  animation: healthcare-list-skeleton-pulse 2s infinite;
+}
+
+.healthcare-list-skeleton-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.healthcare-list-skeleton-title {
+  height: 16px;
+  background-color: #e2e8f0;
+  border-radius: 4px;
+  width: 60%;
+  animation: healthcare-list-skeleton-pulse 2s infinite;
+}
+
+.healthcare-list-skeleton-subtitle {
+  height: 12px;
+  background-color: #f1f5f9;
+  border-radius: 4px;
+  width: 40%;
+  animation: healthcare-list-skeleton-pulse 2s infinite;
+}
+
+@keyframes healthcare-list-skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Empty State */
+.healthcare-list-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.healthcare-list-empty-icon {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8fafc;
+  border-radius: 50%;
+  color: #6b7280;
+  margin-bottom: 16px;
+}
+
+.healthcare-list-empty-message {
+  margin: 0;
+  color: #6b7280;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Medical Footer */
+.healthcare-list-medical-footer {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 20px;
+  padding: 16px;
+  background-color: #f0fdf4;
+  border: 2px solid #bbf7d0;
+  border-radius: 12px;
+}
+
+.healthcare-list-medical-footer-icon {
+  width: 20px;
+  height: 20px;
+  color: #10b981;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.healthcare-list-medical-footer-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.healthcare-list-medical-footer-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #064e3b;
+}
+
+.healthcare-list-medical-footer-text {
+  font-size: 12px;
+  color: #166534;
+  line-height: 1.4;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .healthcare-list-container {
+    padding: 16px;
+  }
+
+  .healthcare-list-container--small {
+    padding: 12px;
+  }
+
+  .healthcare-list-container--large {
+    padding: 20px;
+  }
+
+  .healthcare-list-item {
+    padding: 12px;
+  }
+
+  .healthcare-list-item-title-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .healthcare-list-header {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .healthcare-list-count {
+    order: -1;
+    width: 100%;
+    text-align: center;
+  }
+
+  .healthcare-list-emergency {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+
+  .healthcare-list-emergency-number {
+    font-size: 16px;
+    padding: 8px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .healthcare-list-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .healthcare-list-item-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .healthcare-list-item-chevron {
+    align-self: flex-end;
+    margin-left: 0;
+    margin-top: 8px;
+  }
+
+  .healthcare-list-item-metadata {
+    width: 100%;
+  }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .healthcare-list-item {
+    border-width: 2px;
+  }
+
+  .healthcare-list-item--clickable:focus {
+    outline-width: 3px;
+  }
+
+  .healthcare-list-priority-indicator {
+    width: 6px;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .healthcare-list-item,
+  .healthcare-list-item-chevron-icon,
+  .healthcare-list-skeleton-icon,
+  .healthcare-list-skeleton-title,
+  .healthcare-list-skeleton-subtitle {
+    animation: none;
+    transition: none;
+  }
+
+  .healthcare-list-emergency {
+    animation: none;
+  }
+
+  .healthcare-list-item--critical {
+    animation: none;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .healthcare-list-container {
+    background-color: #1f2937;
+    border-color: #374151;
+    color: #e5e7eb;
+  }
+
+  .healthcare-list-item {
+    background-color: #111827;
+    border-color: #374151;
+  }
+
+  .healthcare-list-item--clickable:hover {
+    background-color: #1f2937;
+    border-color: #60a5fa;
+  }
+
+  .healthcare-list-item--clickable:focus {
+    outline-color: #60a5fa;
+    border-color: #60a5fa;
+  }
+
+  .healthcare-list-title {
+    color: #f3f4f6;
+  }
+
+  .healthcare-list-count {
+    background-color: #374151;
+    color: #d1d5db;
+  }
+
+  .healthcare-list-header {
+    border-bottom-color: #374151;
+  }
+
+  .healthcare-list-item-title {
+    color: #f3f4f6;
+  }
+
+  .healthcare-list-item-subtitle {
+    color: #9ca3af;
+  }
+
+  .healthcare-list-item-icon {
+    background-color: #374151;
+    color: #9ca3af;
+  }
+
+  .healthcare-list-item-value {
+    background-color: #374151;
+    border-color: #4b5563;
+    color: #e5e7eb;
+  }
+
+  .healthcare-list-item-metadata {
+    background-color: #374151;
+    border-color: #4b5563;
+  }
+
+  .healthcare-list-item-icd-code {
+    background-color: #374151;
+    color: #e5e7eb;
+  }
+
+  .healthcare-list-skeleton-icon,
+  .healthcare-list-skeleton-title {
+    background-color: #374151;
+  }
+
+  .healthcare-list-skeleton-subtitle {
+    background-color: #4b5563;
+  }
+
+  .healthcare-list-empty-icon {
+    background-color: #374151;
+    color: #9ca3af;
+  }
+
+  .healthcare-list-empty-message {
+    color: #9ca3af;
+  }
+
+  .healthcare-list-medical-footer {
+    background-color: #064e3b;
+    border-color: #059669;
+  }
+
+  .healthcare-list-medical-footer-title {
+    color: #bbf7d0;
+  }
+
+  .healthcare-list-medical-footer-text {
+    color: #86efac;
+  }
+
+  /* Dark mode type backgrounds */
+  .healthcare-list-container--medical-records {
+    background-color: #14532d;
+    border-color: #059669;
+  }
+
+  .healthcare-list-container--appointments {
+    background-color: #0c4a6e;
+    border-color: #0284c7;
+  }
+
+  .healthcare-list-container--medications {
+    background-color: #4c1d95;
+    border-color: #7c3aed;
+  }
+
+  .healthcare-list-container--test-results {
+    background-color: #451a03;
+    border-color: #d97706;
+  }
+
+  .healthcare-list-container--emergency-contacts {
+    background-color: #7f1d1d;
+    border-color: #dc2626;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .healthcare-list-container {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 2px solid #000;
+  }
+
+  .healthcare-list-item {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #000;
+  }
+
+  .healthcare-list-item--clickable:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .healthcare-list-emergency {
+    background-color: #000 !important;
+    color: #fff !important;
+    animation: none;
+  }
+
+  .healthcare-list-item-chevron {
+    display: none;
+  }
+
+  .healthcare-list-skeleton-icon,
+  .healthcare-list-skeleton-title,
+  .healthcare-list-skeleton-subtitle {
+    animation: none;
+  }
+}

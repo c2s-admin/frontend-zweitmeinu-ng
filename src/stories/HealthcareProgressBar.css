@@ -1,0 +1,680 @@
+/* Healthcare Progress Bar Styles - WCAG 2.1 AA Compliant */
+
+.healthcare-progress-container {
+  position: relative;
+  width: 100%;
+  padding: 20px;
+  background-color: white;
+  border-radius: 16px;
+  border: 2px solid #f1f5f9;
+  font-family: 'Roboto Condensed', sans-serif;
+}
+
+/* Sizes */
+.healthcare-progress-container--small {
+  padding: 16px;
+  font-size: 14px;
+}
+
+.healthcare-progress-container--large {
+  padding: 24px;
+  font-size: 18px;
+}
+
+/* Process Types */
+.healthcare-progress-container--appointment {
+  border-color: #0ea5e9;
+}
+
+.healthcare-progress-container--treatment {
+  border-color: #10b981;
+}
+
+.healthcare-progress-container--diagnosis {
+  border-color: #dc2626;
+}
+
+.healthcare-progress-container--emergency {
+  border-color: #dc2626;
+  background-color: #fef2f2;
+}
+
+.healthcare-progress-container--consent {
+  border-color: #1278B3;
+}
+
+/* Medical Context */
+.healthcare-progress-container--medical {
+  background-color: #f0fdf4;
+  border-color: #bbf7d0;
+  border-style: dashed;
+}
+
+/* Emergency Contact */
+.healthcare-progress-emergency {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 12px 16px;
+  background-color: #dc2626;
+  color: white;
+  border-radius: 8px;
+  animation: healthcare-progress-emergency-pulse 2s infinite;
+}
+
+@keyframes healthcare-progress-emergency-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.9; }
+}
+
+.healthcare-progress-emergency-icon {
+  width: 20px;
+  height: 20px;
+  color: white;
+}
+
+.healthcare-progress-emergency-text {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.healthcare-progress-emergency-number {
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-weight: 700;
+  text-decoration: none;
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.healthcare-progress-emergency-number:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+/* Header */
+.healthcare-progress-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.healthcare-progress-title-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.healthcare-progress-type-icon {
+  width: 24px;
+  height: 24px;
+  color: #1278B3;
+  flex-shrink: 0;
+}
+
+.healthcare-progress-container--appointment .healthcare-progress-type-icon {
+  color: #0ea5e9;
+}
+
+.healthcare-progress-container--treatment .healthcare-progress-type-icon {
+  color: #10b981;
+}
+
+.healthcare-progress-container--diagnosis .healthcare-progress-type-icon {
+  color: #dc2626;
+}
+
+.healthcare-progress-container--emergency .healthcare-progress-type-icon {
+  color: #dc2626;
+}
+
+.healthcare-progress-container--consent .healthcare-progress-type-icon {
+  color: #1278B3;
+}
+
+.healthcare-progress-title-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.healthcare-progress-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  line-height: 1.3;
+}
+
+.healthcare-progress-timeline {
+  font-size: 14px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* Progress Percentage */
+.healthcare-progress-percentage {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.healthcare-progress-percentage-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1278B3;
+  line-height: 1;
+}
+
+.healthcare-progress-percentage-label {
+  font-size: 12px;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Progress Track */
+.healthcare-progress-track {
+  position: relative;
+  height: 4px;
+  background-color: #e2e8f0;
+  border-radius: 2px;
+  margin: 20px 0;
+}
+
+.healthcare-progress-container--vertical .healthcare-progress-track {
+  width: 4px;
+  height: 300px;
+  margin: 0 20px;
+}
+
+/* Progress Fill */
+.healthcare-progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: linear-gradient(90deg, #1278B3, #10b981);
+  border-radius: 2px;
+  transition: width 0.6s ease;
+}
+
+.healthcare-progress-container--vertical .healthcare-progress-fill {
+  width: 100%;
+  height: 0%;
+  transition: height 0.6s ease;
+}
+
+.healthcare-progress-container--animated .healthcare-progress-fill {
+  animation: healthcare-progress-fill-pulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes healthcare-progress-fill-pulse {
+  0% { opacity: 0.8; }
+  100% { opacity: 1; }
+}
+
+/* Progress Steps */
+.healthcare-progress-steps {
+  position: relative;
+  height: 0;
+}
+
+.healthcare-progress-container--vertical .healthcare-progress-steps {
+  width: 0;
+}
+
+.healthcare-progress-step {
+  position: absolute;
+  transform: translateX(-50%);
+  cursor: default;
+  transition: all 0.3s ease;
+}
+
+.healthcare-progress-container--vertical .healthcare-progress-step {
+  transform: translateY(-50%);
+  left: 0;
+}
+
+.healthcare-progress-step--clickable {
+  cursor: pointer;
+}
+
+.healthcare-progress-step--clickable:hover {
+  transform: translateX(-50%) scale(1.05);
+}
+
+.healthcare-progress-container--vertical .healthcare-progress-step--clickable:hover {
+  transform: translateY(-50%) scale(1.05);
+}
+
+.healthcare-progress-step--clickable:focus {
+  outline: 2px solid #1278B3;
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+
+/* Step Circle */
+.healthcare-progress-step-circle {
+  width: 40px;
+  height: 40px;
+  background-color: white;
+  border: 3px solid #e2e8f0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  position: relative;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.healthcare-progress-container--small .healthcare-progress-step-circle {
+  width: 32px;
+  height: 32px;
+}
+
+.healthcare-progress-container--large .healthcare-progress-step-circle {
+  width: 48px;
+  height: 48px;
+}
+
+/* Step States */
+.healthcare-progress-step--pending .healthcare-progress-step-circle {
+  border-color: #e2e8f0;
+  background-color: white;
+}
+
+.healthcare-progress-step--current .healthcare-progress-step-circle {
+  border-color: #1278B3;
+  background-color: #eff6ff;
+  animation: healthcare-progress-step-current 2s infinite;
+}
+
+@keyframes healthcare-progress-step-current {
+  0%, 100% { 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 0 0 0 rgba(18, 120, 179, 0.4); 
+  }
+  50% { 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 0 0 8px rgba(18, 120, 179, 0.1); 
+  }
+}
+
+.healthcare-progress-step--completed .healthcare-progress-step-circle {
+  border-color: #10b981;
+  background-color: #10b981;
+  color: white;
+}
+
+.healthcare-progress-step--error .healthcare-progress-step-circle {
+  border-color: #dc2626;
+  background-color: #fef2f2;
+  color: #dc2626;
+}
+
+.healthcare-progress-step--warning .healthcare-progress-step-circle {
+  border-color: #f59e0b;
+  background-color: #fffbeb;
+  color: #f59e0b;
+}
+
+/* Step Icons and Numbers */
+.healthcare-progress-step-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.healthcare-progress-container--small .healthcare-progress-step-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.healthcare-progress-container--large .healthcare-progress-step-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.healthcare-progress-step-number {
+  font-weight: 700;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.healthcare-progress-step--completed .healthcare-progress-step-number {
+  color: white;
+}
+
+.healthcare-progress-step--current .healthcare-progress-step-number {
+  color: #1278B3;
+  font-weight: 800;
+}
+
+/* Step Content */
+.healthcare-progress-step-content {
+  text-align: center;
+  max-width: 120px;
+  min-height: 60px;
+}
+
+.healthcare-progress-container--small .healthcare-progress-step-content {
+  max-width: 100px;
+  min-height: 50px;
+}
+
+.healthcare-progress-container--large .healthcare-progress-step-content {
+  max-width: 140px;
+  min-height: 80px;
+}
+
+.healthcare-progress-step-label {
+  font-weight: 600;
+  font-size: 14px;
+  color: #1f2937;
+  line-height: 1.3;
+  margin-bottom: 4px;
+}
+
+.healthcare-progress-step-description {
+  font-size: 12px;
+  color: #6b7280;
+  line-height: 1.3;
+  margin-bottom: 8px;
+}
+
+/* Medical Info */
+.healthcare-progress-step-medical {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.healthcare-progress-step-duration,
+.healthcare-progress-step-professional {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.healthcare-progress-step-duration-icon,
+.healthcare-progress-step-professional-icon {
+  width: 12px;
+  height: 12px;
+}
+
+.healthcare-progress-step-specialty {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 4px;
+}
+
+.healthcare-progress-step-specialty-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+/* Status Indicator */
+.healthcare-progress-step-status {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-top: 4px;
+}
+
+.healthcare-progress-step-status--error {
+  background-color: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.healthcare-progress-step-status--warning {
+  background-color: #fffbeb;
+  color: #f59e0b;
+  border: 1px solid #fed7aa;
+}
+
+/* Medical Footer */
+.healthcare-progress-medical-footer {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 20px;
+  padding: 16px;
+  background-color: #f0fdf4;
+  border: 2px solid #bbf7d0;
+  border-radius: 12px;
+}
+
+.healthcare-progress-medical-footer-icon {
+  width: 20px;
+  height: 20px;
+  color: #10b981;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.healthcare-progress-medical-footer-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.healthcare-progress-medical-footer-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #064e3b;
+}
+
+.healthcare-progress-medical-footer-text {
+  font-size: 12px;
+  color: #166534;
+  line-height: 1.4;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .healthcare-progress-container {
+    padding: 16px;
+  }
+
+  .healthcare-progress-container--small {
+    padding: 12px;
+  }
+
+  .healthcare-progress-container--large {
+    padding: 20px;
+  }
+
+  .healthcare-progress-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .healthcare-progress-percentage {
+    align-items: flex-start;
+  }
+
+  .healthcare-progress-step-content {
+    max-width: 100px;
+  }
+
+  .healthcare-progress-title {
+    font-size: 16px;
+  }
+
+  .healthcare-progress-emergency {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+
+  .healthcare-progress-emergency-number {
+    font-size: 16px;
+    padding: 8px 16px;
+  }
+
+  /* Force horizontal orientation on mobile */
+  .healthcare-progress-container--vertical {
+    /* Keep vertical layout but adjust spacing */
+  }
+}
+
+@media (max-width: 480px) {
+  .healthcare-progress-step-content {
+    max-width: 80px;
+    min-height: 40px;
+  }
+
+  .healthcare-progress-step-label {
+    font-size: 12px;
+  }
+
+  .healthcare-progress-step-description {
+    font-size: 10px;
+  }
+
+  .healthcare-progress-step-circle {
+    width: 32px;
+    height: 32px;
+  }
+
+  .healthcare-progress-step-icon {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .healthcare-progress-step-circle {
+    border-width: 4px;
+  }
+
+  .healthcare-progress-step--clickable:focus {
+    outline-width: 3px;
+  }
+
+  .healthcare-progress-fill {
+    background: #000;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .healthcare-progress-fill,
+  .healthcare-progress-step,
+  .healthcare-progress-step-circle {
+    animation: none;
+    transition: none;
+  }
+
+  .healthcare-progress-emergency {
+    animation: none;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .healthcare-progress-container {
+    background-color: #1f2937;
+    border-color: #374151;
+    color: #e5e7eb;
+  }
+
+  .healthcare-progress-title {
+    color: #f3f4f6;
+  }
+
+  .healthcare-progress-track {
+    background-color: #374151;
+  }
+
+  .healthcare-progress-step-circle {
+    background-color: #1f2937;
+    border-color: #4b5563;
+  }
+
+  .healthcare-progress-step--current .healthcare-progress-step-circle {
+    background-color: #1e3a8a;
+    border-color: #60a5fa;
+  }
+
+  .healthcare-progress-step-label {
+    color: #e5e7eb;
+  }
+
+  .healthcare-progress-step-description {
+    color: #9ca3af;
+  }
+
+  .healthcare-progress-step-number {
+    color: #9ca3af;
+  }
+
+  .healthcare-progress-step--current .healthcare-progress-step-number {
+    color: #60a5fa;
+  }
+
+  .healthcare-progress-medical-footer {
+    background-color: #064e3b;
+    border-color: #059669;
+  }
+
+  .healthcare-progress-medical-footer-title {
+    color: #bbf7d0;
+  }
+
+  .healthcare-progress-medical-footer-text {
+    color: #86efac;
+  }
+
+  .healthcare-progress-container--medical {
+    background-color: #14532d;
+    border-color: #059669;
+  }
+
+  .healthcare-progress-container--emergency {
+    background-color: #7f1d1d;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .healthcare-progress-container {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 2px solid #000;
+  }
+
+  .healthcare-progress-emergency {
+    background-color: #000 !important;
+    color: #fff !important;
+    animation: none;
+  }
+
+  .healthcare-progress-step-circle {
+    box-shadow: none;
+    animation: none;
+  }
+
+  .healthcare-progress-fill {
+    background: #000 !important;
+    animation: none;
+  }
+}

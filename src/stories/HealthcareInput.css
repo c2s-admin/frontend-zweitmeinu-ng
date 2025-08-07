@@ -1,0 +1,486 @@
+/* Healthcare Input Styles - WCAG 2.1 AA Compliant */
+
+.healthcare-input-container {
+  position: relative;
+  width: 100%;
+  font-family: 'Roboto Condensed', sans-serif;
+}
+
+.healthcare-input-container--full-width {
+  width: 100%;
+}
+
+/* Sizes */
+.healthcare-input-container--small {
+  font-size: 14px;
+}
+
+.healthcare-input-container--medium {
+  font-size: 16px;
+}
+
+.healthcare-input-container--large {
+  font-size: 18px;
+}
+
+/* Label */
+.healthcare-input-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #004166;
+  cursor: pointer;
+}
+
+.healthcare-input-label-text {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.healthcare-input-required {
+  color: #dc2626;
+  font-weight: 700;
+}
+
+/* Privacy Indicator */
+.healthcare-input-privacy {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  background-color: #ecfdf5;
+  border: 1px solid #10b981;
+  border-radius: 12px;
+}
+
+.healthcare-input-privacy-icon {
+  width: 12px;
+  height: 12px;
+  color: #10b981;
+}
+
+.healthcare-input-privacy-text {
+  font-size: 10px;
+  font-weight: 500;
+  color: #10b981;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Input Wrapper */
+.healthcare-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Input Field */
+.healthcare-input {
+  width: 100%;
+  padding: 16px 20px;
+  min-height: 56px; /* Healthcare touch target */
+  background-color: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: inherit;
+  font-weight: 500;
+  color: #1f2937;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.healthcare-input::placeholder {
+  color: #9ca3af;
+  font-weight: 400;
+}
+
+.healthcare-input:focus {
+  outline: none;
+  border-color: #1278B3;
+  box-shadow: 0 0 0 3px rgba(18, 120, 179, 0.1);
+}
+
+/* Size variations */
+.healthcare-input--small {
+  padding: 12px 16px;
+  min-height: 48px;
+  font-size: 14px;
+}
+
+.healthcare-input--large {
+  padding: 20px 24px;
+  min-height: 64px;
+  font-size: 18px;
+}
+
+/* Icon padding adjustments */
+.healthcare-input--with-left-icon {
+  padding-left: 52px;
+}
+
+.healthcare-input--with-right-icon {
+  padding-right: 52px;
+}
+
+.healthcare-input--small.healthcare-input--with-left-icon {
+  padding-left: 44px;
+}
+
+.healthcare-input--small.healthcare-input--with-right-icon {
+  padding-right: 44px;
+}
+
+.healthcare-input--large.healthcare-input--with-left-icon {
+  padding-left: 60px;
+}
+
+.healthcare-input--large.healthcare-input--with-right-icon {
+  padding-right: 60px;
+}
+
+/* Left Icon */
+.healthcare-input-left-icon {
+  position: absolute;
+  left: 16px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  color: #6b7280;
+  pointer-events: none;
+}
+
+.healthcare-input-container--small .healthcare-input-left-icon {
+  left: 12px;
+  width: 16px;
+  height: 16px;
+}
+
+.healthcare-input-container--large .healthcare-input-left-icon {
+  left: 20px;
+  width: 24px;
+  height: 24px;
+}
+
+/* Password Toggle */
+.healthcare-input-password-toggle {
+  position: absolute;
+  right: 16px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #6b7280;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.healthcare-input-password-toggle:hover {
+  color: #1278B3;
+  background-color: #f1f5f9;
+}
+
+.healthcare-input-password-toggle:focus {
+  outline: 2px solid #1278B3;
+  outline-offset: 2px;
+}
+
+.healthcare-input-password-icon {
+  width: 18px;
+  height: 18px;
+}
+
+/* Status Icons */
+.healthcare-input-status-icon {
+  position: absolute;
+  right: 16px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.healthcare-input-status-icon--error {
+  color: #dc2626;
+}
+
+.healthcare-input-status-icon--success {
+  color: #10b981;
+}
+
+.healthcare-input-icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* Container States */
+.healthcare-input-container--focused .healthcare-input-left-icon {
+  color: #1278B3;
+}
+
+.healthcare-input-container--error .healthcare-input {
+  border-color: #dc2626;
+  background-color: #fef2f2;
+}
+
+.healthcare-input-container--error .healthcare-input:focus {
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+.healthcare-input-container--error .healthcare-input-left-icon {
+  color: #dc2626;
+}
+
+.healthcare-input-container--success .healthcare-input {
+  border-color: #10b981;
+  background-color: #ecfdf5;
+}
+
+.healthcare-input-container--success .healthcare-input:focus {
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.healthcare-input-container--success .healthcare-input-left-icon {
+  color: #10b981;
+}
+
+.healthcare-input-container--disabled .healthcare-input {
+  background-color: #f9fafb;
+  color: #9ca3af;
+  cursor: not-allowed;
+  border-color: #d1d5db;
+}
+
+.healthcare-input-container--disabled .healthcare-input-label {
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.healthcare-input-container--disabled .healthcare-input-left-icon {
+  color: #d1d5db;
+}
+
+/* Medical Context Styling */
+.healthcare-input-container--medical {
+  padding: 16px;
+  background-color: #f8fafc;
+  border: 1px solid #10b981;
+  border-radius: 16px;
+}
+
+.healthcare-input-container--medical .healthcare-input {
+  background-color: white;
+  border-color: #e2e8f0;
+}
+
+.healthcare-input-container--medical .healthcare-input:focus {
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+/* Help Text */
+.healthcare-input-help {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background-color: #f0f9ff;
+  border: 1px solid #0ea5e9;
+  border-radius: 8px;
+}
+
+.healthcare-input-help-icon {
+  width: 16px;
+  height: 16px;
+  color: #0ea5e9;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.healthcare-input-help-text {
+  font-size: 14px;
+  color: #0c4a6e;
+  line-height: 1.4;
+}
+
+/* Error Message */
+.healthcare-input-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background-color: #fef2f2;
+  border: 1px solid #dc2626;
+  border-radius: 8px;
+}
+
+.healthcare-input-error-icon {
+  width: 16px;
+  height: 16px;
+  color: #dc2626;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.healthcare-input-error-text {
+  font-size: 14px;
+  color: #7f1d1d;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* Success Message */
+.healthcare-input-success {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background-color: #ecfdf5;
+  border: 1px solid #10b981;
+  border-radius: 8px;
+}
+
+.healthcare-input-success-icon {
+  width: 16px;
+  height: 16px;
+  color: #10b981;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.healthcare-input-success-text {
+  font-size: 14px;
+  color: #064e3b;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* Medical Privacy Notice */
+.healthcare-input-privacy-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 12px;
+  background-color: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 12px;
+}
+
+.healthcare-input-privacy-notice-icon {
+  width: 16px;
+  height: 16px;
+  color: #10b981;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.healthcare-input-privacy-notice-text {
+  font-size: 12px;
+  color: #14532d;
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .healthcare-input {
+    min-height: 56px; /* Maintain healthcare touch targets */
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+  
+  .healthcare-input--small {
+    min-height: 52px;
+    font-size: 15px;
+  }
+  
+  .healthcare-input--large {
+    min-height: 60px;
+    font-size: 17px;
+  }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .healthcare-input {
+    border-width: 3px;
+  }
+  
+  .healthcare-input:focus {
+    box-shadow: 0 0 0 4px rgba(18, 120, 179, 0.3);
+  }
+  
+  .healthcare-input-container--error .healthcare-input {
+    border-width: 3px;
+  }
+  
+  .healthcare-input-container--success .healthcare-input {
+    border-width: 3px;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .healthcare-input,
+  .healthcare-input-password-toggle {
+    transition: none;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .healthcare-input {
+    background-color: #1f2937;
+    border-color: #374151;
+    color: #f9fafb;
+  }
+  
+  .healthcare-input::placeholder {
+    color: #6b7280;
+  }
+  
+  .healthcare-input:focus {
+    border-color: #60a5fa;
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+  }
+  
+  .healthcare-input-label {
+    color: #f3f4f6;
+  }
+  
+  .healthcare-input-container--medical {
+    background-color: #111827;
+    border-color: #059669;
+  }
+  
+  .healthcare-input-help {
+    background-color: #1e293b;
+    border-color: #0ea5e9;
+  }
+  
+  .healthcare-input-error {
+    background-color: #1f1917;
+    border-color: #dc2626;
+  }
+  
+  .healthcare-input-success {
+    background-color: #0a1f13;
+    border-color: #059669;
+  }
+}

@@ -1,0 +1,387 @@
+/* Healthcare Badge Styles - WCAG 2.1 AA Compliant */
+
+.healthcare-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+  position: relative;
+  vertical-align: middle;
+}
+
+/* Badge Sizes */
+.healthcare-badge--small {
+  padding: 4px 8px;
+  font-size: 11px;
+  min-height: 20px;
+}
+
+.healthcare-badge--medium {
+  padding: 6px 12px;
+  font-size: 13px;
+  min-height: 28px;
+}
+
+.healthcare-badge--large {
+  padding: 8px 16px;
+  font-size: 14px;
+  min-height: 36px;
+}
+
+/* Badge Shapes */
+.healthcare-badge--rounded {
+  border-radius: 6px;
+}
+
+.healthcare-badge--pill {
+  border-radius: 50px;
+}
+
+.healthcare-badge--square {
+  border-radius: 2px;
+}
+
+/* Badge Variants */
+.healthcare-badge--success {
+  background-color: #ecfdf5;
+  color: #064e3b;
+  border-color: #10b981;
+}
+
+.healthcare-badge--warning {
+  background-color: #fffbeb;
+  color: #78350f;
+  border-color: #f59e0b;
+}
+
+.healthcare-badge--error {
+  background-color: #fef2f2;
+  color: #7f1d1d;
+  border-color: #dc2626;
+}
+
+.healthcare-badge--info {
+  background-color: #eff6ff;
+  color: #1e3a8a;
+  border-color: #1278B3;
+}
+
+.healthcare-badge--neutral {
+  background-color: #f8fafc;
+  color: #475569;
+  border-color: #cbd5e1;
+}
+
+.healthcare-badge--urgent {
+  background-color: #fef2f2;
+  color: #7f1d1d;
+  border-color: #dc2626;
+  animation: healthcare-badge-pulse 2s infinite;
+}
+
+@keyframes healthcare-badge-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4); }
+  50% { box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.2); }
+}
+
+/* Specialty Variants */
+.healthcare-badge--specialty {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.healthcare-badge--kardiologie {
+  background-color: #fef2f2;
+  color: #7f1d1d;
+  border-color: #dc2626;
+}
+
+.healthcare-badge--onkologie {
+  background-color: #faf5ff;
+  color: #581c87;
+  border-color: #7c3aed;
+}
+
+.healthcare-badge--gallenblase {
+  background-color: #fffbeb;
+  color: #78350f;
+  border-color: #f59e0b;
+}
+
+.healthcare-badge--nephrologie {
+  background-color: #eff6ff;
+  color: #1e3a8a;
+  border-color: #2563eb;
+}
+
+.healthcare-badge--schilddruese {
+  background-color: #ecfdf5;
+  color: #064e3b;
+  border-color: #10b981;
+}
+
+.healthcare-badge--intensivmedizin {
+  background-color: #fff7ed;
+  color: #7c2d12;
+  border-color: #ea580c;
+}
+
+.healthcare-badge--allgemeine-fragen {
+  background-color: #f8fafc;
+  color: #475569;
+  border-color: #64748b;
+}
+
+/* Clickable State */
+.healthcare-badge--clickable {
+  cursor: pointer;
+  min-height: 32px; /* Healthcare touch target */
+}
+
+.healthcare-badge--clickable:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 65, 102, 0.15);
+}
+
+.healthcare-badge--clickable:focus {
+  outline: 2px solid #1278B3;
+  outline-offset: 2px;
+}
+
+.healthcare-badge--clickable:active {
+  transform: translateY(0);
+}
+
+/* Loading State */
+.healthcare-badge--loading {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+/* Icon */
+.healthcare-badge-icon {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}
+
+.healthcare-badge--small .healthcare-badge-icon {
+  width: 10px;
+  height: 10px;
+}
+
+.healthcare-badge--large .healthcare-badge-icon {
+  width: 14px;
+  height: 14px;
+}
+
+/* Spinner */
+.healthcare-badge-spinner {
+  width: 10px;
+  height: 10px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: healthcare-badge-spin 1s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes healthcare-badge-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.healthcare-badge--small .healthcare-badge-spinner {
+  width: 8px;
+  height: 8px;
+  border-width: 1.5px;
+}
+
+.healthcare-badge--large .healthcare-badge-spinner {
+  width: 12px;
+  height: 12px;
+}
+
+/* Content */
+.healthcare-badge-content {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Remove Button */
+.healthcare-badge-remove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  margin-left: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  opacity: 0.7;
+  border-radius: 3px;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.healthcare-badge-remove:hover {
+  opacity: 1;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.healthcare-badge-remove:focus {
+  outline: 1px solid currentColor;
+  outline-offset: 1px;
+  opacity: 1;
+}
+
+.healthcare-badge-remove-icon {
+  width: 10px;
+  height: 10px;
+}
+
+.healthcare-badge--small .healthcare-badge-remove {
+  width: 14px;
+  height: 14px;
+  margin-left: 2px;
+}
+
+.healthcare-badge--small .healthcare-badge-remove-icon {
+  width: 8px;
+  height: 8px;
+}
+
+.healthcare-badge--large .healthcare-badge-remove {
+  width: 18px;
+  height: 18px;
+  margin-left: 6px;
+}
+
+.healthcare-badge--large .healthcare-badge-remove-icon {
+  width: 12px;
+  height: 12px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .healthcare-badge--clickable {
+    min-height: 36px; /* Larger touch target on mobile */
+  }
+  
+  .healthcare-badge--medium {
+    min-height: 32px;
+  }
+  
+  .healthcare-badge--large {
+    min-height: 40px;
+  }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .healthcare-badge {
+    border-width: 2px;
+  }
+  
+  .healthcare-badge--clickable:focus {
+    outline-width: 3px;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .healthcare-badge,
+  .healthcare-badge-remove {
+    transition: none;
+  }
+  
+  .healthcare-badge--urgent {
+    animation: none;
+  }
+  
+  .healthcare-badge-spinner {
+    animation: none;
+  }
+  
+  .healthcare-badge--clickable:hover {
+    transform: none;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .healthcare-badge--success {
+    background-color: #064e3b;
+    color: #d1fae5;
+    border-color: #059669;
+  }
+  
+  .healthcare-badge--warning {
+    background-color: #78350f;
+    color: #fed7aa;
+    border-color: #f59e0b;
+  }
+  
+  .healthcare-badge--error,
+  .healthcare-badge--urgent {
+    background-color: #7f1d1d;
+    color: #fecaca;
+    border-color: #dc2626;
+  }
+  
+  .healthcare-badge--info {
+    background-color: #1e3a8a;
+    color: #dbeafe;
+    border-color: #60a5fa;
+  }
+  
+  .healthcare-badge--neutral {
+    background-color: #374151;
+    color: #f3f4f6;
+    border-color: #6b7280;
+  }
+  
+  /* Specialty Dark Mode */
+  .healthcare-badge--kardiologie {
+    background-color: #7f1d1d;
+    color: #fecaca;
+  }
+  
+  .healthcare-badge--onkologie {
+    background-color: #581c87;
+    color: #e9d5ff;
+  }
+  
+  .healthcare-badge--gallenblase {
+    background-color: #78350f;
+    color: #fed7aa;
+  }
+  
+  .healthcare-badge--nephrologie {
+    background-color: #1e3a8a;
+    color: #dbeafe;
+  }
+  
+  .healthcare-badge--schilddruese {
+    background-color: #064e3b;
+    color: #d1fae5;
+  }
+  
+  .healthcare-badge--intensivmedizin {
+    background-color: #7c2d12;
+    color: #fed7aa;
+  }
+  
+  .healthcare-badge--allgemeine-fragen {
+    background-color: #374151;
+    color: #f3f4f6;
+  }
+}

@@ -1,0 +1,505 @@
+/* Healthcare Textarea Styles - WCAG 2.1 AA Compliant */
+
+.healthcare-textarea-container {
+  position: relative;
+  width: 100%;
+  font-family: 'Roboto Condensed', sans-serif;
+}
+
+.healthcare-textarea-container--full-width {
+  width: 100%;
+}
+
+/* Sizes */
+.healthcare-textarea-container--small {
+  font-size: 14px;
+}
+
+.healthcare-textarea-container--medium {
+  font-size: 16px;
+}
+
+.healthcare-textarea-container--large {
+  font-size: 18px;
+}
+
+/* Label */
+.healthcare-textarea-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #004166;
+  cursor: pointer;
+}
+
+.healthcare-textarea-label-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.healthcare-textarea-label-text {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.healthcare-textarea-required {
+  color: #dc2626;
+  font-weight: 700;
+}
+
+/* Privacy Indicator */
+.healthcare-textarea-privacy {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  background-color: #ecfdf5;
+  border: 1px solid #10b981;
+  border-radius: 12px;
+}
+
+.healthcare-textarea-privacy-icon {
+  width: 12px;
+  height: 12px;
+  color: #10b981;
+}
+
+.healthcare-textarea-privacy-text {
+  font-size: 10px;
+  font-weight: 500;
+  color: #10b981;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Character Count */
+.healthcare-textarea-count {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #6b7280;
+  transition: color 0.2s ease;
+}
+
+.healthcare-textarea-count--warning {
+  color: #f59e0b;
+}
+
+.healthcare-textarea-count--error {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.healthcare-textarea-count-icon {
+  width: 12px;
+  height: 12px;
+}
+
+/* Textarea Wrapper */
+.healthcare-textarea-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Textarea */
+.healthcare-textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 16px 20px;
+  background-color: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: inherit;
+  font-weight: 500;
+  font-family: inherit;
+  color: #1f2937;
+  line-height: 1.5;
+  transition: all 0.2s ease;
+  resize: vertical;
+}
+
+.healthcare-textarea::placeholder {
+  color: #9ca3af;
+  font-weight: 400;
+}
+
+.healthcare-textarea:focus {
+  outline: none;
+  border-color: #1278B3;
+  box-shadow: 0 0 0 3px rgba(18, 120, 179, 0.1);
+}
+
+/* Size variations */
+.healthcare-textarea--small {
+  min-height: 80px;
+  padding: 12px 16px;
+  font-size: 14px;
+}
+
+.healthcare-textarea--large {
+  min-height: 160px;
+  padding: 20px 24px;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+/* Auto-resize */
+.healthcare-textarea--auto-resize {
+  resize: none;
+  overflow: hidden;
+}
+
+/* Clear Button */
+.healthcare-textarea-clear {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #6b7280;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.healthcare-textarea-clear:hover {
+  color: #dc2626;
+  border-color: #dc2626;
+  background-color: #fef2f2;
+}
+
+.healthcare-textarea-clear:focus {
+  outline: 2px solid #dc2626;
+  outline-offset: 1px;
+}
+
+.healthcare-textarea-clear-icon {
+  width: 14px;
+  height: 14px;
+}
+
+/* Status Icons */
+.healthcare-textarea-status-icon {
+  position: absolute;
+  top: 16px;
+  right: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.healthcare-textarea-status-icon--error {
+  color: #dc2626;
+}
+
+.healthcare-textarea-status-icon--success {
+  color: #10b981;
+}
+
+.healthcare-textarea-icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* Container States */
+.healthcare-textarea-container--focused .healthcare-textarea-privacy-icon {
+  color: #1278B3;
+}
+
+.healthcare-textarea-container--error .healthcare-textarea {
+  border-color: #dc2626;
+  background-color: #fef2f2;
+}
+
+.healthcare-textarea-container--error .healthcare-textarea:focus {
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+.healthcare-textarea-container--success .healthcare-textarea {
+  border-color: #10b981;
+  background-color: #ecfdf5;
+}
+
+.healthcare-textarea-container--success .healthcare-textarea:focus {
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.healthcare-textarea-container--disabled .healthcare-textarea {
+  background-color: #f9fafb;
+  color: #9ca3af;
+  cursor: not-allowed;
+  border-color: #d1d5db;
+  resize: none;
+}
+
+.healthcare-textarea-container--disabled .healthcare-textarea-label {
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.healthcare-textarea-container--readonly .healthcare-textarea {
+  background-color: #f8fafc;
+  cursor: default;
+  resize: none;
+}
+
+/* Medical Context Styling */
+.healthcare-textarea-container--medical {
+  padding: 20px;
+  background-color: #f8fafc;
+  border: 2px solid #10b981;
+  border-radius: 16px;
+  border-style: dashed;
+}
+
+.healthcare-textarea-container--medical .healthcare-textarea {
+  background-color: white;
+  border-color: #e2e8f0;
+}
+
+.healthcare-textarea-container--medical .healthcare-textarea:focus {
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+/* Help Text */
+.healthcare-textarea-help {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background-color: #f0f9ff;
+  border: 1px solid #0ea5e9;
+  border-radius: 8px;
+}
+
+.healthcare-textarea-help-icon {
+  width: 16px;
+  height: 16px;
+  color: #0ea5e9;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.healthcare-textarea-help-text {
+  font-size: 14px;
+  color: #0c4a6e;
+  line-height: 1.4;
+}
+
+/* Error Message */
+.healthcare-textarea-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background-color: #fef2f2;
+  border: 1px solid #dc2626;
+  border-radius: 8px;
+}
+
+.healthcare-textarea-error-icon {
+  width: 16px;
+  height: 16px;
+  color: #dc2626;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.healthcare-textarea-error-text {
+  font-size: 14px;
+  color: #7f1d1d;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* Success Message */
+.healthcare-textarea-success {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background-color: #ecfdf5;
+  border: 1px solid #10b981;
+  border-radius: 8px;
+}
+
+.healthcare-textarea-success-icon {
+  width: 16px;
+  height: 16px;
+  color: #10b981;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.healthcare-textarea-success-text {
+  font-size: 14px;
+  color: #064e3b;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* Medical Privacy Notice */
+.healthcare-textarea-privacy-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 16px;
+  padding: 16px;
+  background-color: #f0fdf4;
+  border: 2px solid #bbf7d0;
+  border-radius: 12px;
+}
+
+.healthcare-textarea-privacy-notice-icon {
+  width: 20px;
+  height: 20px;
+  color: #10b981;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.healthcare-textarea-privacy-notice-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.healthcare-textarea-privacy-notice-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #064e3b;
+}
+
+.healthcare-textarea-privacy-notice-text {
+  font-size: 12px;
+  color: #166534;
+  line-height: 1.4;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .healthcare-textarea {
+    min-height: 100px;
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+  
+  .healthcare-textarea--small {
+    min-height: 80px;
+    font-size: 15px;
+  }
+  
+  .healthcare-textarea--large {
+    min-height: 120px;
+    font-size: 17px;
+  }
+  
+  .healthcare-textarea-container--medical {
+    padding: 16px;
+  }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .healthcare-textarea {
+    border-width: 3px;
+  }
+  
+  .healthcare-textarea:focus {
+    box-shadow: 0 0 0 4px rgba(18, 120, 179, 0.3);
+  }
+  
+  .healthcare-textarea-container--error .healthcare-textarea {
+    border-width: 3px;
+  }
+  
+  .healthcare-textarea-container--success .healthcare-textarea {
+    border-width: 3px;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .healthcare-textarea,
+  .healthcare-textarea-clear,
+  .healthcare-textarea-count {
+    transition: none;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .healthcare-textarea {
+    background-color: #1f2937;
+    border-color: #374151;
+    color: #f9fafb;
+  }
+  
+  .healthcare-textarea::placeholder {
+    color: #6b7280;
+  }
+  
+  .healthcare-textarea:focus {
+    border-color: #60a5fa;
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+  }
+  
+  .healthcare-textarea-label {
+    color: #f3f4f6;
+  }
+  
+  .healthcare-textarea-container--medical {
+    background-color: #111827;
+    border-color: #059669;
+  }
+  
+  .healthcare-textarea-clear {
+    background-color: #374151;
+    border-color: #6b7280;
+    color: #d1d5db;
+  }
+  
+  .healthcare-textarea-clear:hover {
+    background-color: #450a0a;
+    border-color: #dc2626;
+    color: #fca5a5;
+  }
+  
+  .healthcare-textarea-help {
+    background-color: #1e293b;
+    border-color: #0ea5e9;
+  }
+  
+  .healthcare-textarea-error {
+    background-color: #1f1917;
+    border-color: #dc2626;
+  }
+  
+  .healthcare-textarea-success {
+    background-color: #0a1f13;
+    border-color: #059669;
+  }
+  
+  .healthcare-textarea-privacy-notice {
+    background-color: #14532d;
+    border-color: #059669;
+  }
+}

@@ -1,0 +1,622 @@
+/* Healthcare Modal Styles - WCAG 2.1 AA Compliant */
+
+/* Portal and Overlay */
+.healthcare-modal-portal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  font-family: 'Roboto Condensed', sans-serif;
+}
+
+.healthcare-modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 65, 102, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: healthcare-modal-overlay-enter 0.2s ease-out;
+  backdrop-filter: blur(4px);
+}
+
+.healthcare-modal-overlay--emergency {
+  background-color: rgba(220, 38, 38, 0.7);
+}
+
+.healthcare-modal-overlay--closing {
+  animation: healthcare-modal-overlay-exit 0.2s ease-in;
+}
+
+@keyframes healthcare-modal-overlay-enter {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(4px);
+  }
+}
+
+@keyframes healthcare-modal-overlay-exit {
+  from {
+    opacity: 1;
+    backdrop-filter: blur(4px);
+  }
+  to {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+}
+
+/* Emergency Contact Banner */
+.healthcare-modal-emergency-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: #dc2626;
+  color: white;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  z-index: 1001;
+  animation: healthcare-modal-emergency-pulse 2s infinite;
+}
+
+@keyframes healthcare-modal-emergency-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.9; }
+}
+
+.healthcare-modal-emergency-icon {
+  width: 20px;
+  height: 20px;
+  color: white;
+}
+
+.healthcare-modal-emergency-text {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.healthcare-modal-emergency-number {
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 16px;
+  text-decoration: none;
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.healthcare-modal-emergency-number:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+/* Modal Container */
+.healthcare-modal {
+  position: relative;
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 25px 50px rgba(0, 65, 102, 0.25);
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 64px);
+  animation: healthcare-modal-enter 0.3s ease-out;
+  outline: none;
+}
+
+.healthcare-modal--closing {
+  animation: healthcare-modal-exit 0.2s ease-in;
+}
+
+@keyframes healthcare-modal-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-16px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes healthcare-modal-exit {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+}
+
+/* Modal Sizes */
+.healthcare-modal--small {
+  width: 90%;
+  max-width: 400px;
+}
+
+.healthcare-modal--medium {
+  width: 90%;
+  max-width: 600px;
+}
+
+.healthcare-modal--large {
+  width: 90%;
+  max-width: 800px;
+}
+
+.healthcare-modal--fullscreen {
+  width: 95%;
+  max-width: 1200px;
+  height: 90vh;
+}
+
+/* Modal Types */
+.healthcare-modal--consent {
+  border-top: 4px solid #1278B3;
+}
+
+.healthcare-modal--emergency {
+  border-top: 4px solid #dc2626;
+  margin-top: 60px; /* Account for emergency banner */
+}
+
+.healthcare-modal--success {
+  border-top: 4px solid #10b981;
+}
+
+.healthcare-modal--error {
+  border-top: 4px solid #dc2626;
+}
+
+.healthcare-modal--info {
+  border-top: 4px solid #0ea5e9;
+}
+
+/* Medical Context */
+.healthcare-modal--medical {
+  border: 2px solid #10b981;
+  box-shadow: 0 25px 50px rgba(16, 185, 129, 0.15);
+}
+
+/* Header */
+.healthcare-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 24px 16px 24px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.healthcare-modal-title-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.healthcare-modal-type-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.healthcare-modal--emergency .healthcare-modal-type-icon {
+  color: #dc2626;
+}
+
+.healthcare-modal--success .healthcare-modal-type-icon {
+  color: #10b981;
+}
+
+.healthcare-modal--error .healthcare-modal-type-icon {
+  color: #dc2626;
+}
+
+.healthcare-modal--info .healthcare-modal-type-icon {
+  color: #0ea5e9;
+}
+
+.healthcare-modal--consent .healthcare-modal-type-icon {
+  color: #1278B3;
+}
+
+.healthcare-modal-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #004166;
+  line-height: 1.3;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.healthcare-modal--emergency .healthcare-modal-title {
+  color: #dc2626;
+}
+
+/* Medical Badge */
+.healthcare-modal-medical-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  background-color: #ecfdf5;
+  border: 1px solid #10b981;
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.healthcare-modal-medical-icon {
+  width: 12px;
+  height: 12px;
+  color: #10b981;
+}
+
+.healthcare-modal-medical-text {
+  font-size: 10px;
+  font-weight: 500;
+  color: #10b981;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Close Button */
+.healthcare-modal-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px; /* WCAG touch target */
+  height: 44px;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #6b7280;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  margin-left: 12px;
+}
+
+.healthcare-modal-close:hover {
+  color: #dc2626;
+  background-color: #fef2f2;
+}
+
+.healthcare-modal-close:focus {
+  outline: 2px solid #1278B3;
+  outline-offset: 2px;
+}
+
+.healthcare-modal-close-icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* Content */
+.healthcare-modal-content {
+  flex: 1;
+  padding: 16px 24px;
+  overflow-y: auto;
+  color: #1f2937;
+  line-height: 1.6;
+}
+
+.healthcare-modal-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.healthcare-modal-content::-webkit-scrollbar-track {
+  background-color: #f1f5f9;
+  border-radius: 4px;
+}
+
+.healthcare-modal-content::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 4px;
+}
+
+.healthcare-modal-content::-webkit-scrollbar-thumb:hover {
+  background-color: #94a3b8;
+}
+
+/* Footer */
+.healthcare-modal-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 24px 24px 24px;
+  border-top: 1px solid #f1f5f9;
+  background-color: #f8fafc;
+}
+
+/* GDPR Compliance */
+.healthcare-modal-gdpr {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  background-color: #ecfdf5;
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+}
+
+.healthcare-modal-gdpr-icon {
+  width: 16px;
+  height: 16px;
+  color: #10b981;
+  flex-shrink: 0;
+}
+
+.healthcare-modal-gdpr-text {
+  font-size: 12px;
+  color: #064e3b;
+  font-weight: 500;
+}
+
+.healthcare-modal-footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* Privacy Notice */
+.healthcare-modal-privacy-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 16px 24px 0 24px;
+  padding: 16px;
+  background-color: #f0fdf4;
+  border: 2px solid #bbf7d0;
+  border-radius: 12px;
+}
+
+.healthcare-modal-privacy-icon {
+  width: 20px;
+  height: 20px;
+  color: #10b981;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.healthcare-modal-privacy-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.healthcare-modal-privacy-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #064e3b;
+}
+
+.healthcare-modal-privacy-text {
+  font-size: 12px;
+  color: #166534;
+  line-height: 1.4;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .healthcare-modal-overlay {
+    padding: 8px;
+  }
+
+  .healthcare-modal--emergency {
+    margin-top: 70px; /* Account for larger emergency banner on mobile */
+  }
+
+  .healthcare-modal-emergency-banner {
+    padding: 16px;
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+
+  .healthcare-modal-emergency-text {
+    font-size: 16px;
+  }
+
+  .healthcare-modal-emergency-number {
+    font-size: 18px;
+    padding: 8px 16px;
+  }
+
+  .healthcare-modal--small,
+  .healthcare-modal--medium,
+  .healthcare-modal--large {
+    width: 95%;
+    max-width: none;
+  }
+
+  .healthcare-modal--fullscreen {
+    width: 98%;
+    height: 95vh;
+  }
+
+  .healthcare-modal-header {
+    padding: 20px 16px 12px 16px;
+  }
+
+  .healthcare-modal-title {
+    font-size: 18px;
+  }
+
+  .healthcare-modal-content {
+    padding: 12px 16px;
+  }
+
+  .healthcare-modal-footer {
+    padding: 12px 16px 20px 16px;
+  }
+
+  .healthcare-modal-privacy-notice {
+    margin: 12px 16px 0 16px;
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .healthcare-modal-title-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .healthcare-modal-title {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+  }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .healthcare-modal {
+    border: 3px solid #000;
+  }
+
+  .healthcare-modal-close:focus {
+    outline-width: 3px;
+  }
+
+  .healthcare-modal-emergency-banner {
+    border-bottom: 3px solid #fff;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .healthcare-modal,
+  .healthcare-modal-overlay,
+  .healthcare-modal-close,
+  .healthcare-modal-emergency-number {
+    animation: none;
+    transition: none;
+  }
+
+  .healthcare-modal-emergency-banner {
+    animation: none;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .healthcare-modal {
+    background-color: #1f2937;
+    color: #f9fafb;
+  }
+
+  .healthcare-modal-header {
+    border-bottom-color: #374151;
+  }
+
+  .healthcare-modal-title {
+    color: #f3f4f6;
+  }
+
+  .healthcare-modal-content {
+    color: #e5e7eb;
+  }
+
+  .healthcare-modal-footer {
+    background-color: #111827;
+    border-top-color: #374151;
+  }
+
+  .healthcare-modal-close:hover {
+    background-color: #374151;
+    color: #fca5a5;
+  }
+
+  .healthcare-modal-gdpr {
+    background-color: #064e3b;
+    border-color: #10b981;
+  }
+
+  .healthcare-modal-gdpr-text {
+    color: #bbf7d0;
+  }
+
+  .healthcare-modal-privacy-notice {
+    background-color: #14532d;
+    border-color: #059669;
+  }
+
+  .healthcare-modal-privacy-title {
+    color: #bbf7d0;
+  }
+
+  .healthcare-modal-privacy-text {
+    color: #86efac;
+  }
+
+  .healthcare-modal-content::-webkit-scrollbar-track {
+    background-color: #374151;
+  }
+
+  .healthcare-modal-content::-webkit-scrollbar-thumb {
+    background-color: #6b7280;
+  }
+
+  .healthcare-modal-content::-webkit-scrollbar-thumb:hover {
+    background-color: #9ca3af;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .healthcare-modal-portal {
+    position: static;
+    background: none;
+  }
+
+  .healthcare-modal-overlay {
+    position: static;
+    background: none;
+    display: block;
+    padding: 0;
+  }
+
+  .healthcare-modal {
+    box-shadow: none;
+    border: 2px solid #000;
+    animation: none;
+    max-height: none;
+  }
+
+  .healthcare-modal-close {
+    display: none;
+  }
+
+  .healthcare-modal-emergency-banner {
+    position: static;
+    background-color: #000;
+    color: #fff;
+    padding: 12px;
+    margin-bottom: 20px;
+  }
+}

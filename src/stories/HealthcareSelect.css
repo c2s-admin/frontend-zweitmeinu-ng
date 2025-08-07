@@ -1,0 +1,641 @@
+/* Healthcare Select Styles - WCAG 2.1 AA Compliant */
+
+.healthcare-select-container {
+  position: relative;
+  width: 100%;
+  font-family: 'Roboto Condensed', sans-serif;
+}
+
+.healthcare-select-container--full-width {
+  width: 100%;
+}
+
+/* Sizes */
+.healthcare-select-container--small {
+  font-size: 14px;
+}
+
+.healthcare-select-container--medium {
+  font-size: 16px;
+}
+
+.healthcare-select-container--large {
+  font-size: 18px;
+}
+
+/* Label */
+.healthcare-select-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #004166;
+  cursor: pointer;
+}
+
+.healthcare-select-label-text {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.healthcare-select-required {
+  color: #dc2626;
+  font-weight: 700;
+}
+
+/* Medical Indicator */
+.healthcare-select-medical-indicator {
+  display: flex;
+  align-items: center;
+  padding: 2px 8px;
+  background-color: #eff6ff;
+  border: 1px solid #1278B3;
+  border-radius: 12px;
+}
+
+.healthcare-select-medical-text {
+  font-size: 10px;
+  font-weight: 500;
+  color: #1278B3;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Select Button */
+.healthcare-select {
+  position: relative;
+  width: 100%;
+  min-height: 56px; /* Healthcare touch target */
+  background-color: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+}
+
+.healthcare-select:hover:not(.healthcare-select--disabled) {
+  border-color: #1278B3;
+}
+
+.healthcare-select:focus {
+  outline: none;
+  border-color: #1278B3;
+  box-shadow: 0 0 0 3px rgba(18, 120, 179, 0.1);
+}
+
+/* Size variations */
+.healthcare-select--small {
+  min-height: 48px;
+  font-size: 14px;
+}
+
+.healthcare-select--large {
+  min-height: 64px;
+  font-size: 18px;
+}
+
+/* Select Content */
+.healthcare-select-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 20px;
+  min-height: inherit;
+}
+
+.healthcare-select-container--small .healthcare-select-content {
+  padding: 0 16px;
+}
+
+.healthcare-select-container--large .healthcare-select-content {
+  padding: 0 24px;
+}
+
+/* Value Display */
+.healthcare-select-value {
+  flex: 1;
+  min-width: 0;
+}
+
+.healthcare-select-text {
+  color: #1f2937;
+  font-weight: 500;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.healthcare-select:not(.healthcare-select--disabled) .healthcare-select-text:empty::before,
+.healthcare-select-text[data-placeholder="true"] {
+  color: #9ca3af;
+  font-weight: 400;
+}
+
+/* Multiple Selection Chips */
+.healthcare-select-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+}
+
+.healthcare-select-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  background-color: #1278B3;
+  color: white;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  max-width: 120px;
+}
+
+.healthcare-select-chip--count {
+  background-color: #6b7280;
+}
+
+.healthcare-select-chip-remove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: white;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+.healthcare-select-chip-remove:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.healthcare-select-chip-remove-icon {
+  width: 10px;
+  height: 10px;
+}
+
+/* Actions */
+.healthcare-select-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 8px;
+}
+
+.healthcare-select-clear {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #6b7280;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.healthcare-select-clear:hover {
+  color: #dc2626;
+  background-color: #fef2f2;
+}
+
+.healthcare-select-clear-icon {
+  width: 14px;
+  height: 14px;
+}
+
+.healthcare-select-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
+  transition: transform 0.2s ease;
+}
+
+.healthcare-select-container--open .healthcare-select-arrow {
+  transform: rotate(180deg);
+}
+
+.healthcare-select-arrow-icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* Status Icons */
+.healthcare-select-status-icon {
+  position: absolute;
+  right: 50px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.healthcare-select-status-icon--error {
+  color: #dc2626;
+}
+
+.healthcare-select-status-icon--success {
+  color: #10b981;
+}
+
+.healthcare-select-icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* Container States */
+.healthcare-select-container--error .healthcare-select {
+  border-color: #dc2626;
+  background-color: #fef2f2;
+}
+
+.healthcare-select-container--error .healthcare-select:focus {
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+.healthcare-select-container--success .healthcare-select {
+  border-color: #10b981;
+  background-color: #ecfdf5;
+}
+
+.healthcare-select-container--success .healthcare-select:focus {
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.healthcare-select-container--disabled .healthcare-select {
+  background-color: #f9fafb;
+  color: #9ca3af;
+  cursor: not-allowed;
+  border-color: #d1d5db;
+}
+
+.healthcare-select-container--disabled .healthcare-select-label {
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+/* Medical Context */
+.healthcare-select-container--medical {
+  padding: 16px;
+  background-color: #f8fafc;
+  border: 1px solid #1278B3;
+  border-radius: 16px;
+}
+
+.healthcare-select-container--medical .healthcare-select {
+  background-color: white;
+  border-color: #e2e8f0;
+}
+
+/* Dropdown */
+.healthcare-select-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  margin-top: 4px;
+  background-color: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 65, 102, 0.15);
+  overflow: hidden;
+  animation: healthcare-select-dropdown-enter 0.2s ease-out;
+}
+
+@keyframes healthcare-select-dropdown-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Search */
+.healthcare-select-search {
+  position: relative;
+  padding: 12px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.healthcare-select-search-icon {
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  color: #6b7280;
+}
+
+.healthcare-select-search-input {
+  width: 100%;
+  padding: 8px 12px 8px 36px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: #f8fafc;
+  transition: all 0.2s ease;
+}
+
+.healthcare-select-search-input:focus {
+  outline: none;
+  border-color: #1278B3;
+  background-color: white;
+  box-shadow: 0 0 0 2px rgba(18, 120, 179, 0.1);
+}
+
+/* Options List */
+.healthcare-select-list {
+  list-style: none;
+  margin: 0;
+  padding: 8px 0;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.healthcare-select-option {
+  padding: 12px 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  position: relative;
+  min-height: 44px; /* WCAG touch target */
+  display: flex;
+  align-items: center;
+}
+
+.healthcare-select-option:hover:not(.healthcare-select-option--disabled) {
+  background-color: #f8fafc;
+}
+
+.healthcare-select-option--focused {
+  background-color: #eff6ff;
+}
+
+.healthcare-select-option--selected {
+  background-color: #1278B3;
+  color: white;
+}
+
+.healthcare-select-option--selected:hover {
+  background-color: #004166;
+}
+
+.healthcare-select-option--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.healthcare-select-option--empty {
+  padding: 20px;
+  text-align: center;
+  color: #6b7280;
+  font-style: italic;
+  cursor: default;
+}
+
+/* Option Content */
+.healthcare-select-option-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 12px;
+}
+
+.healthcare-select-option-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.healthcare-select-option-label {
+  display: block;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.healthcare-select-option-description {
+  display: block;
+  font-size: 12px;
+  opacity: 0.8;
+  margin-top: 2px;
+  line-height: 1.2;
+}
+
+.healthcare-select-option-check {
+  flex-shrink: 0;
+}
+
+.healthcare-select-check-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* Medical Specialty Colors */
+.healthcare-select-option--kardiologie {
+  border-left: 4px solid #dc2626;
+}
+
+.healthcare-select-option--onkologie {
+  border-left: 4px solid #7c3aed;
+}
+
+.healthcare-select-option--gallenblase {
+  border-left: 4px solid #f59e0b;
+}
+
+.healthcare-select-option--nephrologie {
+  border-left: 4px solid #2563eb;
+}
+
+.healthcare-select-option--schilddruese {
+  border-left: 4px solid #10b981;
+}
+
+.healthcare-select-option--intensivmedizin {
+  border-left: 4px solid #ea580c;
+}
+
+/* Help Text */
+.healthcare-select-help {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background-color: #f0f9ff;
+  border: 1px solid #0ea5e9;
+  border-radius: 8px;
+}
+
+.healthcare-select-help-icon {
+  width: 16px;
+  height: 16px;
+  color: #0ea5e9;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.healthcare-select-help-text {
+  font-size: 14px;
+  color: #0c4a6e;
+  line-height: 1.4;
+}
+
+/* Error Message */
+.healthcare-select-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background-color: #fef2f2;
+  border: 1px solid #dc2626;
+  border-radius: 8px;
+}
+
+.healthcare-select-error-icon {
+  width: 16px;
+  height: 16px;
+  color: #dc2626;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.healthcare-select-error-text {
+  font-size: 14px;
+  color: #7f1d1d;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* Success Message */
+.healthcare-select-success {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background-color: #ecfdf5;
+  border: 1px solid #10b981;
+  border-radius: 8px;
+}
+
+.healthcare-select-success-icon {
+  width: 16px;
+  height: 16px;
+  color: #10b981;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.healthcare-select-success-text {
+  font-size: 14px;
+  color: #064e3b;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .healthcare-select {
+    min-height: 56px; /* Maintain healthcare touch targets */
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+  
+  .healthcare-select--small {
+    min-height: 52px;
+    font-size: 15px;
+  }
+  
+  .healthcare-select--large {
+    min-height: 60px;
+    font-size: 17px;
+  }
+  
+  .healthcare-select-option {
+    min-height: 48px;
+  }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .healthcare-select {
+    border-width: 3px;
+  }
+  
+  .healthcare-select:focus {
+    box-shadow: 0 0 0 4px rgba(18, 120, 179, 0.3);
+  }
+  
+  .healthcare-select-dropdown {
+    border-width: 3px;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .healthcare-select,
+  .healthcare-select-arrow,
+  .healthcare-select-clear,
+  .healthcare-select-option {
+    transition: none;
+  }
+  
+  .healthcare-select-dropdown {
+    animation: none;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .healthcare-select {
+    background-color: #1f2937;
+    border-color: #374151;
+    color: #f9fafb;
+  }
+  
+  .healthcare-select:focus {
+    border-color: #60a5fa;
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+  }
+  
+  .healthcare-select-label {
+    color: #f3f4f6;
+  }
+  
+  .healthcare-select-dropdown {
+    background-color: #1f2937;
+    border-color: #374151;
+  }
+  
+  .healthcare-select-option:hover {
+    background-color: #374151;
+  }
+  
+  .healthcare-select-option--focused {
+    background-color: #1e3a8a;
+  }
+}
