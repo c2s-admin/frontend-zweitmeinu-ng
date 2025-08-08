@@ -1,0 +1,164 @@
+{
+  "name": "Healthcare Performance Budget",
+  "version": "1.0.0",
+  "description": "Performance budgets optimized for zweitmeinung.ng medical platform users",
+  
+  "budgets": {
+    "critical_medical_components": {
+      "description": "Emergency and critical healthcare components",
+      "limits": {
+        "bundle_size": "50KB",
+        "first_contentful_paint": "500ms",
+        "time_to_interactive": "1000ms",
+        "largest_contentful_paint": "800ms"
+      },
+      "components": [
+        "EmergencyBanner",
+        "EmergencyContact",
+        "CriticalAlert"
+      ]
+    },
+    
+    "healthcare_forms": {
+      "description": "Patient data collection forms",
+      "limits": {
+        "bundle_size": "200KB",
+        "first_contentful_paint": "1200ms",
+        "time_to_interactive": "2500ms",
+        "cumulative_layout_shift": "0.05"
+      },
+      "components": [
+        "HealthcareInput",
+        "HealthcareTextarea", 
+        "HealthcareSelect",
+        "ConsentManager"
+      ]
+    },
+    
+    "medical_content": {
+      "description": "Medical information and expert profiles",
+      "limits": {
+        "bundle_size": "300KB",
+        "first_contentful_paint": "1500ms", 
+        "time_to_interactive": "3000ms",
+        "largest_contentful_paint": "2000ms"
+      },
+      "components": [
+        "DoctorProfile",
+        "MedicalFAQ",
+        "SpecialtySelector",
+        "ConsultationFlow"
+      ]
+    },
+    
+    "storybook_healthcare": {
+      "description": "Healthcare component library (Storybook build)",
+      "limits": {
+        "total_build_size": "50MB",
+        "individual_story_load": "2000ms",
+        "a11y_scan_time": "5000ms"
+      }
+    },
+    
+    "mobile_healthcare": {
+      "description": "Mobile healthcare user experience (3G network)",
+      "network_conditions": {
+        "connection": "3G",
+        "rtt": "300ms",
+        "throughput": "1600Kbps"
+      },
+      "limits": {
+        "page_load_time": "6000ms",
+        "first_contentful_paint": "2400ms",
+        "largest_contentful_paint": "3600ms", 
+        "time_to_interactive": "6000ms",
+        "total_blocking_time": "300ms"
+      }
+    }
+  },
+  
+  "accessibility_budgets": {
+    "wcag_compliance": {
+      "level": "WCAG 2.1 AA",
+      "requirements": {
+        "color_contrast_ratio": "4.5:1",
+        "large_text_contrast": "3:1", 
+        "touch_target_size": "56px",
+        "focus_indicator_width": "3px",
+        "keyboard_navigation": "100%"
+      }
+    },
+    
+    "screen_reader_performance": {
+      "description": "Performance for healthcare users with screen readers",
+      "limits": {
+        "aria_label_processing": "100ms",
+        "dom_navigation_delay": "50ms",
+        "content_announcement_delay": "200ms"
+      }
+    },
+    
+    "motor_impairment_support": {
+      "description": "Support for users with motor impairments",
+      "requirements": {
+        "click_target_spacing": "24px",
+        "hover_delay_tolerance": "500ms",
+        "drag_drop_alternatives": "required"
+      }
+    }
+  },
+  
+  "performance_thresholds": {
+    "lighthouse_scores": {
+      "performance": 85,
+      "accessibility": 95, 
+      "best_practices": 90,
+      "seo": 90
+    },
+    
+    "core_web_vitals": {
+      "first_contentful_paint": {
+        "good": "1.2s",
+        "needs_improvement": "2.4s",
+        "poor": ">2.4s"
+      },
+      "largest_contentful_paint": {
+        "good": "1.8s", 
+        "needs_improvement": "3.6s",
+        "poor": ">3.6s"
+      },
+      "cumulative_layout_shift": {
+        "good": "0.05",
+        "needs_improvement": "0.10", 
+        "poor": ">0.10"
+      },
+      "first_input_delay": {
+        "good": "100ms",
+        "needs_improvement": "200ms",
+        "poor": ">200ms"
+      },
+      "time_to_interactive": {
+        "good": "3.0s",
+        "needs_improvement": "6.0s",
+        "poor": ">6.0s"
+      }
+    }
+  },
+  
+  "monitoring": {
+    "ci_cd_enforcement": {
+      "fail_build_on": {
+        "bundle_size_exceeded": true,
+        "accessibility_score_below": 90,
+        "performance_score_below": 80
+      }
+    },
+    
+    "alerts": {
+      "critical_component_regression": "immediate",
+      "accessibility_violations": "immediate", 
+      "bundle_size_increase": "daily",
+      "performance_degradation": "weekly"
+    }
+  }
+}

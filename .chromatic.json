@@ -1,0 +1,71 @@
+{
+  "projectToken": "${CHROMATIC_PROJECT_TOKEN}",
+  "buildScriptName": "build-storybook",
+  "exitOnceUploaded": true,
+  "exitZeroOnChanges": false,
+  "allowConsoleErrors": false,
+  "skip": "dependabot/**",
+  "onlyChanged": true,
+  "externals": ["public/**"],
+  "diagnostics": true,
+  "fileHashing": true,
+  "zip": true,
+  "junitReport": true,
+  "storybookConfigDir": ".storybook",
+  "storybookBuildDir": "storybook-static",
+  "viewports": {
+    "mobile": {
+      "width": 375,
+      "height": 667,
+      "name": "Healthcare Mobile (iPhone SE)"
+    },
+    "tablet": {
+      "width": 768,
+      "height": 1024,
+      "name": "Healthcare Tablet (iPad Portrait)"
+    },
+    "desktop": {
+      "width": 1024,
+      "height": 768,
+      "name": "Healthcare Desktop (Small)"
+    },
+    "large": {
+      "width": 1920,
+      "height": 1080,
+      "name": "Healthcare Desktop (Large)"
+    }
+  },
+  "modes": {
+    "desktop": {
+      "viewport": "desktop",
+      "globals": {
+        "theme": "light"
+      }
+    },
+    "mobile": {
+      "viewport": "mobile", 
+      "globals": {
+        "theme": "light"
+      }
+    },
+    "tablet": {
+      "viewport": "tablet",
+      "globals": {
+        "theme": "light"
+      }
+    },
+    "accessibility": {
+      "viewport": "desktop",
+      "globals": {
+        "theme": "high-contrast"
+      }
+    }
+  },
+  "ignoreLastBuildOnBranch": [
+    "!main"
+  ],
+  "threshold": 0.2,
+  "delay": 300,
+  "diffThreshold": 0.1,
+  "preserveMissingSpecs": false
+}

@@ -21,9 +21,154 @@ jobs:
       - run: npm test
       - run: npm run build
       - run: npm run build-storybook
+      
+      # Healthcare Accessibility Testing - WCAG 2.1 AA Compliance
+      - name: Install Accessibility Dependencies
+        run: |
+          npm install -g @axe-core/cli @axe-core/puppeteer puppeteer jsdom
+          npm install --save-dev @axe-core/puppeteer puppeteer jsdom
+        
+      - name: Start Storybook for A11y Testing
+        run: |
+          npm run storybook &
+          sleep 30  # Wait for Storybook to start
+        env:
+          CI: true
+          
+      - name: Run Healthcare Accessibility Tests
+        run: |
+          # Test all healthcare components with WCAG 2.1 AA standards
+          node accessibility/a11y-test.js
+        env:
+          NODE_ENV: production
+          TEST_CONTEXT: healthcare-ci
+          
+      - name: Validate HTML for Screen Readers
+        run: |
+          # Validate Storybook HTML build for screen reader compatibility
+          node accessibility/wcag-validation.js http://localhost:6006
+          
+      - name: Check Touch Target Sizes
+        run: |
+          # Ensure healthcare 56px+ touch targets
+          npx axe http://localhost:6006 --rules target-size --reporter json > a11y-touch-results.json
+          node -e "
+            const results = require('./a11y-touch-results.json');
+            const touchViolations = results.violations.filter(v => v.id === 'target-size');
+            if (touchViolations.length > 0) {
+              console.error('❌ Touch target violations found:', touchViolations.length);
+              process.exit(1);
+            }
+            console.log('✅ All touch targets meet healthcare standards (56px+)');
+          "
+          
+      - name: Accessibility Score Gate
+        run: |
+          # Require minimum 95% accessibility score for healthcare
+          node -e "
+            const fs = require('fs');
+            try {
+              const report = JSON.parse(fs.readFileSync('accessibility/reports/latest-healthcare-accessibility.json'));
+              const score = report.summary.overallScore;
+              const healthcareCompliance = report.summary.healthcareCompliance;
+              const emergencyCompliance = report.summary.emergencyCompliance;
+              
+              console.log(\`📊 Healthcare Accessibility Score: \${score}%\`);
+              console.log(\`🏥 Healthcare Compliance: \${healthcareCompliance ? 'PASSED' : 'FAILED'}\`);
+              console.log(\`🚨 Emergency Compliance: \${emergencyCompliance ? 'PASSED' : 'FAILED'}\`);
+              
+              if (score < 95) {
+                console.error(\`❌ Healthcare accessibility score \${score}% below required 95%\`);
+                process.exit(1);
+              }
+              
+              if (!healthcareCompliance) {
+                console.error('❌ Healthcare WCAG 2.1 AA compliance failed');
+                process.exit(1);
+              }
+              
+              if (!emergencyCompliance) {
+                console.error('🚨 Emergency accessibility compliance failed - CRITICAL');
+                process.exit(1);
+              }
+              
+              console.log('✅ All healthcare accessibility gates passed');
+            } catch (error) {
+              console.error('❌ Failed to read accessibility report:', error.message);
+              process.exit(1);
+            }
+          "
+          
+      - name: Upload Healthcare Accessibility Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: healthcare-accessibility-report
+          path: |
+            accessibility/reports/
+            a11y-touch-results.json
+          if-no-files-found: warn
+          
       - name: Upload Storybook build
         uses: actions/upload-artifact@v4
         with:
           name: storybook-static
           path: storybook-static/
           if-no-files-found: warn
+          
+  # Separate job for Emergency-Only Accessibility Testing (fastest)
+  emergency-accessibility:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm install --save-dev @axe-core/puppeteer puppeteer jsdom
+      - run: npm run build-storybook
+      
+      - name: Emergency Components Accessibility (Critical Path)
+        run: |
+          npm run storybook &
+          sleep 20
+          
+          # Test only emergency components for fastest feedback
+          node -e "
+            const { HealthcareAccessibilityTester } = require('./accessibility/a11y-test.js');
+            
+            async function testEmergencyOnly() {
+              const tester = new HealthcareAccessibilityTester({
+                healthcareComponents: [
+                  '/iframe.html?id=healthcare-emergencybanner--default',
+                  '/iframe.html?id=healthcare-emergencybanner--emergency-active',
+                  '/iframe.html?id=healthcare-button--emergency-contact'
+                ],
+                userProfiles: [
+                  {
+                    name: 'Emergency User',
+                    viewport: { width: 375, height: 667 },
+                    accessibility: { reducedMotion: true, highContrast: true }
+                  }
+                ]
+              });
+              
+              const results = await tester.runFullHealthcareSuite();
+              
+              if (!results.summary.emergencyCompliance) {
+                console.error('🚨 CRITICAL: Emergency accessibility failed');
+                process.exit(1);
+              }
+              
+              console.log('✅ Emergency components accessibility verified');
+            }
+            
+            testEmergencyOnly().catch(error => {
+              console.error('❌ Emergency accessibility test failed:', error);
+              process.exit(1);
+            });
+          "
+        env:
+          NODE_ENV: test
+          TEST_CONTEXT: emergency-only

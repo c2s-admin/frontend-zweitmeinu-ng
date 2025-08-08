@@ -1,0 +1,30 @@
+[
+  {
+    "name": "Healthcare System Bundle",
+    "passed": true,
+    "size": 1743206,
+    "sizeLimit": 5000000,
+    "loading": 34.0469921875
+  },
+  {
+    "name": "Storybook Healthcare Build",
+    "passed": true,
+    "size": 1957848,
+    "sizeLimit": 50000000,
+    "loading": 38.23921875
+  },
+  {
+    "name": "Healthcare Components",
+    "passed": true,
+    "size": 177018,
+    "sizeLimit": 2000000,
+    "loading": 3.4573828125
+  },
+  {
+    "name": "Healthcare Styles",
+    "passed": true,
+    "size": 63017,
+    "sizeLimit": 500000,
+    "loading": 1.23080078125
+  }
+]

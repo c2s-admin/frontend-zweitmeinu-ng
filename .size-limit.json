@@ -1,0 +1,34 @@
+[
+  {
+    "name": "Healthcare System Bundle",
+    "path": ".next/static/**/*.js",
+    "limit": "5 MB",
+    "gzip": true,
+    "webpack": false,
+    "running": false
+  },
+  {
+    "name": "Storybook Healthcare Build",
+    "path": "storybook-static/**/*.js", 
+    "limit": "50 MB",
+    "gzip": false,
+    "webpack": false,
+    "running": false
+  },
+  {
+    "name": "Healthcare Components",
+    "path": "src/stories/*.tsx",
+    "limit": "2 MB",
+    "gzip": true,
+    "webpack": false,
+    "running": false
+  },
+  {
+    "name": "Healthcare Styles",
+    "path": "src/stories/*.css",
+    "limit": "500 KB", 
+    "gzip": true,
+    "webpack": false,
+    "running": false
+  }
+]
