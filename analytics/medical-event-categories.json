@@ -1,0 +1,63 @@
+{
+  "emergency": {
+    "events": [
+      "emergency_banner_view",
+      "emergency_contact_click",
+      "emergency_form_start",
+      "emergency_redirect"
+    ],
+    "priority": "critical",
+    "tracking": "immediate"
+  },
+  "medical": {
+    "events": [
+      "doctor_profile_view",
+      "specialty_selection",
+      "medical_faq_interaction",
+      "consultation_flow_start"
+    ],
+    "priority": "high",
+    "tracking": "batched"
+  },
+  "accessibility": {
+    "events": [
+      "a11y_feature_used",
+      "high_contrast_enabled",
+      "screen_reader_detected",
+      "keyboard_navigation_used",
+      "large_touch_targets_accessed"
+    ],
+    "priority": "high",
+    "tracking": "immediate"
+  },
+  "component": {
+    "events": [
+      "healthcare_component_view",
+      "healthcare_component_interaction",
+      "component_error",
+      "component_performance"
+    ],
+    "priority": "medium",
+    "tracking": "batched"
+  },
+  "storybook": {
+    "events": [
+      "story_view",
+      "addon_usage",
+      "design_system_usage",
+      "component_documentation_view"
+    ],
+    "priority": "medium",
+    "tracking": "batched"
+  },
+  "privacy": {
+    "events": [
+      "consent_given",
+      "consent_withdrawn",
+      "gdpr_compliance_check",
+      "data_anonymization"
+    ],
+    "priority": "critical",
+    "tracking": "immediate"
+  }
+}

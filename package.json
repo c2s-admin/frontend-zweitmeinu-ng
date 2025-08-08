@@ -46,11 +46,22 @@
     "accessibility:ci": "npm run a11y && npm run wcag:storybook",
     "accessibility:emergency": "npm run a11y:emergency && echo '🚨 Emergency accessibility verified'",
     "healthcare:validate": "npm run accessibility:full && npm run perf:healthcare",
-    "healthcare:ci": "npm run accessibility:ci && npm run size:healthcare"
+    "healthcare:ci": "npm run accessibility:ci && npm run size:healthcare",
+    "analytics:setup": "node analytics/setup.js",
+    "analytics:test": "node analytics/test-events.js",
+    "analytics:dev": "NODE_ENV=development npm run analytics:test",
+    "analytics:medical": "NODE_ENV=medical npm run analytics:test",
+    "analytics:storybook": "npm run build-storybook && npm run analytics:test",
+    "analytics:validate": "npm run analytics:setup && npm run analytics:test",
+    "analytics:components": "node analytics/test-component-metrics.js",
+    "analytics:full": "npm run analytics:test && npm run analytics:components"
   },
   "dependencies": {
+    "@analytics/google-analytics": "^1.1.0",
     "@hcaptcha/react-hcaptcha": "^1.12.0",
     "@sentry/nextjs": "^10.1.0",
+    "@vercel/analytics": "^1.5.0",
+    "analytics": "^0.8.18",
     "beasties": "^0.1.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
