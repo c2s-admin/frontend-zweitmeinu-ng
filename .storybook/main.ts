@@ -17,7 +17,7 @@ const config: StorybookConfig = {
     "options": {}
   },
   "webpackFinal": async (config) => {
-    // Fix for chunk loading issues
+    // Fix for chunk loading issues and webpack-bundle-analyzer
     if (config.optimization) {
       config.optimization.splitChunks = {
         ...config.optimization.splitChunks,
@@ -36,6 +36,14 @@ const config: StorybookConfig = {
         },
       };
     }
+    
+    // Remove problematic webpack-bundle-analyzer plugin if present
+    if (config.plugins) {
+      config.plugins = config.plugins.filter((plugin) => {
+        return plugin.constructor.name !== 'BundleAnalyzerPlugin';
+      });
+    }
+    
     return config;
   }
 };

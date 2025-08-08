@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { MedicalFAQ, FAQ } from './MedicalFAQ'
-import { Heart, Activity, AlertTriangle, HelpCircle, FileText } from 'lucide-react'
+import { Search, ChevronDown, Plus, Minus, Filter, X } from 'lucide-react'
 
 // Sample FAQ data for different scenarios
 const emergencyFAQs: FAQ[] = [

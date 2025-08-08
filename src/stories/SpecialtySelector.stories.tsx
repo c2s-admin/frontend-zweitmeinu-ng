@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { SpecialtySelector, MedicalSpecialty } from './SpecialtySelector'
-import { Heart, Activity, Droplets, Zap, AlertTriangle, Circle } from 'lucide-react'
+import { Stethoscope, Brain } from 'lucide-react'
 
 
 // Custom specialties for specific story scenarios
