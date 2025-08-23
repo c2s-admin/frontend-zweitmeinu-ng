@@ -1,18 +1,64 @@
 import Image from 'next/image'
 import { Quote } from 'lucide-react'
-import type { StorySection as StorySectionType } from '@/types/strapi'
+
+// Interface that matches actual Strapi data structure
+interface StorySectionProps {
+  id: number
+  __component: 'sections.story-section'
+  heading: string
+  content: string
+  image?: {
+    data: {
+      attributes: {
+        url: string
+        alternativeText?: string
+        width?: number
+        height?: number
+      }
+    }
+  }
+  imagePosition: 'left' | 'right'
+  quote?: string
+  quotePosition?: 'above' | 'below'
+  quoteHighlight?: boolean
+  attribution?: string
+  imageAlt?: string
+  sectionTitle?: string
+  description?: string
+}
 
 export default function StorySection({
   heading,
   content,
   image,
   imagePosition = 'left',
-  hasQuote = false,
   quote,
-  quoteAuthor,
-  highlightBoxes = []
-}: StorySectionType) {
+  quotePosition = 'below',
+  quoteHighlight = false,
+  attribution,
+}: StorySectionProps) {
   const isImageLeft = imagePosition === 'left'
+  
+  // Helper function to render quote
+  const renderQuote = () => {
+    if (!quote) return null
+    
+    const quoteElement = (
+      <div className={`relative ${quoteHighlight ? 'bg-healthcare-primary/5' : 'bg-gray-50'} rounded-xl p-6 border-l-4 ${quoteHighlight ? 'border-healthcare-accent-green' : 'border-gray-300'}`}>
+        <Quote className={`absolute top-4 left-4 w-6 h-6 ${quoteHighlight ? 'text-healthcare-accent-green/60' : 'text-gray-400'}`} />
+        <blockquote className={`pl-8 text-lg italic ${quoteHighlight ? 'text-healthcare-primary font-medium' : 'text-gray-700'} leading-relaxed`}>
+          "{quote}"
+        </blockquote>
+        {attribution && (
+          <cite className="block mt-4 pl-8 text-sm text-healthcare-text-muted font-medium">
+            {attribution}
+          </cite>
+        )}
+      </div>
+    )
+    
+    return quoteElement
+  }
   
   return (
     <section className="section-padding bg-white">
@@ -42,6 +88,10 @@ export default function StorySection({
 
           {/* Content Column */}
           <div className={`${isImageLeft ? 'lg:order-2' : 'lg:order-1'} space-y-6`}>
+            
+            {/* Quote Above (if positioned above) */}
+            {quote && quotePosition === 'above' && renderQuote()}
+            
             {/* Heading */}
             <h2 className="text-3xl md:text-4xl font-bold text-healthcare-primary leading-tight">
               {heading}
@@ -53,41 +103,9 @@ export default function StorySection({
               dangerouslySetInnerHTML={{ __html: content }}
             />
 
-            {/* Quote Section */}
-            {hasQuote && quote && (
-              <div className="relative bg-healthcare-primary/5 rounded-xl p-6 border-l-4 border-healthcare-accent-green">
-                <Quote className="absolute top-4 left-4 w-6 h-6 text-healthcare-accent-green/60" />
-                <blockquote className="pl-8 text-lg italic text-healthcare-primary font-medium leading-relaxed">
-                  "{quote}"
-                </blockquote>
-                {quoteAuthor && (
-                  <cite className="block mt-4 pl-8 text-sm text-healthcare-text-muted font-medium">
-                    — {quoteAuthor}
-                  </cite>
-                )}
-              </div>
-            )}
-
-            {/* Highlight Boxes */}
-            {highlightBoxes.length > 0 && (
-              <div className="space-y-4">
-                {highlightBoxes.map((box) => (
-                  <div 
-                    key={box.id}
-                    className="bg-red-50 border border-red-200 rounded-lg p-4"
-                    style={{
-                      backgroundColor: box.backgroundColor || '#fef2f2',
-                      color: box.textColor || '#dc2626'
-                    }}
-                  >
-                    <div 
-                      className="text-sm font-medium leading-relaxed"
-                      dangerouslySetInnerHTML={{ __html: box.content }}
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
+            {/* Quote Below (if positioned below or default) */}
+            {quote && quotePosition === 'below' && renderQuote()}
+            
           </div>
           
         </div>

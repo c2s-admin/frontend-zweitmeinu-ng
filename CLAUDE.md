@@ -1,8 +1,8 @@
-# CLAUDE.md v3.0 - Storybook-Era Constitution 
+# CLAUDE.md v3.1 - FAQ System & Development Environment Update 
 
 This document serves as the **constitution for AI assistants** working on the zweitmeinung.ng platform, providing project-specific context and best practices for resilient, stable, and efficient healthcare component development.
 
-> **Version 3.0 Focus**: Component-driven development with Storybook 9.1.1 as the primary development environment, WCAG 2.1 AA healthcare compliance, and systematic healthcare UI patterns.
+> **Version 3.1 Focus**: Updated for npm-based development workflow and comprehensive FAQ categorization system documentation. Features intelligent hybrid FAQ categorization with Strapi API + keyword fallback system.
 
 ---
 
@@ -34,7 +34,7 @@ zweitmeinung.ng is a **medical second opinion platform** where trust, accessibil
 | **Next.js** | 15.4.6 | React framework with App Router | Server Components by default, Client Components for interactivity |
 | **TypeScript** | 5.5.4 | Type safety and healthcare data integrity | Strict mode enabled, no `any` types in production |
 | **Tailwind CSS** | 3.4.10 | Healthcare design system utilities | Use healthcare tokens only, JIT enabled |
-| **Bun** | 1.1.26 | Fast package manager and runtime | Prefer `bun` over npm for development speed |
+| **npm** | 10.9.2 | Node.js package manager | Use `npm run dev` for development (bun not installed) |
 | **Strapi** | 5.20.0 | Headless CMS for medical content | Always populate parameters, handle data conversion |
 | **React Hook Form** | 7.53.0 | Medical form validation | Use with Zod schemas for patient data |
 | **Lucide React** | 0.536.0 | Healthcare-appropriate icons | Import individually, use medical-context icons |
@@ -88,27 +88,27 @@ src/
 ### **Primary Development Commands**
 | Command | Purpose | When to Use |
 |---------|---------|-------------|
-| **`bun run storybook`** | **🎨 Start Storybook (PRIMARY)** | **Component development, design system work** |
-| **`bun run dev`** | Start Next.js (SECONDARY) | Integration testing, Strapi data testing |
-| **`bun run build-storybook`** | Build Storybook for production | CI/CD validation, design system deployment |
+| **`npm run storybook`** | **🎨 Start Storybook (PRIMARY)** | **Component development, design system work** |
+| **`npm run dev`** | Start Next.js (SECONDARY) | Integration testing, Strapi data testing |
+| **`npm run build-storybook`** | Build Storybook for production | CI/CD validation, design system deployment |
 
 ### **Development Workflow Commands**
 | Command | Purpose | Notes |
 |---------|---------|-------|
-| `bun run build` | Production Next.js build | Tree-shakes unused components |
-| `bun run lint` | TypeScript + ESLint validation | **Run before every commit** |
-| `bun run typecheck` | TypeScript compilation check | Use `bunx tsc --noEmit` if bun unavailable |
+| `npm run build` | Production Next.js build | Tree-shakes unused components |
+| `npm run lint` | TypeScript + ESLint validation | **Run before every commit** |
+| `npm run typecheck` | TypeScript compilation check | Use `npx tsc --noEmit` if needed |
 | `bun test` | Run component and integration tests | Located in `src/__tests__/` |
 
 ### **🏥 Healthcare-Specific Commands**
 ```bash
 # Start BOTH servers for full development (recommended)
-bun run dev & bun run storybook
+npm run dev & npm run storybook
 
 # Component-first development (recommended workflow)
-bun run storybook    # Develop component
+npm run storybook    # Develop component
 # Test in Next.js integration
-bun run dev          # Integrate with Strapi
+npm run dev          # Integrate with Strapi
 
 # Accessibility validation
 npm run build-storybook && open storybook-static/index.html
@@ -123,7 +123,7 @@ npm run build-storybook && open storybook-static/index.html
 
 #### **Step 1: Start with Storybook (ALWAYS)**
 ```bash
-bun run storybook
+npm run storybook
 # Open http://localhost:6006
 # Create component in /src/stories/HealthcareComponent.tsx
 ```
@@ -214,7 +214,7 @@ export type SectionComponentType =
 #### **Step 6: Integration Testing**
 ```bash
 # Start Next.js to test Strapi integration
-bun run dev
+npm run dev
 # Test component in actual page context
 # Verify healthcare data flows correctly
 ```
@@ -516,7 +516,7 @@ try {
 ### **1. Component Development Process**
 ```bash
 # Step 1: Start with Storybook (ALWAYS)
-bun run storybook
+npm run storybook
 # http://localhost:6006
 
 # Step 2: Create healthcare component
@@ -528,7 +528,7 @@ bun run storybook
 # Use A11y tab to validate WCAG 2.1 AA compliance
 
 # Step 4: Integration testing
-bun run dev  # Test with Next.js and Strapi data
+npm run dev  # Test with Next.js and Strapi data
 ```
 
 ### **2. Healthcare Component Checklist (Before Completion)**
@@ -565,10 +565,10 @@ interface ComponentReadinessCheck {
 ### **3. Testing & Quality (Healthcare Standards)**
 ```bash
 # TypeScript compilation (strict mode for medical data)
-bunx tsc --noEmit --strict
+npx tsc --noEmit --strict
 
 # Linting with healthcare-specific rules
-bun run lint
+npm run lint
 
 # Accessibility testing (mandatory)
 # 1. Automated in Storybook A11y tab
@@ -577,7 +577,7 @@ bun run lint
 # 4. Mobile touch testing on actual devices
 
 # Integration testing with medical data
-bun run dev  # Test with real Strapi medical content
+npm run dev  # Test with real Strapi medical content
 ```
 
 ---
@@ -849,7 +849,7 @@ interface HealthcareAccessibility {
 
 ### **Medical Specialties & Content Types**
 
-#### **7 Primary Medical Specialties**
+#### **7 Primary Medical Specialties & FAQ Categories**
 ```typescript
 interface MedicalSpecialties {
   'kardiologie': 'Heart and cardiovascular medicine'
@@ -858,7 +858,18 @@ interface MedicalSpecialties {
   'nephrologie': 'Kidney and renal medicine'
   'schilddruese': 'Thyroid and endocrine disorders'
   'intensivmedizin': 'Critical care and intensive medicine'
-  'allgemeine-fragen': 'General medical inquiries and health questions'
+  'allgemeine-fragen-zur-zweitmeinung': 'General medical inquiries and second opinion questions'
+}
+
+// FAQ Categories in Strapi (Status: ✅ WORKING)
+interface FAQCategories {
+  'zweitmeinung-kardiologie': 'Kardiologie - Herzkatheter, Stent, Bypass'
+  'zweitmeinung-onkologie': 'Onkologie - Krebsdiagnosen, Chemo-, Strahlentherapie'  
+  'zweitmeinung-gallenblase': 'Gallenblase - Gallensteine, Gallenblasenentfernung'
+  'zweitmeinung-nephrologie': 'Nephrologie - Nierenerkrankungen, Dialyse, Transplantation'
+  'zweitmeinung-schilddruese': 'Schilddrüse - Schilddrüsenknoten, Struma, Autonomie'
+  'zweitmeinung-intensivmedizin': 'Intensivmedizin - Intensivpflegerische Situationen'
+  'allgemeine-fragen-zur-zweitmeinung': 'Allgemeine Fragen - Ablauf, Nutzen, Voraussetzungen'
 }
 
 // Usage in components
@@ -903,6 +914,63 @@ type HealthcareSectionTypes =
   
   // ... 45+ additional healthcare section types
 ```
+
+#### **🔧 FAQ Categorization System (Status: ✅ OPERATIONAL)**
+
+Das FAQ-System implementiert eine intelligente **Hybrid-Kategorisierung**:
+
+```typescript
+// System Architecture - Dual Strategy Approach
+interface FAQCategorizationStrategy {
+  primary: 'Strapi API Relations'    // Preferred method when available
+  fallback: 'Keyword-based Matching' // Intelligent backup system  
+  cache: 'Performance Optimization'   // 5-minute TTL for speed
+  coverage: '100% FAQ categorization' // No uncategorized FAQs
+}
+```
+
+**✅ API Endpoints:**
+- `getFAQCategories()`: Retrieves 7 medical categories from Strapi
+- `getFAQs(limit)`: Fetches FAQ data with category population
+- `getFAQsByCategory(slug)`: Category-specific FAQ retrieval
+- `groupFAQsByCategory()`: Intelligent categorization engine
+
+**🧠 Intelligent Keyword System:**
+```typescript
+// Backup categorization via medical keywords
+const CATEGORY_KEYWORDS = {
+  'zweitmeinung-kardiologie': {
+    primary: ['herz', 'herzinfarkt', 'bypass'],
+    secondary: ['katheter', 'stent', 'koronararterien'],
+    confidence: 0.9
+  },
+  'zweitmeinung-onkologie': {
+    primary: ['krebs', 'tumor', 'chemotherapie'], 
+    secondary: ['chemo', 'bestrahlung', 'metastasen'],
+    confidence: 0.95
+  }
+  // ... complete medical keyword mapping for all specialties
+}
+```
+
+**📊 System Performance (Current Status):**
+- **Categories**: 7 medical specialties ✅ LOADED
+- **FAQs**: 24 active FAQs ✅ CATEGORIZED  
+- **API Health**: Keywords-only (Strapi relations not set)
+- **Coverage**: 100% (0 uncategorized FAQs)
+- **Confidence**: ~19% average (low due to keyword fallback)
+- **Cache Performance**: 5min TTL, auto-cleanup
+
+**🔄 How It Works:**
+1. **Primary**: Check if FAQ has `faq.category.slug` from Strapi
+2. **Fallback**: Apply keyword matching with confidence scoring
+3. **Cache**: Store results for performance (5min TTL)
+4. **Display**: Group FAQs by category in `FAQCategoriesGrid`
+
+**💡 Recommendation Status:**
+- ⚠️ **Strapi Relations**: Not configured (0% API coverage)
+- ✅ **Keyword System**: Excellent fallback coverage (100%)
+- 🎯 **Next Steps**: Set up FAQ → Category relations in Strapi CMS for optimal performance
 
 ---
 
@@ -980,7 +1048,7 @@ type HealthcareSectionTypes =
    // /src/types/sections.ts - add to SectionComponentType union
    
    // Step 4: Integration test
-   // bun run dev - test with Next.js and Strapi
+   // npm run dev - test with Next.js and Strapi
    ```
 
 4. **🔒 Medical Data Integrity**
@@ -1000,7 +1068,7 @@ type HealthcareSectionTypes =
 #### **Before Starting Any Task:**
 ```bash
 # 1. Start Storybook FIRST
-bun run storybook
+npm run storybook
 # 2. Check existing healthcare patterns
 # 3. Review /docs/STORYBOOK-ROADMAP.md for current phase
 ```
@@ -1012,9 +1080,9 @@ bun run storybook
 - **Include medical context** - every component should work in healthcare scenarios
 
 #### **Before Completing:**
-- **TypeScript compilation must pass**: `bunx tsc --noEmit`
-- **Linting must pass**: `bun run lint`  
-- **Storybook build must work**: `bun run build-storybook`
+- **TypeScript compilation must pass**: `npx tsc --noEmit`
+- **Linting must pass**: `npm run lint`  
+- **Storybook build must work**: `npm run build-storybook`
 - **A11y tests must pass** - validate in Storybook A11y tab
 - **Mobile testing required** - test on actual mobile devices
 
@@ -1067,5 +1135,5 @@ const handleMedicalError = (error: Error, context: string) => {
 
 ---
 
-*Last updated: 2025-08-06 | Version: 3.0 - Storybook-Era Constitution*
-*Previous version backed up as: CLAUDE-backup-v2.1.md*
+*Last updated: 2025-08-21 | Version: 3.1 - FAQ System & Development Environment Update*
+*Previous version backed up as: CLAUDE-backup-v3.0.md*

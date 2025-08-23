@@ -416,10 +416,13 @@ export interface StorySection extends DynamicZoneSection {
     data: StrapiMedia
   }
   imagePosition: 'left' | 'right'
-  hasQuote?: boolean
   quote?: string
-  quoteAuthor?: string
-  highlightBoxes?: HighlightBox[]
+  quotePosition?: 'above' | 'below'
+  quoteHighlight?: boolean
+  attribution?: string
+  imageAlt?: string
+  sectionTitle?: string
+  description?: string
 }
 
 export interface HighlightBox {

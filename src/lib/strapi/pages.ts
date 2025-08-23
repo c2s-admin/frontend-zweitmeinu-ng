@@ -17,6 +17,17 @@ export async function getPageBySlug(slug: string): Promise<Page | null> {
       'sections.slides.backgroundImage',
       'sections.slides.badge',
       'sections.image', // Added for StorySection images
+      'sections.values', // Added for Core Values
+      'sections.values.id',
+      'sections.values.title',
+      'sections.values.description',
+      'sections.values.icon',
+      'sections.values.color',
+      // Mission Statement fields (corrected structure)
+      'sections.quote',
+      'sections.attribution',
+      'sections.icon',
+      'sections.backgroundColor',
       'seo'
     ])
 

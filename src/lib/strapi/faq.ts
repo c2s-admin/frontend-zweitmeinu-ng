@@ -123,9 +123,60 @@ interface CachedCategorizationResult {
   ttl: number;
 }
 
-// Cache for categorization results (5 minutes TTL)
+// Enhanced caching system
 const CATEGORIZATION_CACHE = new Map<number, CachedCategorizationResult>();
+const FAQ_DATA_CACHE = new Map<string, { data: any; timestamp: number; ttl: number }>();
+const FAQ_CATEGORIES_CACHE = new Map<string, { data: FAQCategory[]; timestamp: number; ttl: number }>();
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+const CATEGORIES_CACHE_TTL = 10 * 60 * 1000; // 10 minutes for categories (change less often)
+
+// Cache cleanup function (runs periodically)
+function cleanupExpiredCaches() {
+  const now = Date.now();
+  
+  // Clean categorization cache
+  for (const [key, value] of CATEGORIZATION_CACHE.entries()) {
+    if (now - value.timestamp > value.ttl) {
+      CATEGORIZATION_CACHE.delete(key);
+    }
+  }
+  
+  // Clean FAQ data cache
+  for (const [key, value] of FAQ_DATA_CACHE.entries()) {
+    if (now - value.timestamp > value.ttl) {
+      FAQ_DATA_CACHE.delete(key);
+    }
+  }
+  
+  // Clean categories cache
+  for (const [key, value] of FAQ_CATEGORIES_CACHE.entries()) {
+    if (now - value.timestamp > value.ttl) {
+      FAQ_CATEGORIES_CACHE.delete(key);
+    }
+  }
+}
+
+// Run cleanup every 5 minutes
+setInterval(cleanupExpiredCaches, 5 * 60 * 1000);
+
+// Export cache stats for monitoring
+export function getCacheStats() {
+  const now = Date.now();
+  return {
+    categorization: {
+      total: CATEGORIZATION_CACHE.size,
+      expired: Array.from(CATEGORIZATION_CACHE.values()).filter(v => now - v.timestamp > v.ttl).length
+    },
+    faqData: {
+      total: FAQ_DATA_CACHE.size,
+      expired: Array.from(FAQ_DATA_CACHE.values()).filter(v => now - v.timestamp > v.ttl).length
+    },
+    categories: {
+      total: FAQ_CATEGORIES_CACHE.size,
+      expired: Array.from(FAQ_CATEGORIES_CACHE.values()).filter(v => now - v.timestamp > v.ttl).length
+    }
+  };
+}
 
 // Enhanced Category Keywords Mapping with confidence scores
 const CATEGORY_KEYWORDS = {
@@ -210,10 +261,13 @@ const CATEGORY_KEYWORDS = {
     confidence: 0.85,
   },
   "allgemeine-fragen-zur-zweitmeinung": {
-    primary: ["zweitmeinung", "gutachten", "experten"],
+    primary: ["zweitmeinung", "gutachten", "experten", "was", "wie", "wann", "kosten", "ablauf"],
     secondary: [
-      "ablauf",
-      "kosten",
+      "bringt",
+      "hilft",
+      "sinnvoll",
+      "notwendig",
+      "wichtig",
       "verfahren",
       "beratung",
       "meinung",
@@ -221,8 +275,14 @@ const CATEGORY_KEYWORDS = {
       "diagnose",
       "behandlung",
       "therapie",
+      "unterlagen",
+      "dokumente",
+      "zeit",
+      "dauer",
+      "experte",
+      "arzt",
     ],
-    confidence: 0.7,
+    confidence: 0.5, // Lower confidence for broader matching
   },
 };
 
@@ -255,6 +315,15 @@ export async function getFAQPage(): Promise<FAQPage | null> {
 }
 
 export async function getFAQCategories(): Promise<FAQCategory[]> {
+  const cacheKey = "faq-categories-all";
+  const cached = FAQ_CATEGORIES_CACHE.get(cacheKey);
+  
+  // Check cache first
+  if (cached && Date.now() - cached.timestamp < cached.ttl) {
+    logger.info("📦 FAQ Categories from cache:", cached.data.length);
+    return cached.data;
+  }
+
   try {
     const response = await fetch(
       `${BASE_URL}/faq-categories?sort=order:asc&populate=*`,
@@ -268,21 +337,41 @@ export async function getFAQCategories(): Promise<FAQCategory[]> {
 
     if (!response.ok) {
       logger.error("Failed to fetch FAQ categories:", response.statusText);
-      return [];
+      // Return cached data if available, even if expired
+      return cached?.data || [];
     }
 
     const data: StrapiResponse<FAQCategory[]> = await response.json();
-    logger.info("✅ FAQ Categories loaded:", data.data?.length);
-
-    return data.data || [];
+    const categories = data.data || [];
+    
+    // Cache the result
+    FAQ_CATEGORIES_CACHE.set(cacheKey, {
+      data: categories,
+      timestamp: Date.now(),
+      ttl: CATEGORIES_CACHE_TTL
+    });
+    
+    logger.info("✅ FAQ Categories loaded fresh:", categories.length);
+    return categories;
   } catch (error) {
     logger.error("Error fetching FAQ categories:", error);
-    return [];
+    // Return cached data if available, even if expired
+    return cached?.data || [];
   }
 }
 
 export async function getFAQs(limit = 25): Promise<FAQ[]> {
+  const cacheKey = `faqs-list-${limit}`;
+  const cached = FAQ_DATA_CACHE.get(cacheKey);
+  
+  // Check cache first
+  if (cached && Date.now() - cached.timestamp < cached.ttl) {
+    logger.info("📦 FAQs from cache:", cached.data.length);
+    return cached.data;
+  }
+
   try {
+    // Simplified populate for Strapi v5 compatibility - use basic populate=*
     const response = await fetch(
       `${BASE_URL}/faqs?sort=priority:desc,helpfulCount:desc&pagination[limit]=${limit}&populate=*`,
       {
@@ -295,16 +384,26 @@ export async function getFAQs(limit = 25): Promise<FAQ[]> {
 
     if (!response.ok) {
       logger.error("Failed to fetch FAQs:", response.statusText);
-      return [];
+      // Return cached data if available, even if expired
+      return cached?.data || [];
     }
 
     const data: StrapiResponse<FAQ[]> = await response.json();
-    logger.info("✅ FAQs loaded:", data.data?.length);
-
-    return data.data || [];
+    const faqs = data.data || [];
+    
+    // Cache the result
+    FAQ_DATA_CACHE.set(cacheKey, {
+      data: faqs,
+      timestamp: Date.now(),
+      ttl: CACHE_TTL
+    });
+    
+    logger.info("✅ FAQs loaded fresh:", faqs.length);
+    return faqs;
   } catch (error) {
     logger.error("Error fetching FAQs:", error);
-    return [];
+    // Return cached data if available, even if expired
+    return cached?.data || [];
   }
 }
 
@@ -467,6 +566,16 @@ export async function searchFAQs(
   searchTerm: string,
   limit = 20,
 ): Promise<FAQ[]> {
+  const cacheKey = `faq-search-${searchTerm.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${limit}`;
+  const cached = FAQ_DATA_CACHE.get(cacheKey);
+  
+  // Check cache first (shorter TTL for search results)
+  const searchCacheTTL = 2 * 60 * 1000; // 2 minutes for search results
+  if (cached && Date.now() - cached.timestamp < searchCacheTTL) {
+    logger.info("📦 Search results from cache:", cached.data.length, "for term:", searchTerm);
+    return cached.data;
+  }
+
   try {
     const encodedSearch = encodeURIComponent(searchTerm);
     const response = await fetch(
@@ -481,21 +590,26 @@ export async function searchFAQs(
 
     if (!response.ok) {
       logger.error("Failed to search FAQs:", response.statusText);
-      return [];
+      // Return cached data if available, even if expired
+      return cached?.data || [];
     }
 
     const data: StrapiResponse<FAQ[]> = await response.json();
-    logger.info(
-      "✅ FAQ search results:",
-      data.data?.length,
-      "for term:",
-      searchTerm,
-    );
-
-    return data.data || [];
+    const searchResults = data.data || [];
+    
+    // Cache search results
+    FAQ_DATA_CACHE.set(cacheKey, {
+      data: searchResults,
+      timestamp: Date.now(),
+      ttl: searchCacheTTL
+    });
+    
+    logger.info("✅ FAQ search results fresh:", searchResults.length, "for term:", searchTerm);
+    return searchResults;
   } catch (error) {
     logger.error("Error searching FAQs:", error);
-    return [];
+    // Return cached data if available, even if expired
+    return cached?.data || [];
   }
 }
 
@@ -769,10 +883,10 @@ export function intelligentCategorizeFrequentlyAskedQuestion(
     }
   }
 
-  // FALLBACK: Enhanced keyword-based categorization
+  // FALLBACK: Enhanced keyword-based categorization with lower threshold
   if (!categorySlug) {
     const keywordResult = categorizeByKeywordsEnhanced(faq);
-    if (keywordResult && keywordResult.confidence > 0.4) {
+    if (keywordResult && keywordResult.confidence > 0.2) {  // Lower threshold for better coverage
       categorySlug = keywordResult.category;
       method = "keywords";
       confidence = keywordResult.confidence;
@@ -781,8 +895,12 @@ export function intelligentCategorizeFrequentlyAskedQuestion(
       );
     } else if (keywordResult) {
       logger.info(
-        `⚠️ Low confidence keyword match for FAQ ${faq.id}: ${keywordResult.category} (${keywordResult.confidence.toFixed(2)}) - skipping`,
+        `⚠️ Low confidence keyword match for FAQ ${faq.id}: ${keywordResult.category} (${keywordResult.confidence.toFixed(2)}) - using anyway for better coverage`,
       );
+      // Use low confidence matches for better coverage
+      categorySlug = keywordResult.category;
+      method = "keywords";
+      confidence = keywordResult.confidence;
     } else {
       logger.info(
         `❌ No categorization possible for FAQ ${faq.id}: "${faq.question.substring(0, 50)}..."`,

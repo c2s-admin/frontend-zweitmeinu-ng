@@ -1,16 +1,6 @@
 import * as Sentry from "@sentry/nextjs";
+import React from "react";
 import { env } from "@/lib/env";
-
-// Healthcare Error Tracking Integration
-import healthcareErrorTracking, { 
-  trackEmergencyComponentError,
-  trackPatientFormError,
-  trackAccessibilityError,
-  trackMedicalAPIError 
-} from "../../analytics/error-tracking.js";
-
-import { processEmergencyError } from "../../analytics/emergency-error-alerts.js";
-import { collectHealthcareErrorContext } from "../../analytics/error-context.js";
 
 if (env.SENTRY_DSN) {
   Sentry.init({ 
@@ -80,43 +70,8 @@ if (env.SENTRY_DSN) {
       }
     },
 
-    // Enhanced integrations for healthcare
-    integrations: [
-      // Default integrations with healthcare optimizations
-      new Sentry.Integrations.Breadcrumbs({
-        console: true, // Log console errors for healthcare debugging
-        dom: true,     // Track DOM interactions for healthcare UX
-        fetch: true,   // Track API calls for medical data
-        history: true, // Track navigation for medical workflows
-        sentry: true,  // Include Sentry breadcrumbs
-        xhr: true      // Track XHR requests for medical APIs
-      }),
-      
-      // Performance monitoring for healthcare
-      new Sentry.Integrations.BrowserTracing({
-        // Healthcare-specific transaction names
-        beforeNavigate: context => ({
-          ...context,
-          name: context.location.pathname.includes('/emergency') 
-            ? 'Emergency Healthcare Navigation'
-            : context.location.pathname.includes('/medical')
-            ? 'Medical Service Navigation'
-            : context.name
-        }),
-        
-        // Track Core Web Vitals for healthcare UX
-        markBackgroundTransactions: true,
-        
-        // Healthcare route instrumentation
-        routingInstrumentation: Sentry.reactRouterV6Instrumentation(
-          React.useEffect,
-          React.useLocation,
-          React.useNavigationType,
-          React.createRoutesFromChildren,
-          React.matchRoutes
-        ),
-      }),
-    ],
+    // Enhanced integrations for healthcare (simplified)
+    integrations: [],
 
     // Release tracking for healthcare deployments
     release: env.APP_VERSION || 'unknown',
@@ -125,100 +80,91 @@ if (env.SENTRY_DSN) {
     fingerprint: ['{{ default }}', 'healthcare-platform'],
   });
 
-  // Register emergency error callback
-  healthcareErrorTracking.registerEmergencyCallback((error, context, eventId) => {
-    // Process emergency error with alert system
-    processEmergencyError(error, context, eventId);
-  });
-
   console.log('🏥 Healthcare Sentry integration initialized');
 }
 
 // Healthcare Error Boundary Component
-export function HealthcareErrorBoundary({ children, fallback, onError }) {
-  return (
-    <Sentry.ErrorBoundary 
-      fallback={fallback || HealthcareErrorFallback}
-      beforeCapture={(scope, error, errorInfo) => {
-        // Collect healthcare context for error boundary errors
-        const healthcareContext = collectHealthcareErrorContext({
-          componentName: errorInfo.componentStack?.split('\n')[1]?.trim(),
-          errorBoundary: true,
-          patientSafetyImpact: true // Component crashes affect patient experience
-        });
-
-        scope.setContext('healthcare_error_boundary', healthcareContext);
+export function HealthcareErrorBoundary({ children, fallback, onError }: { 
+  children: React.ReactNode;
+  fallback?: React.ComponentType<any>;
+  onError?: (error: Error, errorInfo: any) => void;
+}) {
+  const errorFallback = fallback || HealthcareErrorFallback;
+  
+  return React.createElement(
+    Sentry.ErrorBoundary,
+    {
+      fallback: errorFallback,
+      beforeCapture: (scope: any, error: Error, errorInfo: any) => {
         scope.setTag('error_boundary', true);
         scope.setTag('component_crash', true);
         
         // Call custom error handler if provided
         if (onError) {
-          onError(error, errorInfo, healthcareContext);
+          onError(error, errorInfo);
         }
-      }}
-    >
-      {children}
-    </Sentry.ErrorBoundary>
+      }
+    },
+    children
   );
 }
 
 // Healthcare Error Fallback UI
-function HealthcareErrorFallback({ error, resetError }) {
-  return (
-    <div className="min-h-screen bg-healthcare-background flex items-center justify-center p-6">
-      <div className="bg-white rounded-2xl p-8 max-w-md w-full text-center shadow-lg">
-        <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <span className="text-2xl">⚠️</span>
-        </div>
-        
-        <h2 className="text-xl font-semibold text-healthcare-primary mb-3">
-          Technischer Fehler aufgetreten
-        </h2>
-        
-        <p className="text-healthcare-text-muted mb-6">
-          Ein unerwarteter Fehler ist aufgetreten. Ihre medizinischen Daten sind sicher.
-          Bitte versuchen Sie es erneut oder kontaktieren Sie unseren Support.
-        </p>
-        
-        <div className="space-y-3">
-          <button 
-            onClick={resetError}
-            className="w-full bg-healthcare-primary-light hover:bg-healthcare-primary text-white py-3 px-6 rounded-xl font-medium transition-colors"
-          >
-            Erneut versuchen
-          </button>
-          
-          <div className="text-sm text-healthcare-text-muted">
-            <p className="mb-2">Bei kritischen medizinischen Fragen:</p>
-            <a 
-              href="tel:+4980080441100" 
-              className="text-red-600 font-semibold hover:underline"
-            >
-              📞 Notfall-Hotline: +49 800 80 44 100
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
+function HealthcareErrorFallback({ error, resetError }: {
+  error: Error;
+  resetError: () => void;
+}) {
+  return React.createElement(
+    'div',
+    { className: 'min-h-screen bg-healthcare-background flex items-center justify-center p-6' },
+    React.createElement(
+      'div',
+      { className: 'bg-white rounded-2xl p-8 max-w-md w-full text-center shadow-lg' },
+      React.createElement(
+        'div',
+        { className: 'w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4' },
+        React.createElement('span', { className: 'text-2xl' }, '⚠️')
+      ),
+      React.createElement(
+        'h2',
+        { className: 'text-xl font-semibold text-healthcare-primary mb-3' },
+        'Technischer Fehler aufgetreten'
+      ),
+      React.createElement(
+        'p',
+        { className: 'text-healthcare-text-muted mb-6' },
+        'Ein unerwarteter Fehler ist aufgetreten. Ihre medizinischen Daten sind sicher. Bitte versuchen Sie es erneut oder kontaktieren Sie unseren Support.'
+      ),
+      React.createElement(
+        'div',
+        { className: 'space-y-3' },
+        React.createElement(
+          'button',
+          {
+            onClick: resetError,
+            className: 'w-full bg-healthcare-primary-light hover:bg-healthcare-primary text-white py-3 px-6 rounded-xl font-medium transition-colors'
+          },
+          'Erneut versuchen'
+        ),
+        React.createElement(
+          'div',
+          { className: 'text-sm text-healthcare-text-muted' },
+          React.createElement('p', { className: 'mb-2' }, 'Bei kritischen medizinischen Fragen:'),
+          React.createElement(
+            'a',
+            {
+              href: 'tel:+4980080441100',
+              className: 'text-red-600 font-semibold hover:underline'
+            },
+            '📞 Notfall-Hotline: +49 800 80 44 100'
+          )
+        )
+      )
+    )
   );
 }
 
 // Export enhanced Sentry with healthcare tracking
 export { 
-  Sentry,
-  
-  // Healthcare error tracking functions
-  trackEmergencyComponentError,
-  trackPatientFormError,
-  trackAccessibilityError,
-  trackMedicalAPIError,
-  
-  // Healthcare error context
-  collectHealthcareErrorContext,
-  
-  // Emergency error processing
-  processEmergencyError,
-  
-  // Healthcare error tracking instance
-  healthcareErrorTracking
+  Sentry
 };

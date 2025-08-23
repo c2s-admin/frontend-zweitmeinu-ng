@@ -303,6 +303,19 @@ export interface RealCTAButton {
 }
 
 // Real Story Section Structure
+export interface RealCoreValuesSection extends RealDynamicZoneSection {
+  __component: "sections.core-values";
+  heading: string;
+  subheading?: string;
+  values?: Array<{
+    id: number;
+    title: string;
+    description?: string;
+    icon?: string;
+    color?: string;
+  }>;
+}
+
 export interface RealStorySection extends RealDynamicZoneSection {
   __component: "sections.story-section";
   heading: string;
@@ -387,6 +400,16 @@ export interface RealStorySection extends RealDynamicZoneSection {
   description?: string;
 }
 
+// Real Mission Statement Structure (actual Strapi structure)
+export interface RealMissionStatementSection extends RealDynamicZoneSection {
+  __component: "sections.mission-statement";
+  icon?: "quote" | "lightbulb" | "star" | "heart" | "target" | "pulse"; // Default: "quote"
+  heading: string; // Pflichtfeld, Default: "Unsere Mission"
+  quote: string; // Pflichtfeld (Text)
+  attribution?: string; // Default: "— Das Team von zweitmeinung.ng"
+  backgroundColor?: "default" | "light" | "primary-light" | "accent-light"; // Default: "default"
+}
+
 // Type guards
 export function isRealHeroCarousel(
   section: RealDynamicZoneSection,
@@ -394,10 +417,22 @@ export function isRealHeroCarousel(
   return section.__component === "sections.hero-carousel";
 }
 
+export function isRealCoreValuesSection(
+  section: RealDynamicZoneSection,
+): section is RealCoreValuesSection {
+  return section.__component === "sections.core-values";
+}
+
 export function isRealStorySection(
   section: RealDynamicZoneSection,
 ): section is RealStorySection {
   return section.__component === "sections.story-section";
+}
+
+export function isRealMissionStatementSection(
+  section: RealDynamicZoneSection,
+): section is RealMissionStatementSection {
+  return section.__component === "sections.mission-statement";
 }
 
 // Conversion functions to transform real data to expected format
@@ -608,6 +643,14 @@ export function convertRealPageToExpected(realPage: RealPage): unknown {
       logger.info({ id: section.id }, "🎯 Converting story section");
       return convertRealStorySectionToExpected(section);
     }
+    if (isRealCoreValuesSection(section)) {
+      logger.info({ id: section.id }, "🎯 Converting core values section");
+      return convertRealCoreValuesSectionToExpected(section);
+    }
+    if (isRealMissionStatementSection(section)) {
+      logger.info({ id: section.id }, "🎯 Converting mission statement section");
+      return convertRealMissionStatementSectionToExpected(section);
+    }
     // Add other section conversions here as needed
     return section;
   });
@@ -680,6 +723,85 @@ export function convertRealStorySectionToExpected(
           },
         }
       : undefined,
+  };
+}
+
+export function convertRealCoreValuesSectionToExpected(
+  realCoreValuesSection: RealCoreValuesSection,
+): unknown {
+  logger.info({ id: realCoreValuesSection.id }, "🔄 Converting real core values section");
+  
+  // Convert values array to the expected format
+  const convertedValues = realCoreValuesSection.values?.map(value => ({
+    id: value.id,
+    title: value.title,
+    description: value.description,
+    icon: value.icon,
+    iconColor: value.color === 'primary' ? '#B3AF09' : (value.color || '#B3AF09')
+  })) || [];
+
+  logger.info({ 
+    valuesCount: convertedValues.length,
+    values: convertedValues 
+  }, "✅ Converted core values");
+
+  return {
+    ...realCoreValuesSection,
+    values: convertedValues,
+  };
+}
+
+export function convertRealMissionStatementSectionToExpected(
+  realMissionStatement: RealMissionStatementSection,
+): unknown {
+  logger.info({ id: realMissionStatement.id }, "🔄 Converting real mission statement section");
+  
+  // Default mission text fallback for healthcare
+  const defaultMissionText = "Wir setzen uns dafür ein, dass jeder Patient die bestmögliche Versorgung erhält. Durch innovative Technologie, Transparenz und unabhängige Expertise schaffen wir Vertrauen und verbessern die Gesundheitsversorgung.";
+  const defaultAttribution = "— Das Team von zweitmeinung.ng";
+  
+  // Use quote from Strapi or fallback to default healthcare mission
+  const missionText = realMissionStatement.quote && realMissionStatement.quote.trim() 
+    ? realMissionStatement.quote 
+    : defaultMissionText;
+  
+  // Use attribution from Strapi or default
+  const attribution = realMissionStatement.attribution || defaultAttribution;
+  
+  // Map backgroundColor to component expected values
+  let backgroundColor = 'var(--healthcare-primary)'; // default
+  switch (realMissionStatement.backgroundColor) {
+    case 'light':
+      backgroundColor = '#f8fafc';
+      break;
+    case 'primary-light':
+      backgroundColor = 'var(--healthcare-primary-light)';
+      break;
+    case 'accent-light':
+      backgroundColor = 'var(--healthcare-accent-green)';
+      break;
+    case 'default':
+    default:
+      backgroundColor = 'var(--healthcare-primary)';
+      break;
+  }
+
+  logger.info({ 
+    quote: realMissionStatement.quote,
+    missionText: missionText,
+    attribution: attribution,
+    icon: realMissionStatement.icon,
+    backgroundColor: backgroundColor,
+    usingFallback: !realMissionStatement.quote
+  }, "✅ Converted mission statement");
+
+  return {
+    ...realMissionStatement,
+    missionText: missionText, // quote → missionText mapping with fallback
+    attribution: attribution,
+    icon: realMissionStatement.icon || 'heart', // Use Strapi icon or default to heart
+    textColor: 'white', // Default text color
+    backgroundColor: backgroundColor
   };
 }
 

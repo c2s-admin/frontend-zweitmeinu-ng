@@ -8,7 +8,22 @@ import {
   Lightbulb,
   Stethoscope
 } from 'lucide-react'
-import type { CoreValuesSection } from '@/types/strapi'
+
+// Interface that matches actual Strapi data structure
+interface CoreValuesProps {
+  id: number
+  __component: 'sections.core-values'
+  heading: string
+  subheading?: string
+  values?: Array<{
+    id: number
+    title: string
+    description?: string
+    icon?: string
+    iconColor?: string
+  }>
+  backgroundColor?: string
+}
 
 // Icon mapping for healthcare values
 const iconMap = {
@@ -22,12 +37,46 @@ const iconMap = {
   'stethoscope': Stethoscope,
 } as const
 
+// Default healthcare values if none provided from Strapi
+const defaultHealthcareValues = [
+  {
+    id: 1,
+    title: 'Vertrauen',
+    description: 'Wir bauen Vertrauen durch Kompetenz und schaffen eine vertrauensvolle Patientenbeziehung.',
+    icon: 'shield',
+    iconColor: '#B3AF09'
+  },
+  {
+    id: 2,
+    title: 'Transparenz',
+    description: 'Offene und ehrliche Kommunikation ist die Basis unserer Arbeit.',
+    icon: 'lightbulb',
+    iconColor: '#B3AF09'
+  },
+  {
+    id: 3,
+    title: 'Qualität',
+    description: 'Höchste medizinische Standards und kontinuierliche Verbesserung.',
+    icon: 'award',
+    iconColor: '#B3AF09'
+  },
+  {
+    id: 4,
+    title: 'Menschlichkeit',
+    description: 'Der Patient steht mit seinen Bedürfnissen im Mittelpunkt.',
+    icon: 'heart',
+    iconColor: '#B3AF09'
+  }
+]
+
 export default function CoreValues({
   heading,
   subheading,
-  values = [],
+  values,
   backgroundColor = 'healthcare-primary'
-}: CoreValuesSection) {
+}: CoreValuesProps) {
+  // Use Strapi values if available, otherwise fallback to default healthcare values
+  const displayValues = (values && values.length > 0) ? values : defaultHealthcareValues
   return (
     <section 
       className="section-padding text-white"
@@ -52,7 +101,7 @@ export default function CoreValues({
 
         {/* Values Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {values.map((value) => {
+          {displayValues.map((value) => {
             const IconComponent = iconMap[value.icon as keyof typeof iconMap] || CheckCircle
             
             return (
