@@ -14,3 +14,8 @@ Kompakte Übersicht. Detaillierte Anleitungen stehen in den verlinkten Dateien u
 Weitere Quellen der Wahrheit:
 - Storybook: `npm run storybook`
 - Tokens/Theme: `tokens.json`, `tailwind.config.ts`
+
+Reports & Badges:
+- Playwright Report: `playwright-report/index.html`
+- Playwright JSON: `test-results/healthcare-test-results.json`
+- Accessibility Reports (WCAG/Axe): `accessibility/reports/`

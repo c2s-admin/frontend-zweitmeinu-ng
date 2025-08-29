@@ -10,6 +10,18 @@
 [![Bun](https://img.shields.io/badge/Bun-1.1.26-orange?style=flat-square&logo=bun)](https://bun.sh/)
 [![Strapi](https://img.shields.io/badge/Strapi-5.20.0-purple?style=flat-square&logo=strapi)](https://strapi.io/)
 
+## 📘 Documentation
+
+- Docs Index: [docs/README.md](docs/README.md)
+- Design System: [docs/DESIGN-SYSTEM.md](docs/DESIGN-SYSTEM.md)
+- Accessibility: [docs/ACCESSIBILITY.md](docs/ACCESSIBILITY.md)
+- Components: [docs/COMPONENT-DEVELOPMENT.md](docs/COMPONENT-DEVELOPMENT.md)
+- Architecture: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
+- Quality & CI: [docs/QUALITY-AND-CI.md](docs/QUALITY-AND-CI.md)
+- API Reference: [docs/API-REFERENCE.md](docs/API-REFERENCE.md)
+- Deployment: [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)
+- Medical Context: [docs/MEDICAL-CONTEXT.md](docs/MEDICAL-CONTEXT.md)
+
 ## 🚀 Live Demo
 
 🔗 **Live Website:** [frontend-zweitmeinu-ng.netlify.app](https://frontend-zweitmeinu-ng.netlify.app)
@@ -174,6 +186,14 @@ src/
 ## 🧱 Architecture Overview
 
 High-level system diagrams are documented in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) to help new contributors understand the flow between the frontend, backend, cache, and logging services.
+
+---
+
+## 🧪 Reports
+
+- Playwright Report: [playwright-report/index.html](playwright-report/index.html)
+- Playwright JSON: [test-results/healthcare-test-results.json](test-results/healthcare-test-results.json)
+- Accessibility Reports (WCAG/Axe): [accessibility/reports/](accessibility/reports/)
 
 ---
 
