@@ -15,6 +15,8 @@ jobs:
           node-version: '20'
           cache: 'npm'
       - run: npm ci
+      - name: Install browsers and system deps (Playwright)
+        run: npx playwright install --with-deps
       # Temporarily skip strict TypeScript checks during healthcare component development
       # - run: npx tsc --noEmit --noUnusedLocals --noUnusedParameters
       # - run: npx next lint
@@ -31,7 +33,7 @@ jobs:
       - name: Start Storybook for A11y Testing
         run: |
           npm run storybook &
-          sleep 30  # Wait for Storybook to start
+          npx wait-on --timeout 120000 http://localhost:6006
         env:
           CI: true
           
