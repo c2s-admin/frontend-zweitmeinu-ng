@@ -30,10 +30,11 @@ jobs:
           npm install -g @axe-core/cli @axe-core/puppeteer puppeteer jsdom
           npm install --save-dev @axe-core/puppeteer puppeteer jsdom
         
-      - name: Start Storybook for A11y Testing
+      - name: Serve Storybook static for A11y Testing
         run: |
-          npm run storybook &
-          npx wait-on --timeout 120000 http://localhost:6006
+          # Use the already built static Storybook for faster startup
+          npx http-server storybook-static -p 6006 --silent &
+          npx wait-on --timeout 300000 http://localhost:6006
         env:
           CI: true
           
