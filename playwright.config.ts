@@ -41,8 +41,8 @@ export default defineConfig({
   ],
   
   use: {
-    // Healthcare-specific browser settings
-    baseURL: 'http://localhost:6006', // Storybook for component testing
+    // Default to Next.js app; projects can override to Storybook
+    baseURL: 'http://localhost:3000',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
@@ -56,32 +56,48 @@ export default defineConfig({
   },
 
   projects: [
+    // E2E/API tests against Next.js
+    {
+      name: 'e2e',
+      testMatch: ['**/*.spec.ts', '!**/screenshots/**'],
+      use: {
+        baseURL: 'http://localhost:3000',
+      },
+    },
+    // Screenshot projects against Storybook
     {
       name: 'healthcare-mobile',
+      testMatch: ['**/screenshots/**/*.spec.ts'],
       use: {
         ...devices['iPhone SE'], // Common healthcare user device
         // Override for better healthcare mobile testing
         viewport: { width: 375, height: 667 },
+        baseURL: 'http://localhost:6006',
       },
     },
     {
-      name: 'healthcare-tablet', 
+      name: 'healthcare-tablet',
+      testMatch: ['**/screenshots/**/*.spec.ts'],
       use: {
         ...devices['iPad'],
         // Clinical tablet dimensions
         viewport: { width: 768, height: 1024 },
+        baseURL: 'http://localhost:6006',
       },
     },
     {
       name: 'healthcare-desktop',
+      testMatch: ['**/screenshots/**/*.spec.ts'],
       use: {
         ...devices['Desktop Chrome'],
         // Clinical workstation dimensions
         viewport: { width: 1440, height: 900 },
+        baseURL: 'http://localhost:6006',
       },
     },
     {
       name: 'healthcare-accessibility',
+      testMatch: ['**/screenshots/**/*.spec.ts'],
       use: {
         ...devices['Desktop Chrome'],
         viewport: { width: 1200, height: 800 },
@@ -89,7 +105,8 @@ export default defineConfig({
         colorScheme: 'light',
         extraHTTPHeaders: {
           'prefers-reduced-motion': 'reduce'
-        }
+        },
+        baseURL: 'http://localhost:6006',
       },
     },
   ],

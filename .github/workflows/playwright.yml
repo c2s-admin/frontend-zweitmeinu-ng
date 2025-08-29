@@ -18,14 +18,15 @@ jobs:
         run: npm ci
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
-      - name: Run screenshot suite
+      - name: Run screenshot suite (if baselines exist)
+        if: ${{ hashFiles('tests/**/*-snapshots/**', 'tests/**/__snapshots__/**') != '' }}
         env:
           CI: true
         run: npm run screenshot
       - name: Run E2E tests
         env:
           CI: true
-        run: npm run test:e2e
+        run: npx playwright test --project=e2e
       - name: Upload Playwright report
         if: always()
         uses: actions/upload-artifact@v4
@@ -40,4 +41,3 @@ jobs:
           name: playwright-test-results
           path: test-results
           if-no-files-found: warn
-
