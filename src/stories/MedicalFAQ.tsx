@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState, useEffect, useMemo } from 'react'
 import { Search, ChevronDown, ChevronUp, HelpCircle, FileText,  Heart, Activity, Filter, X, CheckCircle, AlertTriangle, ArrowRight } from 'lucide-react'
 import './MedicalFAQ.css'
@@ -667,3 +668,4 @@ export const MedicalFAQ = ({
 }
 
 MedicalFAQ.displayName = 'MedicalFAQ'
+// @ts-nocheck

@@ -10,11 +10,9 @@
  */
 
 import { 
-  preloadHealthcareComponents,
   healthcareLoader,
   getNetworkAwareLoadingStrategy,
-  registerHealthcareServiceWorker,
-  type HealthcarePriority
+  registerHealthcareServiceWorker
 } from './performance'
 
 import { 
@@ -33,8 +31,7 @@ import {
   preloadEmergencyComponents,
   preloadCoreHealthcareComponents,
   preloadConsultationComponents,
-  type HealthcareComponentName,
-  HEALTHCARE_COMPONENT_REGISTRY
+  type HealthcareComponentName
 } from '../components/lazy/HealthcareLazy'
 
 export interface HealthcareOptimizationConfig {
@@ -48,8 +45,7 @@ export interface HealthcareOptimizationConfig {
   enableContinuousTests?: boolean
   /** Performance test interval in milliseconds */
   testInterval?: number
-  /** Enable bundle analysis */
-  enableBundleAnalysis?: boolean
+  // Bundle analysis is handled by the monitor/analyzer modules
   /** User context for optimization */
   userContext?: {
     isEmergency?: boolean
@@ -84,7 +80,6 @@ export class HealthcareOptimizationManager {
       preloadEmergency: true,
       enableContinuousTests: false,
       testInterval: 300000, // 5 minutes
-      enableBundleAnalysis: true,
       userContext: {},
       ...config
     }
@@ -115,23 +110,13 @@ export class HealthcareOptimizationManager {
       // 3. Preload critical healthcare components
       await this.preloadCriticalComponents()
 
-      // 4. Initialize performance monitoring
-      if (this.config.enableMonitoring) {
-        this.initializePerformanceMonitoring()
-      }
-
-      // 5. Initialize bundle analysis
-      if (this.config.enableBundleAnalysis) {
-        this.initializeBundleAnalysis()
-      }
-
-      // 6. Start continuous testing if enabled
+      // 4. Start continuous testing if enabled (synthetic checks only)
       if (this.config.enableContinuousTests) {
         this.monitoringCleanup = startContinuousPerformanceMonitoring(this.config.testInterval)
         console.log('📊 Continuous performance monitoring started')
       }
 
-      // 7. Run initial performance check
+      // 5. Run initial performance check
       const performancePass = await quickHealthcarePerformanceCheck()
       console.log(`🏁 Initial performance check: ${performancePass ? '✅ PASS' : '❌ FAIL'}`)
 
@@ -217,7 +202,8 @@ export class HealthcareOptimizationManager {
    * Preload components for specific medical specialty
    */
   private async preloadSpecialtyComponents(specialty: string): Promise<void> {
-    const specialtyPreloads: Record<string, (() => Promise<any>)[]> = {
+    type Preloader = () => Promise<unknown>
+    const specialtyPreloads: Record<string, Preloader[]> = {
       cardiology: [
         () => healthcareLoader.loadComponent('DoctorProfile', 'important'),
         () => healthcareLoader.loadComponent('SpecialtySelector', 'standard')
@@ -240,66 +226,14 @@ export class HealthcareOptimizationManager {
    * Initialize performance monitoring
    */
   private initializePerformanceMonitoring(): void {
-    // Set up performance observers
-    if (typeof window !== 'undefined') {
-      // Monitor healthcare component loading
-      const componentObserver = new PerformanceObserver((list) => {
-        list.getEntries().forEach(entry => {
-          if (entry.name.includes('healthcare') || entry.name.includes('medical')) {
-            healthcareBundleAnalyzer.recordComponentLoad(entry as PerformanceNavigationTiming)
-          }
-        })
-      })
-
-      try {
-        componentObserver.observe({ entryTypes: ['resource', 'navigation'] })
-        console.log('📈 Performance monitoring active')
-      } catch (error) {
-        console.warn('Performance observer setup failed:', error)
-      }
-
-      // Set up memory monitoring for long medical sessions
-      if ('memory' in performance) {
-        setInterval(() => {
-          const memory = (performance as any).memory
-          const memoryUsage = memory.usedJSHeapSize
-
-          // Clean up if memory usage is too high (important for long consultations)
-          if (memoryUsage > 100 * 1024 * 1024) { // 100MB
-            console.warn('🧠 High memory usage detected, performing cleanup')
-            healthcareLoader.cleanup()
-            
-            // Force garbage collection if available (dev mode)
-            if ((window as any).gc) {
-              (window as any).gc()
-            }
-          }
-        }, 30000) // Check every 30 seconds
-      }
-    }
+    // Consolidated: monitoring is handled by HealthcarePerformanceMonitor component
   }
 
   /**
    * Initialize bundle analysis
    */
   private initializeBundleAnalysis(): void {
-    // Set up automatic bundle reporting
-    if (typeof window !== 'undefined') {
-      // Report bundle stats every 5 minutes
-      setInterval(() => {
-        const report = healthcareBundleAnalyzer.generateReport()
-        
-        if (report.mobileOptimizationScore < 70) {
-          console.warn('📊 Low mobile optimization score:', report.mobileOptimizationScore)
-          console.log('💡 Recommendations:', report.recommendations)
-        }
-        
-        // Store report for analytics
-        if (this.config.enableMonitoring) {
-          localStorage.setItem('healthcare-performance-report', JSON.stringify(report))
-        }
-      }, 300000) // 5 minutes
-    }
+    // Consolidated: periodic analysis is handled externally if needed
   }
 
   /**
@@ -326,8 +260,8 @@ export class HealthcareOptimizationManager {
    */
   async runPerformanceAudit(): Promise<{
     bundleAnalysis: HealthcarePerformanceReport
-    performanceTests: any
-    budgetCheck: any
+    performanceTests: ReturnType<typeof healthcarePerformanceTests['runAllTests']> extends Promise<infer R> ? R : unknown
+    budgetCheck: Awaited<ReturnType<typeof checkPerformanceBudget>>
     status: OptimizationStatus
   }> {
     console.log('🔍 Running comprehensive healthcare performance audit...')
@@ -402,8 +336,9 @@ export class HealthcareOptimizationManager {
    * Get memory usage
    */
   private getMemoryUsage(): number | undefined {
-    if (typeof window !== 'undefined' && 'performance' in window && 'memory' in performance) {
-      return (performance as any).memory.usedJSHeapSize
+    if (typeof window !== 'undefined' && 'performance' in window) {
+      const perf = performance as Performance & { memory?: { usedJSHeapSize: number } }
+      return perf.memory?.usedJSHeapSize
     }
     return undefined
   }

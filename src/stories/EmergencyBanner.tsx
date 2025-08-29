@@ -447,7 +447,7 @@ export const EmergencyBanner = ({
               </button>
             )}
 
-            {variant === 'expandable' && (
+            {variant === 'expanded' && (
               <button
                 className="healthcare-emergency-banner-control"
                 onClick={handleExpandToggle}

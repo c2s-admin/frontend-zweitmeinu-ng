@@ -71,83 +71,33 @@ const nextConfig = {
     removeConsole: process.env.NODE_ENV === 'production',
   },
   
-  // Temporary: Allow TypeScript build warnings during healthcare component development
+  // Enforce strict builds: fail on TS/ESLint errors
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false,
   },
   
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: false,
   },
   
-  // Performance optimization for healthcare mobile users
-  webpack: (config, { buildId, dev, isServer, defaultLoaders, nextRuntime, webpack }) => {
-    // Healthcare-specific optimizations
-    if (!dev && !isServer) {
-      // Split healthcare components into optimized chunks
+  // Performance optimization hook (kept minimal; rely on Next defaults)
+  webpack: (config, { dev, isServer, webpack }) => {
+    // Optional: enable experimental chunking only when explicitly requested
+    if (!dev && !isServer && process.env.HEALTHCARE_CHUNKING === 'true') {
       config.optimization.splitChunks = {
         ...config.optimization.splitChunks,
         cacheGroups: {
           ...config.optimization.splitChunks.cacheGroups,
-          
-          // Emergency components - highest priority, separate chunk
           emergency: {
             name: 'emergency',
-            test: /[\\/]stories[\\/](Emergency|HealthcareModal)/,
-            chunks: 'all',
-            priority: 50,
-            enforce: true
-          },
-          
-          // Core healthcare components
-          healthcareCore: {
-            name: 'healthcare-core',
-            test: /[\\/]stories[\\/](Healthcare|Button|Card|Input)/,
-            chunks: 'all',
-            priority: 40,
-            minChunks: 1,
-            maxSize: 100000 // 100KB max for mobile
-          },
-          
-          // Medical consultation components
-          consultation: {
-            name: 'consultation',
-            test: /[\\/]stories[\\/](Consultation|Doctor|Specialty|MedicalFAQ)/,
+            test: /[\\/]components[\\/].*(Emergency|Modal)/,
             chunks: 'all',
             priority: 30,
-            maxSize: 150000 // 150KB max
           },
-          
-          // Content sections
-          content: {
-            name: 'content',
-            test: /[\\/]stories[\\/](Motivation|Story|CoreValues)/,
-            chunks: 'all',
-            priority: 20,
-            maxSize: 200000 // 200KB max
-          },
-          
-          // Utilities and forms
-          utils: {
-            name: 'utils',
-            test: /[\\/]stories[\\/](FileUpload|DatePicker|Progress)/,
-            chunks: 'all',
-            priority: 10,
-            maxSize: 100000
-          }
         }
       }
-      
-      // Optimize for mobile healthcare users
-      config.optimization.usedExports = true
-      config.optimization.sideEffects = false
-      
-      // Tree shake unused icons (important for healthcare mobile performance)
-      config.resolve.alias = {
-        ...config.resolve.alias,
-        'lucide-react': 'lucide-react/dist/esm/icons'
-      }
     }
+    // Keep defaults; Next handles tree-shaking and chunking well
     
     // Bundle analyzer for healthcare performance monitoring
     if (process.env.ANALYZE === 'true') {

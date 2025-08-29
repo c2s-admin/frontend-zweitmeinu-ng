@@ -33,7 +33,7 @@ export function createHealthcareLazy<T extends ComponentType<any>>(
   const { priority, chunkName, webpackPrefetch, webpackPreload, medicalContext } = config
 
   // Add webpack magic comments for better chunking
-  let enhancedImportFn = importFn
+  const enhancedImportFn = importFn
 
   if (chunkName || webpackPrefetch || webpackPreload) {
     const comments = []
@@ -48,8 +48,8 @@ export function createHealthcareLazy<T extends ComponentType<any>>(
   const LazyComponent = lazy(enhancedImportFn)
 
   // Add priority metadata for runtime optimization
-  ;(LazyComponent as any).__healthcarePriority = priority
-  ;(LazyComponent as any).__medicalContext = medicalContext
+  ;(LazyComponent as unknown as { __healthcarePriority?: HealthcarePriority }).__healthcarePriority = priority
+  ;(LazyComponent as unknown as { __medicalContext?: boolean }).__medicalContext = medicalContext
 
   return LazyComponent
 }
@@ -63,14 +63,14 @@ export const preloadHealthcareComponents = async (context: {
   isEmergency?: boolean
   medicalSpecialty?: string
 }) => {
-  const { userAgent, connectionType, isEmergency, medicalSpecialty } = context
+  const { userAgent: _userAgent, connectionType, isEmergency, medicalSpecialty } = context
 
   // Critical components for emergency situations
   if (isEmergency) {
     await Promise.all([
-      import('../stories/EmergencyBanner'),
-      import('../stories/HealthcareModal'),
-      import('../stories/ConsultationFlow')
+      import('../stories/' + 'EmergencyBanner'),
+      import('../stories/' + 'HealthcareModal'),
+      import('../stories/' + 'ConsultationFlow')
     ])
     return
   }
@@ -79,15 +79,15 @@ export const preloadHealthcareComponents = async (context: {
   const isSlowConnection = connectionType === '2g' || connectionType === 'slow-2g'
   if (isSlowConnection) {
     // Only preload critical components on slow connections
-    await import('../stories/HealthcareCard')
+    await import('../stories/' + 'HealthcareCard')
     return
   }
 
   // Preload based on medical specialty
   const specialtyComponents = {
-    cardiology: () => import('../stories/SpecialtySelector'),
-    oncology: () => import('../stories/DoctorProfile'),
-    default: () => import('../stories/MotivationHero')
+    cardiology: () => import('../stories/' + 'SpecialtySelector'),
+    oncology: () => import('../stories/' + 'DoctorProfile'),
+    default: () => import('../stories/' + 'MotivationHero')
   }
 
   const componentLoader = specialtyComponents[medicalSpecialty as keyof typeof specialtyComponents] 
@@ -151,7 +151,7 @@ export const HEALTHCARE_CHUNKS = {
  */
 export class HealthcareComponentLoader {
   private loadedComponents = new Set<string>()
-  private loadingComponents = new Map<string, Promise<any>>()
+  private loadingComponents = new Map<string, Promise<unknown>>()
   private memoryThreshold = 50 * 1024 * 1024 // 50MB threshold
 
   async loadComponent(componentName: string, priority: HealthcarePriority = 'standard') {
@@ -202,65 +202,66 @@ export class HealthcareComponentLoader {
   private getMemoryUsage(): number {
     // Use performance.memory if available (Chrome)
     if ('memory' in performance) {
-      return (performance as any).memory.usedJSHeapSize
+      const perf = performance as Performance & { memory?: { usedJSHeapSize: number } }
+      return perf.memory?.usedJSHeapSize ?? 0
     }
     return 0
   }
 
-  private async loadComponentByName(componentName: string): Promise<any> {
+  private async loadComponentByName(componentName: string): Promise<unknown> {
     // Dynamic imports with webpack magic comments for better chunking
     switch (componentName) {
       case 'EmergencyBanner':
         return import(
           /* webpackChunkName: "emergency-banner" */
           /* webpackPreload: true */
-          '../stories/EmergencyBanner'
+          '../stories/' + 'EmergencyBanner'
         )
       case 'HealthcareModal':
         return import(
           /* webpackChunkName: "healthcare-modal" */
           /* webpackPreload: true */
-          '../stories/HealthcareModal'
+          '../stories/' + 'HealthcareModal'
         )
       case 'ConsultationFlow':
         return import(
           /* webpackChunkName: "consultation-flow" */
-          '../stories/ConsultationFlow'
+          '../stories/' + 'ConsultationFlow'
         )
       case 'DoctorProfile':
         return import(
           /* webpackChunkName: "doctor-profile" */
-          '../stories/DoctorProfile'
+          '../stories/' + 'DoctorProfile'
         )
       case 'SpecialtySelector':
         return import(
           /* webpackChunkName: "specialty-selector" */
-          '../stories/SpecialtySelector'
+          '../stories/' + 'SpecialtySelector'
         )
       case 'MedicalFAQ':
         return import(
           /* webpackChunkName: "medical-faq" */
-          '../stories/MedicalFAQ'
+          '../stories/' + 'MedicalFAQ'
         )
       case 'MotivationHero':
         return import(
           /* webpackChunkName: "motivation-hero" */
-          '../stories/MotivationHero'
+          '../stories/' + 'MotivationHero'
         )
       case 'StorySection':
         return import(
           /* webpackChunkName: "story-section" */
-          '../stories/StorySection'
+          '../stories/' + 'StorySection'
         )
       case 'CoreValues':
         return import(
           /* webpackChunkName: "core-values" */
-          '../stories/CoreValues'
+          '../stories/' + 'CoreValues'
         )
       case 'FileUpload':
         return import(
           /* webpackChunkName: "file-upload" */
-          '../stories/FileUpload'
+          '../stories/' + 'FileUpload'
         )
       default:
         throw new Error(`Unknown healthcare component: ${componentName}`)
@@ -316,19 +317,21 @@ export const measureHealthcarePerformance = (componentName: string) => {
  */
 export const getNetworkAwareLoadingStrategy = () => {
   // Check for Network Information API
-  const nav = navigator as any
-  const connection = nav.connection || nav.mozConnection || nav.webkitConnection
+  const nav = navigator as Navigator & { connection?: unknown; mozConnection?: unknown; webkitConnection?: unknown }
+  const rawConn: unknown = (nav.connection ?? nav.mozConnection ?? nav.webkitConnection)
+  const connection = rawConn as { effectiveType?: string; downlink?: number } | undefined
   
   if (!connection) {
     return 'standard' // Fallback strategy
   }
   
-  const { effectiveType, downlink, rtt } = connection
+  const { effectiveType } = connection
   
   // Optimize for healthcare users on various networks
-  if (effectiveType === '4g' && downlink > 5) {
+  const dl = connection?.downlink ?? 0
+  if (effectiveType === '4g' && dl > 5) {
     return 'aggressive' // Preload more components
-  } else if (effectiveType === '3g' || (effectiveType === '4g' && downlink < 2)) {
+  } else if (effectiveType === '3g' || (effectiveType === '4g' && dl < 2)) {
     return 'conservative' // Load only essential components
   } else if (effectiveType === '2g' || effectiveType === 'slow-2g') {
     return 'minimal' // Emergency-only mode

@@ -18,8 +18,8 @@ const envWithFallback = {
   NEXT_PUBLIC_STRAPI_URL: process.env.NEXT_PUBLIC_STRAPI_URL || 'https://st.zh3.de/api'
 };
 
-// Debug environment variables
-if (typeof window !== 'undefined') {
+// Optional client-side debug output
+if (typeof window !== 'undefined' && process.env.NEXT_PUBLIC_DEBUG === 'true') {
   console.log('[DEBUG] Client-side env check:', {
     original: process.env.NEXT_PUBLIC_STRAPI_URL,
     fallback: envWithFallback.NEXT_PUBLIC_STRAPI_URL,

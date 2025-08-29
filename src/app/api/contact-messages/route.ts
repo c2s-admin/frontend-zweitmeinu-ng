@@ -17,6 +17,8 @@ async function handler(request: NextRequest) {
           { status: 400 },
         );
       }
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 5000);
       const captchaResponse = await fetch(
         "https://www.google.com/recaptcha/api/siteverify",
         {
@@ -27,8 +29,9 @@ async function handler(request: NextRequest) {
             response: captchaToken,
             remoteip: clientIP,
           }),
+          signal: controller.signal,
         },
-      );
+      ).finally(() => clearTimeout(timeout));
       const captchaData = await captchaResponse.json();
       if (!captchaData.success) {
         return NextResponse.json(

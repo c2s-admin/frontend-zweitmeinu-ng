@@ -257,14 +257,14 @@ export class HealthcarePerformanceTestSuite {
         const priority = test.priority === 'critical' ? '🚨' : test.priority === 'important' ? '⚠️' : 'ℹ️'
         console.log(`    ${status} ${priority} ${result.message} (${result.value}${result.unit})`)
 
-      } catch (error) {
-        console.error(`  ❌ Test failed: ${name}`, error)
+      } catch (_error) {
+        console.error(`  ❌ Test failed: ${name}`, _error)
         results[name] = {
           passed: false,
           value: 0,
           threshold: 0,
           unit: '',
-          message: `Test execution failed: ${error}`,
+          message: `Test execution failed`,
           recommendations: ['Fix test execution error']
         }
         failed++
@@ -319,7 +319,7 @@ export class HealthcarePerformanceTestSuite {
    */
   private async measureEmergencyBundleSize(): Promise<number> {
     // Simulate emergency component bundle analysis
-    if (typeof window !== 'undefined' && (window as any).__NEXT_DATA__) {
+    if (typeof window !== 'undefined' && (window as unknown as { __NEXT_DATA__?: unknown }).__NEXT_DATA__) {
       // In a real implementation, this would analyze the actual bundle
       // For now, we'll simulate based on component count and complexity
       return 45 * 1024 // Simulated 45KB for emergency components
@@ -340,7 +340,7 @@ export class HealthcarePerformanceTestSuite {
       await new Promise(resolve => setTimeout(resolve, 50))
       const end = performance.now()
       return end - start
-    } catch (error) {
+    } catch {
       return 1000 // Return high value if loading fails
     }
   }
@@ -364,7 +364,7 @@ export class HealthcarePerformanceTestSuite {
             observer.disconnect()
             resolve(1500) // Fallback value
           }, 5000)
-        } catch (error) {
+        } catch {
           resolve(1500)
         }
       } else {
@@ -374,8 +374,9 @@ export class HealthcarePerformanceTestSuite {
   }
 
   private async measureMemoryUsage(): Promise<number> {
-    if (typeof window !== 'undefined' && 'performance' in window && 'memory' in performance) {
-      return (performance as any).memory.usedJSHeapSize
+    if (typeof window !== 'undefined' && 'performance' in window) {
+      const perf = performance as Performance & { memory?: { usedJSHeapSize: number } }
+      return perf.memory?.usedJSHeapSize ?? 50 * 1024 * 1024
     }
     return 50 * 1024 * 1024 // Fallback 50MB
   }
@@ -443,7 +444,6 @@ export const quickHealthcarePerformanceCheck = async (): Promise<boolean> => {
  * Continuous performance monitoring setup
  */
 export const startContinuousPerformanceMonitoring = (intervalMs: number = 60000) => {
-  let monitoringInterval: NodeJS.Timeout
 
   const monitor = async () => {
     try {
@@ -454,11 +454,12 @@ export const startContinuousPerformanceMonitoring = (intervalMs: number = 60000)
         
         // In a real implementation, this would trigger alerts
         if (typeof window !== 'undefined') {
-          (window as any).healthcarePerformanceAlert?.(report)
+          interface AlertGlobal { healthcarePerformanceAlert?: (r: unknown) => void }
+          ;(window as unknown as AlertGlobal).healthcarePerformanceAlert?.(report)
         }
       }
-    } catch (error) {
-      console.error('Performance monitoring cycle failed:', error)
+    } catch {
+      console.error('Performance monitoring cycle failed')
     }
   }
 
@@ -466,7 +467,7 @@ export const startContinuousPerformanceMonitoring = (intervalMs: number = 60000)
   monitor()
 
   // Set up interval
-  monitoringInterval = setInterval(monitor, intervalMs)
+  const monitoringInterval = setInterval(monitor, intervalMs)
 
   // Return cleanup function
   return () => {

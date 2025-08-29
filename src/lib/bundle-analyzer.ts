@@ -15,7 +15,7 @@ interface BundleStats {
   memoryUsage?: number
 }
 
-interface HealthcarePerformanceReport {
+export interface HealthcarePerformanceReport {
   totalBundleSize: number
   criticalPathSize: number
   emergencyComponentsSize: number
@@ -61,11 +61,16 @@ export class HealthcareBundleAnalyzer {
     const componentName = this.extractComponentName(entry.name)
     if (!componentName) return
 
+    const isNavigation = (entry as PerformanceNavigationTiming).entryType === 'navigation'
+    const loadTime = isNavigation
+      ? (entry as PerformanceNavigationTiming).loadEventEnd - (entry as PerformanceNavigationTiming).loadEventStart
+      : (entry as PerformanceResourceTiming).responseEnd - (entry as PerformanceResourceTiming).startTime
+
     const stats: BundleStats = {
       componentName,
       bundleSize: entry.transferSize || 0,
       gzippedSize: entry.encodedBodySize || 0,
-      loadTime: entry.loadEventEnd - entry.loadEventStart,
+      loadTime,
       dependencies: this.extractDependencies(entry.name),
       isHealthcareCritical: this.isHealthcareCritical(componentName),
       memoryUsage: this.getMemoryUsage()
@@ -212,8 +217,6 @@ export class HealthcareBundleAnalyzer {
   private extractDependencies(url: string): string[] {
     // This would be enhanced with actual webpack bundle analysis
     const commonDeps = ['react', 'react-dom']
-    const healthcareDeps = ['lucide-react', 'clsx']
-    
     if (url.includes('lucide')) {
       return [...commonDeps, 'lucide-react']
     }
@@ -243,8 +246,9 @@ export class HealthcareBundleAnalyzer {
    * Get current memory usage
    */
   private getMemoryUsage(): number | undefined {
-    if (typeof window !== 'undefined' && 'performance' in window && 'memory' in performance) {
-      return (performance as any).memory.usedJSHeapSize
+    if (typeof window !== 'undefined' && 'performance' in window) {
+      const perf = performance as Performance & { memory?: { usedJSHeapSize: number } }
+      return perf.memory?.usedJSHeapSize
     }
     return undefined
   }
@@ -295,8 +299,9 @@ export const healthcareBundleAnalyzer = new HealthcareBundleAnalyzer()
 /**
  * Healthcare-specific webpack bundle analysis
  */
-export const analyzeHealthcareBundle = async (stats: any) => {
-  const healthcareChunks = stats.chunks.filter((chunk: any) =>
+export const analyzeHealthcareBundle = async (_stats: unknown) => {
+  const stats = _stats as { chunks: Array<{ name: string; size: number; modules?: unknown[]; initial?: boolean }> }
+  const healthcareChunks = stats.chunks.filter((chunk) =>
     chunk.name.includes('healthcare') || 
     chunk.name.includes('medical') ||
     chunk.name.includes('emergency')
@@ -306,7 +311,7 @@ export const analyzeHealthcareBundle = async (stats: any) => {
     totalHealthcareSize: 0,
     criticalPathSize: 0,
     emergencySize: 0,
-    chunks: healthcareChunks.map((chunk: any) => ({
+    chunks: healthcareChunks.map((chunk) => ({
       name: chunk.name,
       size: chunk.size,
       modules: chunk.modules?.length || 0,
@@ -314,10 +319,10 @@ export const analyzeHealthcareBundle = async (stats: any) => {
     }))
   }
 
-  analysis.totalHealthcareSize = healthcareChunks.reduce((sum: number, chunk: any) => sum + chunk.size, 0)
+  analysis.totalHealthcareSize = healthcareChunks.reduce((sum: number, chunk) => sum + chunk.size, 0)
   analysis.emergencySize = healthcareChunks
-    .filter((chunk: any) => chunk.name.includes('emergency'))
-    .reduce((sum: number, chunk: any) => sum + chunk.size, 0)
+    .filter((chunk) => chunk.name.includes('emergency'))
+    .reduce((sum: number, chunk) => sum + chunk.size, 0)
 
   return analysis
 }
@@ -404,7 +409,7 @@ function calculateOverallHealthcareScore(metrics: Record<string, number>): numbe
 
 function generateLighthouseRecommendations(
   metrics: Record<string, number>, 
-  stats: BundleStats[]
+  _stats: BundleStats[]
 ): string[] {
   const recommendations: string[] = []
 

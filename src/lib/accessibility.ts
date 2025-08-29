@@ -474,7 +474,7 @@ export class HealthcareKeyboardManager {
     }
   }
 
-  private handleKeyUp(event: KeyboardEvent): void {
+  private handleKeyUp(_event: KeyboardEvent): void {
     // Handle any key up events if needed
   }
 
@@ -522,7 +522,7 @@ export class HealthcareKeyboardManager {
     screenReader.announceEmergency('Notfall-Hotline wird angerufen: 112')
   }
 
-  private handleEscapeKey(event: KeyboardEvent): void {
+  private handleEscapeKey(_event: KeyboardEvent): void {
     // Close modals, cancel actions
     const modal = document.querySelector('[role="dialog"]:not([aria-hidden="true"])')
     if (modal) {
@@ -652,13 +652,15 @@ export class HealthcareFocusManager {
    * Focus next required field
    */
   focusNextRequired(): boolean {
-    const requiredFields = document.querySelectorAll('input[required], textarea[required], select[required]') as NodeListOf<HTMLElement>
+    const requiredFields = document.querySelectorAll(
+      'input[required], textarea[required], select[required]'
+    ) as NodeListOf<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
     const currentElement = document.activeElement as HTMLElement
-    const currentIndex = Array.from(requiredFields).indexOf(currentElement)
+    const currentIndex = Array.from(requiredFields).indexOf(currentElement as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement)
     
     for (let i = currentIndex + 1; i < requiredFields.length; i++) {
       const field = requiredFields[i]
-      if (!field.value || (field as HTMLInputElement).validity.valueMissing) {
+      if (!field.value || field.validity.valueMissing) {
         field.focus()
         return true
       }
@@ -729,7 +731,10 @@ if (typeof window !== 'undefined') {
   })
 
   // Add healthcare accessibility controls to window for debugging
-  ;(window as any).healthcareAccessibility = {
+  interface HealthcareAccessibilityGlobal {
+    healthcareAccessibility?: Record<string, unknown>
+  }
+  ;(window as unknown as HealthcareAccessibilityGlobal).healthcareAccessibility = {
     screenReader: healthcareScreenReader,
     keyboard: healthcareKeyboardManager,
     focus: healthcareFocusManager,

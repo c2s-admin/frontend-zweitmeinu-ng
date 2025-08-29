@@ -1,8 +1,8 @@
-# CLAUDE.md v3.1 - FAQ System & Development Environment Update 
+# CLAUDE.md v4.0 - Streamlined Healthcare Development Guide
 
-This document serves as the **constitution for AI assistants** working on the zweitmeinung.ng platform, providing project-specific context and best practices for resilient, stable, and efficient healthcare component development.
+This document provides essential context and guidelines for AI assistants working on the zweitmeinung.ng medical platform. Focus: Concise, actionable healthcare development standards.
 
-> **Version 3.1 Focus**: Updated for npm-based development workflow and comprehensive FAQ categorization system documentation. Features intelligent hybrid FAQ categorization with Strapi API + keyword fallback system.
+> **Version 4.0**: Consolidated redundant content, updated commands, fixed broken links. Reduced from 1139 to ~500 lines while preserving all critical information.
 
 ---
 
@@ -34,7 +34,7 @@ zweitmeinung.ng is a **medical second opinion platform** where trust, accessibil
 | **Next.js** | 15.4.6 | React framework with App Router | Server Components by default, Client Components for interactivity |
 | **TypeScript** | 5.5.4 | Type safety and healthcare data integrity | Strict mode enabled, no `any` types in production |
 | **Tailwind CSS** | 3.4.10 | Healthcare design system utilities | Use healthcare tokens only, JIT enabled |
-| **npm** | 10.9.2 | Node.js package manager | Use `npm run dev` for development (bun not installed) |
+| **npm** | 10.9.2 | Node.js package manager | Primary package manager for all commands |
 | **Strapi** | 5.20.0 | Headless CMS for medical content | Always populate parameters, handle data conversion |
 | **React Hook Form** | 7.53.0 | Medical form validation | Use with Zod schemas for patient data |
 | **Lucide React** | 0.536.0 | Healthcare-appropriate icons | Import individually, use medical-context icons |
@@ -98,7 +98,7 @@ src/
 | `npm run build` | Production Next.js build | Tree-shakes unused components |
 | `npm run lint` | TypeScript + ESLint validation | **Run before every commit** |
 | `npm run typecheck` | TypeScript compilation check | Use `npx tsc --noEmit` if needed |
-| `bun test` | Run component and integration tests | Located in `src/__tests__/` |
+| `npm test` | Run component and integration tests | Located in `src/__tests__/` |
 
 ### **🏥 Healthcare-Specific Commands**
 ```bash
@@ -117,327 +117,159 @@ npm run build-storybook && open storybook-static/index.html
 
 ---
 
-## 🎨 Healthcare Component System (Storybook 9.1.1)
+## 🎨 Healthcare Component Development
 
-### **🔬 Component Development Workflow (MANDATORY)**
+### **🔬 Storybook-First Workflow (MANDATORY)**
 
-#### **Step 1: Start with Storybook (ALWAYS)**
-```bash
-npm run storybook
-# Open http://localhost:6006
-# Create component in /src/stories/HealthcareComponent.tsx
-```
+#### **6-Step Development Process**
+1. **Start Storybook**: `npm run storybook` → http://localhost:6006
+2. **Create Component**: `/src/stories/HealthcareComponent.tsx`
+3. **Create Stories**: Minimum 6 stories (Default, Emergency, Disabled, Touch variants, High contrast)
+4. **Validate A11y**: Use Storybook A11y tab - must pass WCAG 2.1 AA
+5. **Add to Registry**: Update `/src/types/sections.ts` if Strapi component
+6. **Integration Test**: `npm run dev` to test with Next.js/Strapi
 
-#### **Step 2: Healthcare Component Creation Pattern**
+#### **Healthcare Component Template**
 ```typescript
-// 1. Create in /src/stories/HealthcareNewComponent.tsx
-interface HealthcareNewComponentProps {
-  // Always include accessibility props
+interface HealthcareComponentProps {
   'aria-label'?: string
   disabled?: boolean
-  size?: 'small' | 'medium' | 'large'  // Healthcare touch targets
-  // Medical context props
+  size?: 'small' | 'medium' | 'large'  // 44px/56px/64px
   urgencyLevel?: 'normal' | 'urgent' | 'emergency'
   medicalContext?: boolean
 }
 
-// 2. Healthcare-compliant implementation
-export const HealthcareNewComponent = ({ 
-  size = 'medium',  // Default to healthcare-optimized size
+export const HealthcareComponent = ({ 
+  size = 'medium',
   disabled = false,
   'aria-label': ariaLabel,
   ...props 
-}: HealthcareNewComponentProps) => {
-  return (
-    <div 
-      className={`
-        healthcare-component 
-        healthcare-component--${size}
-        ${disabled ? 'healthcare-component--disabled' : ''}
-      `}
-      aria-label={ariaLabel}
-      // Minimum 56px touch targets for healthcare users
-      style={{ minHeight: '56px', minWidth: '56px' }}
-    >
-      {/* Healthcare component content */}
-    </div>
-  )
-}
+}: HealthcareComponentProps) => (
+  <div 
+    className={`healthcare-component healthcare-component--${size} ${disabled ? 'healthcare-component--disabled' : ''}`}
+    aria-label={ariaLabel}
+    style={{ minHeight: '56px', minWidth: '56px' }}
+  >
+    {/* Component content */}
+  </div>
+)
 ```
 
-#### **Step 3: Story Creation (MINIMUM 6 stories)**
-```typescript
-// 3. Create HealthcareNewComponent.stories.ts
-import type { Meta, StoryObj } from '@storybook/react'
-import { HealthcareNewComponent } from './HealthcareNewComponent'
+### **Healthcare Design System**
 
-const meta: Meta<typeof HealthcareNewComponent> = {
-  title: 'Healthcare/NewComponent',  // Use Healthcare/ prefix
-  component: HealthcareNewComponent,
-  parameters: {
-    docs: {
-      description: {
-        component: 'Healthcare-optimized component following WCAG 2.1 AA standards...'
-      }
-    }
-  },
-  tags: ['autodocs'],
-}
-
-// REQUIRED STORIES (minimum 6):
-export const Default: Story = { /* Normal healthcare usage */ }
-export const Emergency: Story = { /* Emergency/urgent context */ }
-export const Disabled: Story = { /* Disabled state */ }
-export const SmallTouch: Story = { /* 44px minimum touch target */ }
-export const LargeTouch: Story = { /* 64px primary CTA touch target */ }
-export const HighContrast: Story = { /* High contrast accessibility */ }
-```
-
-#### **Step 4: WCAG 2.1 AA Validation (MANDATORY)**
-```bash
-# In Storybook, use A11y tab for each story:
-# ✅ Color Contrast: 4.5:1 ratio minimum
-# ✅ Focus Indicators: 3px solid outline visible
-# ✅ Touch Targets: 44px+ (prefer 56px+)
-# ✅ Screen Reader: ARIA labels present and descriptive
-# ✅ Keyboard Navigation: Tab order logical
-```
-
-#### **Step 5: Add to Section Registry (if applicable)**
-```typescript
-// 4. Add to /src/types/sections.ts (if used in Strapi)
-export type SectionComponentType = 
-  // ... existing types
-  | 'sections.healthcare-new-component'  // Add your new component
-```
-
-#### **Step 6: Integration Testing**
-```bash
-# Start Next.js to test Strapi integration
-npm run dev
-# Test component in actual page context
-# Verify healthcare data flows correctly
-```
-
-### **Healthcare Design System Standards (IMMUTABLE)**
-
-#### **🛡️ Healthcare Color Palette (DO NOT DEVIATE)**
+#### **🛡️ Color Palette (IMMUTABLE)**
 ```css
-/* Primary Healthcare Colors - Medical Trust & Professionalism */
---healthcare-primary: #004166;           /* Headlines, navigation, trust */
---healthcare-primary-light: #1278B3;     /* CTAs, links, accents */
---healthcare-accent-green: #B3AF09;      /* Success, highlights, positive actions */
+/* Primary Colors */
+--healthcare-primary: #004166;           /* Headlines, navigation */
+--healthcare-primary-light: #1278B3;     /* CTAs, links */
+--healthcare-accent-green: #B3AF09;      /* Success, highlights */
 
-/* Background & Status Colors */
---healthcare-light: #ffffff;             /* Clean backgrounds */
---healthcare-background: #f8fafc;        /* Subtle sections, calm */
---healthcare-error: #dc2626;            /* Medical alerts, critical */
---healthcare-warning: #f59e0b;          /* Caution, attention needed */
---healthcare-success: #10b981;          /* Confirmation, positive outcomes */
+/* Status Colors */
+--healthcare-background: #f8fafc;        /* Sections */
+--healthcare-error: #dc2626;            /* Alerts */
+--healthcare-warning: #f59e0b;          /* Caution */
+--healthcare-success: #10b981;          /* Confirmation */
 ```
 
-**Implementation (Tailwind Classes):**
-```tsx
-// ✅ CORRECT - Use healthcare tokens
-<button className="bg-healthcare-primary-light text-white hover:bg-healthcare-primary">
-<div className="bg-healthcare-background text-healthcare-primary">
-<span className="text-healthcare-accent-green">
+**Usage**: Use `bg-healthcare-primary-light`, `text-healthcare-primary`. Never arbitrary colors like `bg-blue-500`.
 
-// ❌ WRONG - Never use arbitrary colors
-<button className="bg-blue-500">  // Never
-<div className="bg-slate-100">    // Never  
-```
+#### **🔤 Typography**
+- **Font**: `'Roboto Condensed'` for medical readability
+- **Weights**: 300 (caption), 400 (body), 500 (headings)
+- **Line Height**: 1.6 for body text
 
-#### **📝 Typography (Healthcare-Optimized)**
-```css
-/* Font Stack: Roboto Condensed - Medical Readability */
-font-family: 'Roboto Condensed', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui;
+#### **♿ Accessibility (WCAG 2.1 AA)**
 
-/* Usage in Components */
-.healthcare-heading { font-weight: 500; color: var(--healthcare-primary); }
-.healthcare-body { font-weight: 400; line-height: 1.6; }
-.healthcare-caption { font-weight: 300; color: var(--healthcare-text-muted); }
-```
-
-#### **♿ Accessibility Requirements (WCAG 2.1 AA - MANDATORY)**
-
-**Critical Requirements (Non-Negotiable):**
-```typescript
-// Touch Targets - Healthcare Context
-interface TouchTargetSizes {
-  minimum: '44px'    // WCAG 2.1 AA absolute minimum
-  standard: '56px'   // Healthcare recommended (stressed users)
-  primary: '64px'    // Primary CTAs, emergency actions
-}
-
-// Focus Indicators - Must be visible
-const focusStyles = `
-  focus:outline-none 
-  focus:ring-3 
-  focus:ring-healthcare-primary-light 
-  focus:ring-offset-2
-`
-
-// Contrast Requirements
-interface ContrastRatios {
-  normalText: '4.5:1'    // Minimum for body text
-  largeText: '3:1'       // 18px+ or 14px+ bold
-  uiComponents: '3:1'    // Buttons, form elements
-}
-```
+**Touch Targets**: 44px minimum, 56px recommended, 64px for primary CTAs
+**Contrast**: 4.5:1 for normal text, 3:1 for large text/components  
+**Focus**: 3px solid outline with 2px offset
+**ARIA**: Descriptive German labels for screen readers
 
 **ARIA Implementation Examples:**
 ```tsx
-// Healthcare Button - Complete accessibility
+// Healthcare Button
 <button
-  className="bg-healthcare-primary-light text-white min-h-[56px] min-w-[56px] focus:ring-3 focus:ring-healthcare-primary-light focus:ring-offset-2"
+  className="bg-healthcare-primary-light text-white min-h-[56px] focus:ring-3"
   aria-label="Jetzt kostenlose medizinische Zweitmeinung anfordern"
   disabled={isLoading}
-  aria-describedby={errors ? 'button-error' : undefined}
 >
   {isLoading ? 'Wird bearbeitet...' : 'Zweitmeinung anfordern'}
 </button>
 
-// Healthcare Navigation
-<nav aria-label="Hauptnavigation für medizinische Dienste">
-  <ul role="list">
-    <li role="listitem">
-      <a href="/kardiologie" aria-describedby="cardiology-desc">Kardiologie</a>
-    </li>
-  </ul>
-</nav>
-
-// Healthcare Form Input
+// Healthcare Form
 <div className="healthcare-form-group">
-  <label htmlFor="medical-concern" className="healthcare-label">
-    Medizinisches Anliegen *
-  </label>
+  <label htmlFor="medical-concern">Medizinisches Anliegen *</label>
   <textarea
     id="medical-concern"
-    className="healthcare-textarea min-h-[120px]"
+    className="min-h-[120px]"
     aria-describedby="medical-concern-help"
     aria-required="true"
-    placeholder="Beschreiben Sie Ihr medizinisches Anliegen..."
   />
-  <div id="medical-concern-help" className="healthcare-help-text">
-    Alle Angaben werden vertraulich behandelt und sind durch die ärztliche Schweigepflicht geschützt.
+  <div id="medical-concern-help">
+    Alle Angaben werden vertraulich behandelt.
   </div>
 </div>
 ```
 
-### **🏥 Healthcare-Specific UI Patterns**
+### **🏥 Healthcare UI Patterns**
 
-#### **Emergency Elements (Always Visible)**
+#### **Emergency Elements**
 ```tsx
-// Emergency Contact Banner - Must be present on all pages
-<div className="fixed top-0 left-0 right-0 bg-red-600 text-white text-center py-2 z-50">
-  <span className="font-medium">Medizinischer Notfall?</span>
-  <a href="tel:+4980080441100" className="ml-2 underline font-bold">
-    📞 +49 800 80 44 100
-  </a>
+// Emergency Banner (always visible)
+<div className="fixed top-0 bg-red-600 text-white text-center py-2 z-50">
+  Medizinischer Notfall? <a href="tel:+4980080441100">📞 +49 800 80 44 100</a>
 </div>
 
-// Emergency CTA in forms
-<button className="bg-red-600 hover:bg-red-700 text-white min-h-[64px] text-lg font-semibold">
-  🚨 Notfall - Sofortige Hilfe
-</button>
+// Emergency Button
+<button className="bg-red-600 text-white min-h-[64px]">🚨 Notfall</button>
 ```
 
-#### **Trust-Building Elements**
+#### **Trust & Status Elements**
 ```tsx
-// Medical Credentials Display
+// Medical Credentials
 <div className="bg-healthcare-background p-6 rounded-2xl">
-  <div className="flex items-center gap-4">
-    <div className="w-16 h-16 bg-healthcare-primary rounded-full flex items-center justify-center">
-      <UserIcon className="w-8 h-8 text-white" />
-    </div>
-    <div>
-      <h3 className="font-semibold text-healthcare-primary">Dr. med. Maria Schmidt</h3>
-      <p className="text-sm text-healthcare-text-muted">Fachärztin für Kardiologie</p>
-      <div className="flex items-center gap-2 mt-1">
-        <CheckCircleIcon className="w-4 h-4 text-healthcare-success" />
-        <span className="text-xs text-healthcare-success">Zertifiziert</span>
-      </div>
-    </div>
-  </div>
+  <h3 className="text-healthcare-primary">Dr. med. Maria Schmidt</h3>
+  <p className="text-sm">Fachärztin für Kardiologie</p>
+  <span className="text-xs text-healthcare-success">✓ Zertifiziert</span>
 </div>
 
 // Privacy Indicator
-<div className="flex items-center gap-2 text-sm text-healthcare-text-muted">
+<div className="flex items-center gap-2 text-sm">
   <ShieldCheckIcon className="w-4 h-4 text-healthcare-success" />
   <span>DSGVO-konform · Ärztliche Schweigepflicht</span>
 </div>
-```
 
-#### **Loading & Status Indicators (Healthcare Context)**
-```tsx
-// Medical Data Loading
-<div className="flex items-center justify-center p-8">
-  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-healthcare-primary"></div>
-  <span className="ml-3 text-healthcare-primary">Medizinische Daten werden geladen...</span>
-</div>
-
-// Success States (Medical Context)
-<div className="bg-healthcare-success/10 border border-healthcare-success/20 rounded-xl p-4">
-  <div className="flex items-center gap-3">
-    <CheckCircleIcon className="w-6 h-6 text-healthcare-success" />
-    <div>
-      <p className="font-medium text-healthcare-success">Anfrage erfolgreich übermittelt</p>
-      <p className="text-sm text-healthcare-text-muted">
-        Sie erhalten innerhalb von 48 Stunden eine erste ärztliche Einschätzung.
-      </p>
-    </div>
-  </div>
-</div>
-
-// Error States (Medical Context)
-<div className="bg-red-50 border border-red-200 rounded-xl p-4">
-  <div className="flex items-center gap-3">
-    <AlertTriangleIcon className="w-6 h-6 text-red-600" />
-    <div>
-      <p className="font-medium text-red-800">Übertragung fehlgeschlagen</p>
-      <p className="text-sm text-red-600">
-        Bei kritischen Fällen wenden Sie sich bitte direkt an den Notdienst: 112
-      </p>
-    </div>
-  </div>
+// Loading State
+<div className="flex items-center p-8">
+  <div className="animate-spin h-8 w-8 border-b-2 border-healthcare-primary"></div>
+  <span className="ml-3">Medizinische Daten werden geladen...</span>
 </div>
 ```
 
 ---
 
-## 💡 Code Standards & Best Practices (Healthcare-Enhanced)
+## 💡 Development Guidelines
 
-### **TypeScript (Medical Data Integrity)**
+### **TypeScript Standards**
 ```typescript
 // ✅ CORRECT - Strict medical data types
 interface PatientInquiry {
   readonly id: string
   medicalConcern: string
   urgencyLevel: 'routine' | 'urgent' | 'emergency'
-  patientAge?: number  // Optional, privacy-sensitive
-  medicalHistory?: MedicalHistory[]  // Structured medical data
-  consentGiven: boolean  // GDPR compliance required
+  consentGiven: boolean  // GDPR required
   timestamp: Date
 }
 
-// ✅ CORRECT - No any types in medical contexts
-interface StrapiMedicalResponse {
-  data: MedicalExpert[]
-  meta: ResponseMetadata
-}
-
-// ❌ WRONG - Never use any for medical data
-const patientData: any = response.data  // Never!
+// ❌ NEVER use 'any' for medical data
+const patientData: any = response.data  // NEVER!
 ```
 
-### **React/Next.js Patterns (Healthcare Context)**
+### **React/Next.js Patterns**
 ```tsx
-// ✅ CORRECT - Server Components for medical content (privacy)
-// app/experts/page.tsx
+// Server Components for medical content (privacy)
 export default async function MedicalExpertsPage() {
-  const experts = await getMedicalExperts()  // Server-side, secure
-  
+  const experts = await getMedicalExperts()
   return (
     <div className="min-h-screen bg-healthcare-background">
       <EmergencyBanner />  {/* Always include */}
@@ -446,487 +278,241 @@ export default async function MedicalExpertsPage() {
   )
 }
 
-// ✅ CORRECT - Client Components only for interactivity
+// Client Components only for interactivity
 'use client'
 export function MedicalForm() {
   const [consent, setConsent] = useState(false)
-  
   return (
     <form className="space-y-6">
-      {/* Medical form with privacy considerations */}
-      <ConsentCheckbox 
-        checked={consent} 
-        onChange={setConsent}
-        required 
-      />
+      <ConsentCheckbox checked={consent} onChange={setConsent} required />
     </form>
   )
 }
 ```
 
-### **Styling (Healthcare Design System)**
-```tsx
-// ✅ CORRECT - Healthcare design tokens
-<div className="bg-healthcare-background p-6 rounded-2xl shadow-healthcare">
-  <button className="bg-healthcare-primary-light hover:bg-healthcare-primary text-white min-h-[56px] px-8 rounded-xl transition-all duration-200">
-    Beratung anfragen
-  </button>
-</div>
-
-// ✅ CORRECT - Responsive healthcare patterns
-<div className="p-4 sm:p-6 lg:p-8">  {/* Progressive spacing */}
-  <h1 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-healthcare-primary">
-    Medizinische Zweitmeinung
-  </h1>
-</div>
-
-// ❌ WRONG - Arbitrary values in healthcare context
-<button className="bg-blue-500 h-10">  {/* Too small, wrong color */}
-<div className="p-2">  {/* Not enough padding for healthcare */}
-```
-
-### **Strapi Integration (Medical Content)**
+### **Strapi Integration**
 ```typescript
-// ✅ CORRECT - Medical content with proper population
-const medicalContent = await strapiAPI.get('/medical-articles', {
+// Medical content with proper population
+const content = await strapiAPI.get('/medical-articles', {
   'populate[sections]': '*',
-  'populate[medicalExperts]': 'name,specialization,credentials',
-  'populate[images]': 'url,alt',  // Always include alt text for accessibility
-  'filters[medicallyReviewed][$eq]': true  // Only medically reviewed content
+  'populate[images]': 'url,alt',
+  'filters[medicallyReviewed][$eq]': true
 })
 
-// ✅ CORRECT - Error handling for medical data
+// Error handling with fallback
 try {
-  const experts = await getMedicalExperts()
-  return experts
+  return await getMedicalExperts()
 } catch (error) {
-  // Log error but show user-friendly healthcare message
-  console.error('Medical experts fetch failed:', error)
   return {
-    error: 'Medizinische Daten konnten nicht geladen werden. Bitte versuchen Sie es später erneut oder wenden Sie sich direkt an unseren Support.',
-    fallback: defaultMedicalContacts  // Always provide fallback contact
+    error: 'Medizinische Daten konnten nicht geladen werden.',
+    fallback: defaultMedicalContacts
   }
 }
 ```
 
 ---
 
-## 🔧 Development Workflow (Storybook-First)
+## 🔧 Quality Assurance
 
-### **1. Component Development Process**
+### **Pre-Completion Checklist**
+
+#### **Accessibility (WCAG 2.1 AA)**
+- ✅ Color contrast 4.5:1+ (validated in Storybook A11y tab)
+- ✅ Touch targets 56px+ (measured in browser)
+- ✅ Focus indicators 3px solid visible
+- ✅ German ARIA labels for screen readers
+
+#### **Functionality**
+- ✅ Emergency states handled appropriately
+- ✅ Loading states with medical context
+- ✅ Error states with clear guidance
+- ✅ Mobile usability tested on devices
+
+#### **Design & Performance**
+- ✅ Only approved healthcare colors
+- ✅ Professional medical tone
+- ✅ Roboto Condensed typography
+- ✅ Minimal bundle impact
+- ✅ Fast rendering for stressed users
+
+### **Testing Commands**
 ```bash
-# Step 1: Start with Storybook (ALWAYS)
-npm run storybook
-# http://localhost:6006
-
-# Step 2: Create healthcare component
-# /src/stories/HealthcareNewComponent.tsx
-# /src/stories/HealthcareNewComponent.stories.ts
-# /src/stories/HealthcareNewComponent.css
-
-# Step 3: A11y validation in Storybook
-# Use A11y tab to validate WCAG 2.1 AA compliance
-
-# Step 4: Integration testing
-npm run dev  # Test with Next.js and Strapi data
-```
-
-### **2. Healthcare Component Checklist (Before Completion)**
-```typescript
-// ✅ WCAG 2.1 AA Compliance Checklist
-interface ComponentReadinessCheck {
-  accessibility: {
-    contrastRatio: '4.5:1 minimum'           // ✅ Validated in Storybook A11y tab
-    touchTargets: '56px+ for healthcare'    // ✅ Measured in browser dev tools
-    focusIndicators: '3px solid visible'    // ✅ Keyboard navigation tested
-    ariaLabels: 'Descriptive German text'  // ✅ Screen reader friendly
-  }
-  
-  functionality: {
-    emergencyStates: 'Handled appropriately'  // ✅ Emergency contexts work
-    loadingStates: 'Medical context'          // ✅ Healthcare-appropriate loading
-    errorStates: 'Helpful medical guidance'   // ✅ Clear error recovery
-    mobileUsability: 'Thumb-friendly on mobile'  // ✅ Mobile healthcare testing
-  }
-  
-  design: {
-    healthcareColors: 'Only approved palette'     // ✅ No arbitrary colors
-    medicalTone: 'Professional and trustworthy'  // ✅ Appropriate for medical context
-    typography: 'Roboto Condensed only'          // ✅ Healthcare font system
-  }
-  
-  performance: {
-    bundleSize: 'Minimal impact'        // ✅ Dynamic imports when needed
-    renderTime: 'Fast for stressed users'  // ✅ Quick loading essential
-  }
-}
-```
-
-### **3. Testing & Quality (Healthcare Standards)**
-```bash
-# TypeScript compilation (strict mode for medical data)
-npx tsc --noEmit --strict
-
-# Linting with healthcare-specific rules
-npm run lint
-
-# Accessibility testing (mandatory)
-# 1. Automated in Storybook A11y tab
-# 2. Manual screen reader testing (NVDA/JAWS)
-# 3. Keyboard navigation testing
-# 4. Mobile touch testing on actual devices
-
-# Integration testing with medical data
-npm run dev  # Test with real Strapi medical content
+# Before every commit
+npm run lint              # ESLint + TypeScript
+npx tsc --noEmit         # Type checking
+npm run build-storybook  # Storybook build test
+npm run dev              # Integration test
 ```
 
 ---
 
-## 🚨 Common Issues & Solutions (Storybook Era)
+## 🚨 Troubleshooting & Optimization
 
-### **Storybook Development Issues**
+### **Common Issues & Solutions**
 
-#### **1. Component Not Appearing in Storybook**
-**Problem**: Component created but not visible in Storybook sidebar
-**Solution**:
-```typescript
-// Check file naming convention
-// ✅ CORRECT
-src/stories/HealthcareButton.stories.ts    // Will appear in sidebar
-src/stories/HealthcareButton.tsx           // Component file
+#### **Storybook Issues**
 
-// ❌ WRONG
-src/stories/button.stories.ts              // Wrong naming
-src/components/Button.stories.ts           // Wrong directory
-```
+**Component not visible**: Check file naming - use `HealthcareButton.stories.ts` in `/src/stories/`
 
-#### **2. A11y Tests Failing**
-**Problem**: Accessibility violations in Storybook A11y tab
-**Solution**:
+**A11y failures**: Ensure 56px+ touch targets, sufficient contrast, focus indicators:
 ```tsx
-// ✅ CORRECT - Fix common A11y issues
 <button 
-  className="min-h-[56px] min-w-[56px]"        // Touch target size
-  aria-label="Medizinische Zweitmeinung anfordern"  // Screen reader text
-  style={{ backgroundColor: '#1278B3' }}      // Sufficient contrast
+  className="min-h-[56px] bg-healthcare-primary-light focus:ring-3"
+  aria-label="Medizinische Zweitmeinung anfordern"
 >
-  Anfragen
-</button>
-
-// Add focus indicators
-.healthcare-button:focus {
-  outline: 3px solid #1278B3;
-  outline-offset: 2px;
-}
 ```
 
-#### **3. Stories Not Loading Healthcare Data**
-**Problem**: Stories show empty or placeholder data
-**Solution**:
+**Empty story data**: Mock realistic healthcare data:
 ```typescript
-// ✅ CORRECT - Mock healthcare data in stories
 export const WithMedicalData: Story = {
   args: {
     expert: {
       name: 'Dr. med. Maria Schmidt',
       specialization: 'Kardiologie',
-      credentials: 'Facharzt für Innere Medizin',
-      rating: 4.9,
-      reviewCount: 127
-    }
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'Medical expert card with realistic healthcare professional data'
-      }
+      rating: 4.9
     }
   }
 }
 ```
 
-### **Traditional Issues (Updated for Storybook Era)**
+#### **Integration Issues**
 
-#### **4. Hydration Mismatches (Healthcare Context)**
-**Problem**: Server/client rendering differences affecting medical components
-**Solution**:
+**Hydration mismatch**: Use client-only rendering with loading state:
 ```tsx
-// ✅ CORRECT - Healthcare-safe client-only rendering
 'use client'
-import { useState, useEffect } from 'react'
-
-export function MedicalAppointmentTime() {
+export function MedicalTime() {
   const [mounted, setMounted] = useState(false)
-  
   useEffect(() => setMounted(true), [])
-  
-  if (!mounted) {
-    return <div className="h-6 bg-healthcare-background animate-pulse rounded" />  // Healthcare loading
-  }
-  
-  return (
-    <time className="text-healthcare-primary">
-      {new Date().toLocaleDateString('de-DE')}
-    </time>
-  )
+  if (!mounted) return <div className="animate-pulse" />
+  return <time>{new Date().toLocaleDateString('de-DE')}</time>
 }
 ```
 
-#### **5. Component Not in Section Registry**
-**Problem**: New component created but can't be used in Strapi sections
-**Solution**:
+**Missing Strapi component**: Add to `/src/types/sections.ts`:
 ```typescript
-// Add to /src/types/sections.ts
 export type SectionComponentType = 
-  // ... existing types
-  | 'sections.healthcare-new-component'     // Add your component here
-  | 'sections.medical-expert-grid'          // Example medical component
-  | 'sections.emergency-contact-banner'     // Example emergency component
+  | 'sections.healthcare-new-component'
 ```
 
-#### **6. Image Loading Issues (Medical Context)**
-**Problem**: Medical images, doctor photos not displaying
-**Solution**:
+### **Performance Optimization**
+
+#### **Bundle Size**
 ```typescript
-// 1. Check Strapi populate includes medical image data
-const medicalExperts = await strapiAPI.get('/experts', {
-  'populate[photo]': '*',           // Doctor profile photos
-  'populate[credentials]': '*',     // Medical certificates
-  'populate[specializations]': '*'  // Medical specialization images
-})
-
-// 2. Verify medical image conversion in strapi-real.ts
-// 3. Ensure Next.js next.config.js includes medical image domains
-```
-
----
-
-## 🎯 Performance Optimization (Healthcare-Critical)
-
-### **Bundle Size (Medical Performance)**
-```typescript
-// ✅ CORRECT - Dynamic imports for large medical components
+// Dynamic imports for large components
 const MedicalFileUpload = dynamic(() => import('./MedicalFileUpload'), {
   loading: () => <MedicalLoadingSpinner />,
-  ssr: false  // Medical file handling client-side only
+  ssr: false
 })
 
-// ✅ CORRECT - Tree-shake medical icons
-import { Heart, Stethoscope, Pills } from 'lucide-react'  // Only medical icons needed
-
-// ❌ WRONG - Large bundle for healthcare users
-import * as Icons from 'lucide-react'  // Too large for healthcare mobile users
+// Tree-shake icons
+import { Heart, Stethoscope } from 'lucide-react'
+// Not: import * as Icons from 'lucide-react'
 ```
 
-### **Runtime Performance (Healthcare UX)**
+#### **Runtime Performance**
 ```tsx
-// ✅ CORRECT - Optimize for stressed medical users
-import { memo, useMemo } from 'react'
-
-const MedicalExpertCard = memo(({ expert }: { expert: MedicalExpert }) => {
-  // Cache expensive medical data calculations
-  const expertRating = useMemo(() => 
-    calculateMedicalRating(expert.reviews), 
-    [expert.reviews]
-  )
-  
-  return (
-    <div className="bg-white rounded-2xl p-6 shadow-healthcare">
-      {/* Fast-loading medical expert info */}
-    </div>
-  )
+// Memoize expensive calculations
+const MedicalExpertCard = memo(({ expert }) => {
+  const rating = useMemo(() => calculateRating(expert.reviews), [expert.reviews])
+  return <div className="bg-white rounded-2xl p-6">{/* content */}</div>
 })
 
-// ✅ CORRECT - Suspense for medical data
-<Suspense fallback={<MedicalExpertSkeleton />}>
+// Suspense for data loading
+<Suspense fallback={<Skeleton />}>
   <MedicalExpertGrid />
 </Suspense>
 ```
 
-### **Healthcare API Optimization**
+#### **API Optimization**
 ```typescript
-// ✅ CORRECT - Selective medical data fetching
-const medicalData = await strapiAPI.get('/medical-experts', {
-  'populate[specializations]': 'name,icon',  // Only essential medical data
-  'populate[credentials]': 'title,year',     // Essential credentials only
-  'fields': 'name,rating,reviewCount',       // Minimal expert data
-  'pagination[pageSize]': 10,                // Reasonable page size for healthcare
+// Selective data fetching
+const data = await strapiAPI.get('/experts', {
+  'fields': 'name,rating,reviewCount',
+  'populate[specializations]': 'name,icon',
+  'pagination[pageSize]': 10
 })
 
-// ✅ CORRECT - Cache medical data appropriately
-export const revalidate = 3600  // 1 hour cache for medical expert data (not too stale)
-export const dynamic = 'force-dynamic'  // For patient-specific data
+// Appropriate caching
+export const revalidate = 3600  // 1 hour for expert data
 ```
 
 ---
 
-## 🏥 Domain-Specific Context (Enhanced)
+## 🏥 Healthcare Platform Context
 
-### **Medical Platform Requirements (2025 Standards)**
+### **Medical Platform Requirements**
 
-#### **Patient Privacy & GDPR Compliance**
+#### **Privacy & GDPR**
+- Never log sensitive medical information
+- Encrypt patient data at rest and in transmission
+- HTTPS only for medical communications  
+- 10-year retention for medical data (Germany)
+- Explicit consent for all data processing
+
 ```typescript
-// ✅ CORRECT - Privacy-first medical data handling
-interface PatientDataHandling {
-  logging: 'Never log sensitive medical information'
-  storage: 'Encrypt all patient data at rest'
-  transmission: 'HTTPS only for medical communications'
-  retention: 'Follow medical data retention laws (10 years Germany)'
-  consent: 'Explicit opt-in for all medical data processing'
-}
-
-// Example implementation
 const handleMedicalSubmission = async (data: MedicalInquiry) => {
-  // ✅ CORRECT - No logging of medical details
   logger.info('Medical inquiry submitted', { 
     inquiryId: data.id, 
     timestamp: data.timestamp 
-    // Never log: medicalConcern, patientDetails, etc.
+    // Never log: medicalConcern, patientDetails
   })
   
-  // ✅ CORRECT - Encrypted transmission
   const response = await fetch('/api/medical-inquiry', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(encrypt(data))  // Encrypt sensitive medical data
+    body: JSON.stringify(encrypt(data))
   })
 }
 ```
 
-#### **Accessibility for Medical Users**
+#### **Healthcare User Needs**
+- **Visual**: High contrast, screen reader support
+- **Motor**: Large touch targets (56px+), voice input
+- **Cognitive**: Simple language, clear instructions
+- **Stress**: Calm colors, emergency contacts visible
+- **Mobile**: Primary device for many healthcare users
+
+### **Medical Specialties**
+
+#### **7 Primary Specialties & FAQ Categories**
+- **Kardiologie**: Heart/cardiovascular (red theme)
+- **Onkologie**: Cancer treatment (purple theme)
+- **Gallenblase**: Gallbladder/biliary (yellow theme)  
+- **Nephrologie**: Kidney/renal (blue theme)
+- **Schilddrüse**: Thyroid/endocrine (green theme)
+- **Intensivmedizin**: Critical care (orange theme)
+- **Allgemeine Fragen**: General inquiries (brand color)
+
 ```typescript
-// Healthcare users often have additional accessibility needs
-interface HealthcareAccessibility {
-  visualImpairments: 'High contrast modes, screen reader optimization'
-  motorImpairments: 'Large touch targets (56px+), voice input support'
-  cognitiveLoad: 'Simple language, clear instructions, progress indicators'
-  stressFactors: 'Calm colors, reassuring messaging, emergency contacts visible'
-  mobileFirst: 'Many healthcare users primarily on mobile devices'
-}
-
-// ✅ CORRECT - Healthcare accessibility implementation
-<button 
-  className="
-    min-h-[56px] min-w-[56px] 
-    bg-healthcare-primary-light 
-    text-white text-lg font-medium
-    rounded-xl
-    focus:ring-4 focus:ring-healthcare-primary-light focus:ring-offset-2
-    active:scale-95
-    transition-all duration-200
-  "
-  aria-label="Medizinische Beratung jetzt starten - Sie werden zu einem Facharzt weitergeleitet"
->
-  🩺 Beratung starten
-</button>
-```
-
-#### **Trust Indicators for Medical Platform**
-```tsx
-// ✅ CORRECT - Medical trust elements
-<div className="bg-healthcare-background p-6 rounded-2xl">
-  <div className="flex items-center gap-4 mb-4">
-    <div className="flex items-center gap-2">
-      <ShieldCheckIcon className="w-5 h-5 text-healthcare-success" />
-      <span className="text-sm font-medium">DSGVO-konform</span>
-    </div>
-    <div className="flex items-center gap-2">
-      <CertificateIcon className="w-5 h-5 text-healthcare-success" />
-      <span className="text-sm font-medium">Ärztlich geprüft</span>
-    </div>
-    <div className="flex items-center gap-2">
-      <LockIcon className="w-5 h-5 text-healthcare-success" />
-      <span className="text-sm font-medium">SSL-verschlüsselt</span>
-    </div>
-  </div>
-  
-  <p className="text-xs text-healthcare-text-muted">
-    Alle medizinischen Daten werden nach höchsten Sicherheitsstandards behandelt 
-    und unterliegen der ärztlichen Schweigepflicht.
-  </p>
-</div>
-```
-
-### **Medical Specialties & Content Types**
-
-#### **7 Primary Medical Specialties & FAQ Categories**
-```typescript
-interface MedicalSpecialties {
-  'kardiologie': 'Heart and cardiovascular medicine'
-  'onkologie': 'Cancer treatment and oncology'  
-  'gallenblase': 'Gallbladder and biliary system'
-  'nephrologie': 'Kidney and renal medicine'
-  'schilddruese': 'Thyroid and endocrine disorders'
-  'intensivmedizin': 'Critical care and intensive medicine'
-  'allgemeine-fragen-zur-zweitmeinung': 'General medical inquiries and second opinion questions'
-}
-
-// FAQ Categories in Strapi (Status: ✅ WORKING)
-interface FAQCategories {
-  'zweitmeinung-kardiologie': 'Kardiologie - Herzkatheter, Stent, Bypass'
-  'zweitmeinung-onkologie': 'Onkologie - Krebsdiagnosen, Chemo-, Strahlentherapie'  
-  'zweitmeinung-gallenblase': 'Gallenblase - Gallensteine, Gallenblasenentfernung'
-  'zweitmeinung-nephrologie': 'Nephrologie - Nierenerkrankungen, Dialyse, Transplantation'
-  'zweitmeinung-schilddruese': 'Schilddrüse - Schilddrüsenknoten, Struma, Autonomie'
-  'zweitmeinung-intensivmedizin': 'Intensivmedizin - Intensivpflegerische Situationen'
-  'allgemeine-fragen-zur-zweitmeinung': 'Allgemeine Fragen - Ablauf, Nutzen, Voraussetzungen'
-}
-
-// Usage in components
-const getSpecialtyColor = (specialty: keyof MedicalSpecialties) => {
+const getSpecialtyColor = (specialty: string) => {
   const colors = {
-    'kardiologie': 'text-red-600',         // Heart = red
-    'onkologie': 'text-purple-600',        // Cancer = purple  
-    'gallenblase': 'text-yellow-600',      // Gallbladder = yellow
-    'nephrologie': 'text-blue-600',        // Kidney = blue
-    'schilddruese': 'text-green-600',      // Thyroid = green
-    'intensivmedizin': 'text-orange-600',  // ICU = orange
-    'allgemeine-fragen': 'text-healthcare-primary'  // General = brand color
+    'kardiologie': 'text-red-600',
+    'onkologie': 'text-purple-600',
+    'gallenblase': 'text-yellow-600',
+    'nephrologie': 'text-blue-600',
+    'schilddruese': 'text-green-600',
+    'intensivmedizin': 'text-orange-600'
   }
   return colors[specialty] || 'text-healthcare-primary'
 }
 ```
 
-#### **Component Types (58+ Healthcare Sections)**
+#### **Healthcare Section Types**
 ```typescript
-// Medical section components for Strapi integration
 type HealthcareSectionTypes = 
-  // Emergency & Contact
   | 'sections.emergency-banner'
-  | 'sections.medical-contact-form'  
-  | 'sections.emergency-contacts'
-  
-  // Medical Content
   | 'sections.medical-hero'
   | 'sections.expert-grid'
-  | 'sections.medical-services'
-  | 'sections.specialty-showcase'
-  
-  // Trust & Credentials  
-  | 'sections.medical-credentials'
-  | 'sections.patient-testimonials'
-  | 'sections.trust-indicators'
-  
-  // FAQ & Information
   | 'sections.medical-faq'
-  | 'sections.health-information'
-  | 'sections.treatment-process'
-  
-  // ... 45+ additional healthcare section types
+  | 'sections.trust-indicators'
+  // ... 50+ additional section types
 ```
 
-#### **🔧 FAQ Categorization System (Status: ✅ OPERATIONAL)**
+#### **FAQ System**
 
-Das FAQ-System implementiert eine intelligente **Hybrid-Kategorisierung**:
-
-```typescript
-// System Architecture - Dual Strategy Approach
-interface FAQCategorizationStrategy {
-  primary: 'Strapi API Relations'    // Preferred method when available
-  fallback: 'Keyword-based Matching' // Intelligent backup system  
-  cache: 'Performance Optimization'   // 5-minute TTL for speed
-  coverage: '100% FAQ categorization' // No uncategorized FAQs
-}
+**Hybrid Categorization Strategy**:
+1. **Primary**: Strapi API relations (when configured)
+2. **Fallback**: Keyword-based matching (100% coverage)
+3. **Cache**: 5-minute TTL for performance
 ```
 
 **✅ API Endpoints:**
@@ -1018,122 +604,66 @@ const CATEGORY_KEYWORDS = {
 
 ---
 
-## 🤖 AI Assistant Instructions (Storybook-Era Guidelines)
+## 🤖 AI Assistant Instructions
 
-### **PRIMARY DEVELOPMENT RULES**
+### **Development Rules (NON-NEGOTIABLE)**
 
-1. **🎨 Storybook-First Development (MANDATORY)**
-   - ALWAYS start component development in Storybook
-   - Create healthcare components in `/src/stories/` first
-   - Test with A11y addon before integration
-   - Minimum 6 stories per component (Default, Emergency, Disabled, Touch sizes, High contrast)
+1. **Storybook-First**: Always start in Storybook, create 6+ stories, validate A11y
+2. **Healthcare Compliance**: WCAG 2.1 AA mandatory, 56px+ touch targets
+3. **Medical Data**: No `any` types, never log sensitive info, provide emergency fallbacks
+4. **Healthcare Colors**: Only approved palette (#004166, #1278B3, #B3AF09)
 
-2. **🏥 Healthcare Compliance (NON-NEGOTIABLE)**
-   - WCAG 2.1 AA compliance is mandatory, not optional
-   - Use only healthcare color palette (#004166, #1278B3, #B3AF09)
-   - Minimum 56px touch targets for healthcare users
-   - Include emergency contact visibility in all layouts
-
-3. **⚗️ Component Development Process**
-   ```typescript
-   // Step 1: Create in Storybook
-   /src/stories/HealthcareComponent.tsx
-   /src/stories/HealthcareComponent.stories.ts
-   /src/stories/HealthcareComponent.css
-   
-   // Step 2: Validate accessibility
-   // Use A11y tab in Storybook - must pass all tests
-   
-   // Step 3: Add to type registry (if Strapi component)
-   // /src/types/sections.ts - add to SectionComponentType union
-   
-   // Step 4: Integration test
-   // npm run dev - test with Next.js and Strapi
-   ```
-
-4. **🔒 Medical Data Integrity**
-   - Use TypeScript strict mode - no `any` types for medical data
-   - Never log sensitive medical information
-   - Implement proper error boundaries for healthcare data
-   - Always provide fallback emergency contacts
-
-5. **📱 Healthcare UX Priorities**
-   - Mobile-first design for healthcare users
-   - Large touch targets (56px+) for stressed users
-   - Clear error messages with medical context
-   - Emergency information always accessible
-
-### **DEVELOPMENT WORKFLOW ENFORCEMENT**
-
-#### **Before Starting Any Task:**
+### **Workflow**
 ```bash
-# 1. Start Storybook FIRST
-npm run storybook
-# 2. Check existing healthcare patterns
-# 3. Review /docs/STORYBOOK-ROADMAP.md for current phase
+# Before starting
+npm run storybook  # Start Storybook first
+
+# Development process
+# 1. Create in /src/stories/
+# 2. Validate A11y in Storybook
+# 3. Add to /src/types/sections.ts if needed
+# 4. Test with npm run dev
+
+# Before completing
+npm run lint && npx tsc --noEmit
 ```
 
-#### **During Development:**
-- **Create components in Storybook first** - no exceptions
-- **Test A11y compliance immediately** - use A11y tab for every story
-- **Use healthcare design tokens only** - no arbitrary colors/sizes
-- **Include medical context** - every component should work in healthcare scenarios
-
-#### **Before Completing:**
-- **TypeScript compilation must pass**: `npx tsc --noEmit`
-- **Linting must pass**: `npm run lint`  
-- **Storybook build must work**: `npm run build-storybook`
-- **A11y tests must pass** - validate in Storybook A11y tab
-- **Mobile testing required** - test on actual mobile devices
-
-### **ERROR HANDLING (Healthcare-Critical)**
+### **Error Handling**
 ```typescript
-// ✅ CORRECT - Healthcare-appropriate error handling
 const handleMedicalError = (error: Error, context: string) => {
-  // Log technical details (not medical data)
-  logger.error(`Medical system error in ${context}`, { 
-    error: error.message, 
-    stack: error.stack,
+  logger.error(`Medical system error`, { 
+    error: error.message,
+    context,
     timestamp: new Date().toISOString()
-    // Never log: patient data, medical details, personal info
+    // Never log medical details
   })
   
-  // Show user-friendly medical message
   return {
-    message: 'Ein technischer Fehler ist aufgetreten. Ihre medizinischen Daten sind sicher. Bitte versuchen Sie es erneut oder kontaktieren Sie unseren Support.',
-    emergencyContact: '+49 800 80 44 100',
-    supportEmail: 'support@zweitmeinung.ng'
+    message: 'Ein technischer Fehler ist aufgetreten. Ihre medizinischen Daten sind sicher.',
+    emergencyContact: '+49 800 80 44 100'
   }
 }
 ```
 
-### **PERFORMANCE CONSIDERATIONS (Healthcare Users)**
-- **Fast loading is critical** - medical users are often stressed
-- **Bundle size matters** - many users on mobile with limited data
-- **Offline considerations** - implement service workers for critical functions
-- **Progressive enhancement** - core functionality must work without JavaScript
+### **Key Principles**
+- **Fast loading**: Medical users are stressed
+- **Mobile-first**: Primary device for many users
+- **Professional tone**: Medical-appropriate language
+- **Privacy-first**: Never assume medical details
+- **Emergency access**: Always provide fallback contacts
 
-### **COMMUNICATION GUIDELINES**
-- **Use medical-appropriate language** - professional, reassuring tone
-- **Provide clear next steps** - medical users need guidance
-- **Include emergency fallbacks** - always offer alternative contact methods
-- **Respect privacy** - never assume medical details in generic messaging
+**Remember**: Healthcare platform where patient trust and accessibility are paramount.
 
 ---
 
-**Remember**: This is a medical platform where patient trust, data security, and accessibility are paramount. Every component, every interaction, and every error message must reflect the highest standards of healthcare professionalism.
+## 🔗 Quick Reference
+
+- **Storybook**: http://localhost:6006 (primary development)
+- **Next.js**: http://localhost:3000 (integration testing)
+- **Commands**: `npm run storybook`, `npm run dev`, `npm run lint`
+- **Colors**: #004166 (primary), #1278B3 (primary-light), #B3AF09 (accent)
+- **Touch Targets**: 44px min, 56px recommended, 64px primary CTAs
 
 ---
 
-## 🔗 Quick Reference Links
-
-- **🎨 Storybook Development**: http://localhost:6006
-- **🏥 Website Testing**: http://localhost:3000
-- **📚 Full Roadmap**: `/docs/STORYBOOK-ROADMAP.md`
-- **🏗️ Architecture**: `/docs/ARCHITECTURE.md`
-- **📖 API Reference**: `/docs/API-REFERENCE.md`
-
----
-
-*Last updated: 2025-08-21 | Version: 3.1 - FAQ System & Development Environment Update*
-*Previous version backed up as: CLAUDE-backup-v3.0.md*
+*Version 4.0 - Streamlined | Updated: 2025-08-24*

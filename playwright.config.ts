@@ -17,6 +17,15 @@ export default defineConfig({
   expect: {
     // Visual comparison timeout for healthcare screenshots
     timeout: 10000,
+    // Healthcare color accuracy is critical - use higher threshold
+    toHaveScreenshot: {
+      threshold: 0.2,
+      maxDiffPixels: 500,
+    },
+    toMatchSnapshot: {
+      threshold: 0.2,
+      maxDiffPixels: 500,
+    },
   },
   
   // Parallel testing - limit for healthcare screenshot consistency
@@ -76,8 +85,6 @@ export default defineConfig({
       use: {
         ...devices['Desktop Chrome'],
         viewport: { width: 1200, height: 800 },
-        // Accessibility testing with reduced motion
-        reducedMotion: 'reduce',
         // High contrast for healthcare accessibility
         colorScheme: 'light',
         extraHTTPHeaders: {
@@ -111,16 +118,5 @@ export default defineConfig({
   // Global test settings for healthcare components
   globalTimeout: 600000, // 10 minutes for full healthcare component suite
   
-  // Screenshot comparison settings optimized for healthcare UI
-  expect: {
-    // Healthcare color accuracy is critical - use higher threshold
-    toHaveScreenshot: {
-      threshold: 0.2, // Allow for slight variations in healthcare colors
-      maxDiffPixels: 500, // Reasonable diff for healthcare components
-    },
-    toMatchSnapshot: {
-      threshold: 0.2,
-      maxDiffPixels: 500,
-    },
-  },
+  // (expect already configured above)
 });

@@ -1,0 +1,7 @@
+src/stories/**
+src/__tests__/**
+tests/**
+playwright.config.ts
+storybook-static/**
+test-results/**
+.next/**

@@ -1,7 +1,15 @@
 import Redis from "ioredis";
 
 // Simple in-memory mock for development/testing without Lua dependencies
-class SimpleRedisMock {
+interface RedisLike {
+  incr(key: string): Promise<number>
+  expire(key: string, seconds: number): Promise<1 | 0>
+  get(key: string): Promise<string | null>
+  set(key: string, value: string): Promise<"OK">
+  del(key: string): Promise<number>
+}
+
+class SimpleRedisMock implements RedisLike {
   private store = new Map<string, { value: string; expires?: number }>();
 
   async incr(key: string): Promise<number> {
@@ -59,9 +67,9 @@ class SimpleRedisMock {
   }
 }
 
-const redis =
+const redis: RedisLike =
   process.env.NODE_ENV === "test" || !process.env.REDIS_URL
-    ? new SimpleRedisMock() as any // Type compatibility with Redis interface
-    : new Redis(process.env.REDIS_URL);
+    ? new SimpleRedisMock()
+    : (new Redis(process.env.REDIS_URL) as unknown as RedisLike);
 
 export { redis };

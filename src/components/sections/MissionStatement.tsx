@@ -17,7 +17,7 @@ export default function MissionStatement({
   attribution = '– Das Team von zweitmeinung.ng',
   icon = 'quote',
   backgroundColor,
-  textColor
+  textColor: _textColor
 }: MissionStatementSection) {
   
   // Icon Component - uses actual icon from Strapi API

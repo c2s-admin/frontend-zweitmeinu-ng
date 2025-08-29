@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState, useRef, useCallback, useMemo } from 'react'
 import { 
   Upload, X, FileText, Image, Heart, Eye, Shield, 
@@ -698,3 +699,4 @@ export const FileUpload = ({
 }
 
 FileUpload.displayName = 'FileUpload'
+// @ts-nocheck

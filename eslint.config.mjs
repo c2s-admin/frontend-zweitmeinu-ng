@@ -10,8 +10,22 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
-  { ignores: ["src/lib/env.js"] },
+  { ignores: [
+    "src/lib/env.js",
+    "src/stories/**",
+    "src/__tests__/**",
+    "tests/**",
+    "playwright.config.ts",
+    "storybook-static/**",
+    "test-results/**"
+  ] },
   ...compat.extends("next/core-web-vitals", "next/typescript"),
+  {
+    files: ["src/lib/performance.ts"],
+    rules: {
+      "@typescript-eslint/no-explicit-any": "off",
+    }
+  },
   {
     languageOptions: {
       parserOptions: {

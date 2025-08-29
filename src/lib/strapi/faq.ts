@@ -125,7 +125,8 @@ interface CachedCategorizationResult {
 
 // Enhanced caching system
 const CATEGORIZATION_CACHE = new Map<number, CachedCategorizationResult>();
-const FAQ_DATA_CACHE = new Map<string, { data: any; timestamp: number; ttl: number }>();
+type FAQDataCacheEntry = { data: FAQ[]; timestamp: number; ttl: number }
+const FAQ_DATA_CACHE = new Map<string, FAQDataCacheEntry>();
 const FAQ_CATEGORIES_CACHE = new Map<string, { data: FAQCategory[]; timestamp: number; ttl: number }>();
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 const CATEGORIES_CACHE_TTL = 10 * 60 * 1000; // 10 minutes for categories (change less often)

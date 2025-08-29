@@ -1,24 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+import { redis } from "@/lib/redis";
 
 const WINDOW_MS = parseInt(process.env.CONTACT_MESSAGES_RATE_LIMIT_WINDOW ?? "60") * 1000;
 const MAX_REQUESTS = parseInt(process.env.CONTACT_MESSAGES_RATE_LIMIT_MAX ?? "5");
-
-interface RateLimitInfo {
-  count: number;
-  expires: number;
-}
-
-const ipRecords = new Map<string, RateLimitInfo>();
-
-// periodically purge expired records to prevent unbounded memory growth
-setInterval(() => {
-  const now = Date.now();
-  for (const [ip, info] of ipRecords) {
-    if (info.expires <= now) {
-      ipRecords.delete(ip);
-    }
-  }
-}, WINDOW_MS).unref?.();
 
 export function getClientIP(request: NextRequest): string {
   const forwarded = request.headers.get("x-forwarded-for");
@@ -26,18 +10,16 @@ export function getClientIP(request: NextRequest): string {
   return forwarded?.split(",")[0] || real || "unknown";
 }
 
-function isAllowed(ip: string): boolean {
-  const now = Date.now();
-  const info = ipRecords.get(ip);
-  if (!info || info.expires <= now) {
-    ipRecords.set(ip, { count: 1, expires: now + WINDOW_MS });
-    return true;
+async function isAllowed(ip: string): Promise<boolean> {
+  // Use a rolling window key per IP (simple fixed window)
+  const windowSeconds = Math.ceil(WINDOW_MS / 1000);
+  const key = `ratelimit:contact:${ip}`;
+  const current = await redis.incr(key);
+  if (current === 1) {
+    // first hit: set expiry
+    await redis.expire(key, windowSeconds);
   }
-  if (info.count < MAX_REQUESTS) {
-    info.count += 1;
-    return true;
-  }
-  return false;
+  return current <= MAX_REQUESTS;
 }
 
 type Handler = (request: NextRequest) => Promise<NextResponse>;
@@ -45,9 +27,10 @@ type Handler = (request: NextRequest) => Promise<NextResponse>;
 export function withRateLimit(handler: Handler): Handler {
   return async (request: NextRequest) => {
     const ip = getClientIP(request);
-    if (!isAllowed(ip)) {
-      const info = ipRecords.get(ip);
-      const retryAfter = info ? Math.ceil((info.expires - Date.now()) / 1000) : 0;
+    const allowed = await isAllowed(ip);
+    if (!allowed) {
+      // Best-effort: provide remaining TTL
+      const retryAfter = Math.ceil(WINDOW_MS / 1000);
       return NextResponse.json(
         { error: "Too many requests" },
         {

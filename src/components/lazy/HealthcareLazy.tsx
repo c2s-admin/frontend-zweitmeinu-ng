@@ -8,7 +8,7 @@
  * - Memory-efficient chunking
  */
 
-import { lazy, Suspense, ComponentType } from 'react'
+import { Suspense, ComponentType } from 'react'
 import { createHealthcareLazy, type HealthcareLoadingConfig } from '../../lib/performance'
 
 // Healthcare loading fallbacks
@@ -380,7 +380,7 @@ export const loadHealthcareComponent = async (componentName: HealthcareComponent
   } catch (error) {
     console.error(`Failed to load healthcare component '${componentName}':`, error)
     // Return error fallback component
-    return () => (
+    const FallbackComponent: React.FC = () => (
       <div className="bg-red-50 border border-red-200 rounded-xl p-4" role="alert">
         <p className="text-red-800 font-medium">Komponente konnte nicht geladen werden</p>
         <p className="text-red-600 text-sm">
@@ -389,5 +389,7 @@ export const loadHealthcareComponent = async (componentName: HealthcareComponent
         </p>
       </div>
     )
+    FallbackComponent.displayName = 'HealthcareErrorFallbackComponent'
+    return FallbackComponent
   }
 }

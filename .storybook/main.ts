@@ -1,5 +1,8 @@
 import type { StorybookConfig } from '@storybook/nextjs';
 
+const isLight = process.env.STORYBOOK_LIGHT === 'true' || process.env.STORYBOOK_CI === 'true'
+const withDocs = process.env.STORYBOOK_DOCS !== 'false' && !isLight
+
 const config: StorybookConfig = {
   "stories": [
     "../src/**/*.mdx",
@@ -7,10 +10,11 @@ const config: StorybookConfig = {
   ],
   "addons": [
     "@chromatic-com/storybook",
-    "@storybook/addon-docs",
-    "@storybook/addon-onboarding",
+    // Docs can be toggled via STORYBOOK_DOCS=false; disabled in light/CI by default
+    ...(withDocs ? ["@storybook/addon-docs"] : []),
     "@storybook/addon-a11y",
-    "@storybook/addon-vitest"
+    // Optional/weighty addons disabled in light/CI
+    ...(isLight ? [] : ["@storybook/addon-onboarding", "@storybook/addon-vitest"])
   ],
   "framework": {
     "name": "@storybook/nextjs",
@@ -44,6 +48,19 @@ const config: StorybookConfig = {
       });
     }
     
+    // Optional: generate analyzer report for Storybook
+    if (process.env.STORYBOOK_ANALYZE === 'true') {
+      const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
+      config.plugins = config.plugins || []
+      config.plugins.push(new BundleAnalyzerPlugin({
+        analyzerMode: 'static',
+        openAnalyzer: false,
+        reportFilename: 'sb-bundle-report.html',
+        generateStatsFile: true,
+        statsFilename: 'sb-stats.json'
+      }))
+    }
+
     return config;
   }
 };

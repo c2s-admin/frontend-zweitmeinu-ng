@@ -1,6 +1,6 @@
 import { env } from "@/lib/env";
 import { logger } from "@/lib/logger";
-import { Sentry } from "@/lib/sentry";
+import { Sentry } from "@/lib/sentry.server";
 
 class StrapiAPIError extends Error {
   constructor(

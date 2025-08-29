@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { redis } from "@/lib/redis";
 import { MEDICAL_DICTIONARY } from "@/lib/medical-dictionary";
 import type { FAQ } from "@/lib/strapi/faq";
 import { logger } from "@/lib/logger";
@@ -43,47 +44,22 @@ const POPULAR_SEARCHES = [
   "Behandlung überprüfen",
 ];
 
-// Rate limiting for auto-complete
-const autoCompleteRateLimit = new Map<
-  string,
-  { count: number; resetTime: number }
->();
+// Rate limiting for auto-complete (Redis-backed)
 const RATE_LIMIT_WINDOW = 10 * 1000; // 10 seconds
 const RATE_LIMIT_MAX_REQUESTS = 50; // 50 requests per 10 seconds
 
-// Cache for auto-complete results
-const autoCompleteCache = new Map<
-  string,
-  { data: AutoCompleteResponse; timestamp: number }
->();
+// Cache for auto-complete results (in-memory; can be swapped to Redis if needed)
+const autoCompleteCache = new Map<string, { data: AutoCompleteResponse; timestamp: number }>();
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
-function checkAutoCompleteRateLimit(clientIP: string): boolean {
-  const now = Date.now();
-  const clientData = autoCompleteRateLimit.get(clientIP);
-
-  if (!clientData) {
-    autoCompleteRateLimit.set(clientIP, {
-      count: 1,
-      resetTime: now + RATE_LIMIT_WINDOW,
-    });
-    return true;
+async function checkAutoCompleteRateLimit(clientIP: string): Promise<boolean> {
+  const windowSeconds = Math.ceil(RATE_LIMIT_WINDOW / 1000);
+  const key = `ratelimit:autocomplete:${clientIP}`;
+  const current = await redis.incr(key);
+  if (current === 1) {
+    await redis.expire(key, windowSeconds);
   }
-
-  if (now > clientData.resetTime) {
-    autoCompleteRateLimit.set(clientIP, {
-      count: 1,
-      resetTime: now + RATE_LIMIT_WINDOW,
-    });
-    return true;
-  }
-
-  if (clientData.count >= RATE_LIMIT_MAX_REQUESTS) {
-    return false;
-  }
-
-  clientData.count++;
-  return true;
+  return current <= RATE_LIMIT_MAX_REQUESTS;
 }
 
 function getClientIP(request: NextRequest): string {
@@ -209,13 +185,16 @@ async function getFAQSuggestions(
   try {
     // This would typically query Strapi for FAQ questions
     // For now, we'll use a simplified approach
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000);
     const response = await fetch(
       `${STRAPI_BASE_URL}/faqs?filters[question][$containsi]=${encodeURIComponent(searchTerm)}&pagination[limit]=${limit}&populate=category`,
       {
         headers: { "Content-Type": "application/json" },
         cache: "no-store",
+        signal: controller.signal,
       },
-    );
+    ).finally(() => clearTimeout(timeout));
 
     if (!response.ok) {
       return [];
@@ -248,7 +227,7 @@ export async function GET(
   try {
     // Check rate limit
     const clientIP = getClientIP(request);
-    if (!checkAutoCompleteRateLimit(clientIP)) {
+    if (!(await checkAutoCompleteRateLimit(clientIP))) {
       return NextResponse.json(
         {
           suggestions: [],

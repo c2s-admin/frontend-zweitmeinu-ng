@@ -54,9 +54,9 @@ export interface AccessibilityState {
 export function useHealthcareAccessibility(options: UseHealthcareAccessibilityOptions = {}) {
   const {
     autoFocus = false,
-    enableKeyboardShortcuts = true,
+    enableKeyboardShortcuts: _enableKeyboardShortcuts = true,
     enableScreenReader = true,
-    context = 'content',
+    context: _context = 'content',
     medicalContext = false,
     emergencyMode = false
   } = options
@@ -81,6 +81,32 @@ export function useHealthcareAccessibility(options: UseHealthcareAccessibilityOp
   const componentRef = useRef<HTMLElement>(null)
   const previousFocusRef = useRef<HTMLElement | null>(null)
 
+  // Helpers before effects to satisfy TS ordering
+  const loadAccessibilitySettings = useCallback((): Partial<AccessibilitySettings> => {
+    if (typeof window === 'undefined') return {}
+    try {
+      const saved = localStorage.getItem('healthcare-accessibility-settings')
+      return saved ? JSON.parse(saved) : {}
+    } catch {
+      return {}
+    }
+  }, [])
+
+  const saveAccessibilitySettings = useCallback((settings: Partial<AccessibilitySettings>) => {
+    if (typeof window === 'undefined') return
+    try {
+      const currentSettings = loadAccessibilitySettings()
+      const newSettings = { ...currentSettings, ...settings }
+      localStorage.setItem('healthcare-accessibility-settings', JSON.stringify(newSettings))
+    } catch (error) {
+      console.warn('Failed to save accessibility settings:', error)
+    }
+  }, [loadAccessibilitySettings])
+
+  const announceEmergency = useCallback((message: string) => {
+    healthcareScreenReader.announceEmergency(message)
+  }, [])
+
   // Initialize accessibility features
   useEffect(() => {
     // Detect user preferences
@@ -93,9 +119,9 @@ export function useHealthcareAccessibility(options: UseHealthcareAccessibilityOp
     const initialState: AccessibilityState = {
       ...accessibilityState,
       settings: { ...accessibilityState.settings, ...savedSettings },
-      isReducedMotion: prefersReducedMotion || savedSettings.reducedMotion,
-      isHighContrast: prefersHighContrast || savedSettings.highContrastMode,
-      textSize: savedSettings.textSizeAdjustment || 'medium'
+      isReducedMotion: prefersReducedMotion || !!savedSettings.reducedMotion,
+      isHighContrast: prefersHighContrast || !!savedSettings.highContrastMode,
+      textSize: (savedSettings.textSizeAdjustment as AccessibilityState['textSize']) || 'medium'
     }
 
     setAccessibilityState(initialState)
@@ -120,7 +146,7 @@ export function useHealthcareAccessibility(options: UseHealthcareAccessibilityOp
       reducedMotionQuery.removeEventListener('change', handleReducedMotionChange)
       highContrastQuery.removeEventListener('change', handleHighContrastChange)
     }
-  }, [])
+  }, [accessibilityState, loadAccessibilitySettings])
 
   // Apply emergency mode
   useEffect(() => {
@@ -134,7 +160,7 @@ export function useHealthcareAccessibility(options: UseHealthcareAccessibilityOp
     return () => {
       document.body.classList.remove('emergency-mode')
     }
-  }, [emergencyMode])
+  }, [emergencyMode, announceEmergency])
 
   // Auto focus management
   useEffect(() => {
@@ -176,9 +202,6 @@ export function useHealthcareAccessibility(options: UseHealthcareAccessibilityOp
     }
   }, [enableScreenReader, medicalContext])
 
-  const announceEmergency = useCallback((message: string) => {
-    healthcareScreenReader.announceEmergency(message)
-  }, [])
 
   const announceMedicalData = useCallback((message: string, sensitive = false) => {
     healthcareScreenReader.announceMedicalData(message, sensitive)
@@ -263,7 +286,7 @@ export function useHealthcareAccessibility(options: UseHealthcareAccessibilityOp
     }
     
     saveAccessibilitySettings({ highContrastMode: newState })
-  }, [accessibilityState.isHighContrast, announce])
+  }, [accessibilityState.isHighContrast, announce, saveAccessibilitySettings])
 
   const toggleReducedMotion = useCallback(() => {
     const newState = !accessibilityState.isReducedMotion
@@ -282,7 +305,7 @@ export function useHealthcareAccessibility(options: UseHealthcareAccessibilityOp
     }
     
     saveAccessibilitySettings({ reducedMotion: newState })
-  }, [accessibilityState.isReducedMotion, announce])
+  }, [accessibilityState.isReducedMotion, announce, saveAccessibilitySettings])
 
   const setTextSize = useCallback((size: AccessibilityState['textSize']) => {
     // Remove all text size classes
@@ -307,7 +330,7 @@ export function useHealthcareAccessibility(options: UseHealthcareAccessibilityOp
     
     announce(`Textgröße geändert zu: ${sizeNames[size]}`)
     saveAccessibilitySettings({ textSizeAdjustment: size })
-  }, [announce])
+  }, [announce, saveAccessibilitySettings])
 
   const cycleTextSize = useCallback(() => {
     const sizes: AccessibilityState['textSize'][] = ['small', 'medium', 'large', 'extra-large']
@@ -333,7 +356,7 @@ export function useHealthcareAccessibility(options: UseHealthcareAccessibilityOp
     }
     
     saveAccessibilitySettings({ focusIndicatorEnhanced: newState })
-  }, [accessibilityState.enhancedFocus, announce])
+  }, [accessibilityState.enhancedFocus, announce, saveAccessibilitySettings])
 
   // Utility functions
   const isKeyboardUser = useCallback(() => {
@@ -358,29 +381,7 @@ export function useHealthcareAccessibility(options: UseHealthcareAccessibilityOp
     }))
   }, [])
 
-  // Helper functions
-  const loadAccessibilitySettings = (): Partial<AccessibilitySettings> => {
-    if (typeof window === 'undefined') return {}
-    
-    try {
-      const saved = localStorage.getItem('healthcare-accessibility-settings')
-      return saved ? JSON.parse(saved) : {}
-    } catch {
-      return {}
-    }
-  }
-
-  const saveAccessibilitySettings = (settings: Partial<AccessibilitySettings>) => {
-    if (typeof window === 'undefined') return
-    
-    try {
-      const currentSettings = loadAccessibilitySettings()
-      const newSettings = { ...currentSettings, ...settings }
-      localStorage.setItem('healthcare-accessibility-settings', JSON.stringify(newSettings))
-    } catch (error) {
-      console.warn('Failed to save accessibility settings:', error)
-    }
-  }
+  // Helper functions (defined earlier for TS ordering)
 
   const applyAccessibilitySettings = (state: AccessibilityState) => {
     // Apply high contrast
@@ -461,7 +462,7 @@ export function useHealthcareModalAccessibility(options: Omit<UseHealthcareAcces
       accessibility.releaseFocusTrap()
       accessibility.restoreFocus()
     }
-  }, [])
+  }, [accessibility])
 
   return accessibility
 }

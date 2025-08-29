@@ -11,8 +11,8 @@
 'use client'
 
 import { useEffect, useState, useCallback, useRef } from 'react'
-import { healthcareBundleAnalyzer, measureHealthcarePerformance } from '../lib/bundle-analyzer'
-import { getNetworkAwareLoadingStrategy, registerHealthcareServiceWorker } from '../lib/performance'
+import { healthcareBundleAnalyzer } from '../lib/bundle-analyzer'
+import { getNetworkAwareLoadingStrategy, registerHealthcareServiceWorker, measureHealthcarePerformance } from '../lib/performance'
 
 export interface PerformanceMetrics {
   pageLoadTime: number
@@ -58,26 +58,11 @@ export const HealthcarePerformanceMonitor = ({
   const performanceObserverRef = useRef<PerformanceObserver | null>(null)
   const emergencyComponentTimesRef = useRef<Map<string, number>>(new Map())
 
-  // Initialize performance monitoring
-  useEffect(() => {
-    initializePerformanceMonitoring()
-    if (enableServiceWorker) {
-      registerHealthcareServiceWorker()
+  const cleanup = useCallback(() => {
+    if (performanceObserverRef.current) {
+      performanceObserverRef.current.disconnect()
     }
-    
-    return cleanup
-  }, [enableServiceWorker])
-
-  // Network strategy monitoring
-  useEffect(() => {
-    const strategy = getNetworkAwareLoadingStrategy()
-    setNetworkStrategy(strategy)
-    setIsSlowConnection(strategy === 'minimal' || strategy === 'conservative')
-    
-    if (enableLogging) {
-      console.log(`Healthcare network strategy: ${strategy}`)
-    }
-  }, [enableLogging])
+  }, [])
 
   const initializePerformanceMonitoring = useCallback(() => {
     // Web Vitals monitoring
@@ -119,11 +104,13 @@ export const HealthcarePerformanceMonitor = ({
         lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] })
 
         // Monitor layout shifts
+        type LayoutShiftEntry = PerformanceEntry & { value: number; hadRecentInput: boolean }
         const clsObserver = new PerformanceObserver((list) => {
           let cls = 0
-          list.getEntries().forEach((entry: any) => {
-            if (!entry.hadRecentInput) {
-              cls += entry.value
+          list.getEntries().forEach((entry) => {
+            const e = entry as LayoutShiftEntry
+            if (!e.hadRecentInput) {
+              cls += e.value
             }
           })
           setMetrics(prev => ({
@@ -178,11 +165,11 @@ export const HealthcarePerformanceMonitor = ({
     }
 
     // Memory usage monitoring for long medical sessions
-    if (typeof window !== 'undefined' && 'performance' in window && 'memory' in performance) {
+    if (typeof window !== 'undefined' && 'performance' in window) {
       const memoryMonitor = setInterval(() => {
-        const memory = (performance as any).memory
-        if (memory) {
-          const memoryUsage = memory.usedJSHeapSize
+        const perf = performance as Performance & { memory?: { usedJSHeapSize: number } }
+        if (perf.memory) {
+          const memoryUsage = perf.memory.usedJSHeapSize
           setMetrics(prev => ({
             ...prev,
             memoryUsage
@@ -199,11 +186,28 @@ export const HealthcarePerformanceMonitor = ({
     }
   }, [alertThreshold, monitorEmergency, onPerformanceAlert])
 
-  const cleanup = useCallback(() => {
-    if (performanceObserverRef.current) {
-      performanceObserverRef.current.disconnect()
+  // Initialize performance monitoring
+  useEffect(() => {
+    initializePerformanceMonitoring()
+    if (enableServiceWorker) {
+      registerHealthcareServiceWorker()
     }
-  }, [])
+    
+    return cleanup
+  }, [enableServiceWorker, initializePerformanceMonitoring, cleanup])
+
+  // Network strategy monitoring
+  useEffect(() => {
+    const strategy = getNetworkAwareLoadingStrategy()
+    setNetworkStrategy(strategy)
+    setIsSlowConnection(strategy === 'minimal' || strategy === 'conservative')
+    
+    if (enableLogging) {
+      console.log(`Healthcare network strategy: ${strategy}`)
+    }
+  }, [enableLogging])
+
+  // (moved initializePerformanceMonitoring earlier for TS ordering)
 
   // Component load time measurement hook
   const measureComponentLoad = useCallback((componentName: string) => {
@@ -236,18 +240,6 @@ export const HealthcarePerformanceMonitor = ({
     }
   }, [onPerformanceAlert])
 
-  // Report current performance status
-  const getPerformanceReport = useCallback(() => {
-    return {
-      ...metrics,
-      networkStrategy,
-      isSlowConnection,
-      emergencyComponentTimes: Object.fromEntries(emergencyComponentTimesRef.current),
-      bundleAnalysis: healthcareBundleAnalyzer.generateReport(),
-      recommendations: generateHealthcareRecommendations()
-    }
-  }, [metrics, networkStrategy, isSlowConnection])
-
   const generateHealthcareRecommendations = useCallback(() => {
     const recommendations: string[] = []
     
@@ -277,6 +269,18 @@ export const HealthcarePerformanceMonitor = ({
     
     return recommendations
   }, [metrics, isSlowConnection])
+
+  // Report current performance status
+  const getPerformanceReport = useCallback(() => {
+    return {
+      ...metrics,
+      networkStrategy,
+      isSlowConnection,
+      emergencyComponentTimes: Object.fromEntries(emergencyComponentTimesRef.current),
+      bundleAnalysis: healthcareBundleAnalyzer.generateReport(),
+      recommendations: generateHealthcareRecommendations()
+    }
+  }, [metrics, networkStrategy, isSlowConnection, generateHealthcareRecommendations])
 
   // Export performance data (for analytics)
   const exportPerformanceData = useCallback(() => {
@@ -312,7 +316,16 @@ export const HealthcarePerformanceMonitor = ({
   useEffect(() => {
     if (typeof window !== 'undefined') {
       // Add performance monitor to window for debugging
-      ;(window as any).healthcarePerformance = {
+      interface HealthcarePerformanceGlobal {
+        healthcarePerformance?: {
+          getReport: typeof getPerformanceReport
+          exportData: typeof exportPerformanceData
+          measureComponent: typeof measureComponentLoad
+          checkEmergency: typeof checkEmergencyPerformance
+          getCurrentMetrics: () => PerformanceMetrics
+        }
+      }
+      ;(window as unknown as HealthcarePerformanceGlobal).healthcarePerformance = {
         getReport: getPerformanceReport,
         exportData: exportPerformanceData,
         measureComponent: measureComponentLoad,

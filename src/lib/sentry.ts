@@ -1,107 +1,25 @@
 import * as Sentry from "@sentry/nextjs";
 import React from "react";
-import { env } from "@/lib/env";
 
-if (env.SENTRY_DSN) {
-  Sentry.init({ 
-    dsn: env.SENTRY_DSN,
-    
-    // Healthcare-specific Sentry configuration
-    environment: env.NODE_ENV || 'development',
-    
-    // Enhanced error filtering for healthcare
-    beforeSend(event, hint) {
-      // GDPR Compliance: Scrub any PII from healthcare errors
-      if (event.exception) {
-        event.exception.values?.forEach(exception => {
-          if (exception.stacktrace) {
-            exception.stacktrace.frames?.forEach(frame => {
-              // Remove sensitive file paths
-              if (frame.filename) {
-                frame.filename = frame.filename.replace(/\/home\/[^\/]+/g, '/home/[user]');
-              }
-              // Remove query parameters that might contain PII
-              if (frame.vars) {
-                Object.keys(frame.vars).forEach(key => {
-                  if (key.toLowerCase().includes('patient') || 
-                      key.toLowerCase().includes('email') ||
-                      key.toLowerCase().includes('name')) {
-                    frame.vars[key] = '[redacted]';
-                  }
-                });
-              }
-            });
-          }
-          
-          // Scrub error messages for PII
-          if (exception.value) {
-            exception.value = exception.value
-              .replace(/patient_id=\w+/gi, 'patient_id=[redacted]')
-              .replace(/email=[^&\s]+/gi, 'email=[redacted]')
-              .replace(/name=[^&\s]+/gi, 'name=[redacted]');
-          }
-        });
-      }
-
-      return event;
-    },
-
-    // Healthcare-specific error sampling
-    sampleRate: env.NODE_ENV === 'production' ? 0.1 : 1.0, // 10% sampling in prod
-    
-    // Enable performance monitoring for healthcare UX
-    tracesSampleRate: 0.05, // 5% performance tracing
-    
-    // Healthcare platform tags
-    initialScope: {
-      tags: {
-        platform: 'zweitmeinung.ng',
-        healthcare: true,
-        gdpr_compliant: true,
-        patient_safety_critical: true
-      },
-      contexts: {
-        healthcare: {
-          platform_type: 'medical_consultation',
-          compliance: ['GDPR', 'Medical_Data_Protection'],
-          emergency_support: true,
-          accessibility: 'WCAG_2.1_AA'
-        }
-      }
-    },
-
-    // Enhanced integrations for healthcare (simplified)
-    integrations: [],
-
-    // Release tracking for healthcare deployments
-    release: env.APP_VERSION || 'unknown',
-    
-    // Enhanced error fingerprinting for healthcare
-    fingerprint: ['{{ default }}', 'healthcare-platform'],
-  });
-
-  console.log('🏥 Healthcare Sentry integration initialized');
-}
-
-// Healthcare Error Boundary Component
+// Healthcare Error Boundary Component (Sentry is initialized via sentry.client/server.config.ts)
 export function HealthcareErrorBoundary({ children, fallback, onError }: { 
   children: React.ReactNode;
-  fallback?: React.ComponentType<any>;
-  onError?: (error: Error, errorInfo: any) => void;
+  fallback?: Sentry.FallbackRender | React.ReactElement;
+  onError?: (error: Error, componentStack: string) => void;
 }) {
-  const errorFallback = fallback || HealthcareErrorFallback;
+  const fb = fallback || HealthcareErrorFallback;
   
   return React.createElement(
     Sentry.ErrorBoundary,
     {
-      fallback: errorFallback,
-      beforeCapture: (scope: any, error: Error, errorInfo: any) => {
+      fallback: fb as Sentry.FallbackRender,
+      beforeCapture: (scope, error: unknown, componentStack: string) => {
         scope.setTag('error_boundary', true);
         scope.setTag('component_crash', true);
         
         // Call custom error handler if provided
-        if (onError) {
-          onError(error, errorInfo);
+        if (onError && error instanceof Error) {
+          onError(error, componentStack)
         }
       }
     },
@@ -110,10 +28,7 @@ export function HealthcareErrorBoundary({ children, fallback, onError }: {
 }
 
 // Healthcare Error Fallback UI
-function HealthcareErrorFallback({ error, resetError }: {
-  error: Error;
-  resetError: () => void;
-}) {
+const HealthcareErrorFallback: Sentry.FallbackRender = ({ error: _error, componentStack: _componentStack, resetError }) => {
   return React.createElement(
     'div',
     { className: 'min-h-screen bg-healthcare-background flex items-center justify-center p-6' },

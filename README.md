@@ -281,6 +281,13 @@ bun run type-check         # TypeScript type checking
 bun run test              # Run all tests
 ```
 
+### Storybook & Analysis
+- Storybook build (local): `npm run build-storybook` → outputs `storybook-static/`.
+- CI‑freundlicher Build: `npm run storybook:ci` (deaktiviert schwere Addons). Optional: `STORYBOOK_DOCS=false` schaltet Docs-Addon aus.
+- Bundle‑Report (Storybook): `npm run storybook:analyze` → erzeugt `storybook-static/sb-bundle-report.html` und `sb-stats.json`.
+- Bundle‑Report (App): `ANALYZE=true npm run build` → öffne `.next/healthcare-bundle-report.html`.
+- Optionales Chunk‑Experiment: `HEALTHCARE_CHUNKING=true ANALYZE=true npm run build` (standardmäßig aus; nur für Messungen nutzen).
+
 ### Code Quality & Testing
 - **ESLint** - Code linting with Next.js rules
 - **Biome** - Fast code formatting and linting  
@@ -329,6 +336,13 @@ bun run start
 ```
 
 ---
+
+## 🔔 Error Tracking (Sentry)
+
+- Initialisierung erfolgt über `sentry.client.config.ts` (Client) und `sentry.server.config.ts` (Server). PII‑Scrubbing ist aktiv.
+- Serverseitig Sentry importieren via `@/lib/sentry.server` (z. B. in API/Strapi‑Clients). Für UI‑Grenzen `HealthcareErrorBoundary` aus `@/lib/sentry` verwenden.
+- Release‑Versionen können über `NEXT_PUBLIC_APP_VERSION`/`APP_VERSION` gesetzt werden.
+
 
 ## 📊 Features Deep Dive
 
