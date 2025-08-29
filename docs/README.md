@@ -16,6 +16,6 @@ Weitere Quellen der Wahrheit:
 - Tokens/Theme: `tokens.json`, `tailwind.config.ts`
 
 Reports & Badges:
-- Playwright Report: `playwright-report/index.html`
+- Playwright Report: `playwright-report/index.html` ([Workflow](https://github.com/c2s-admin/frontend-zweitmeinu-ng/actions/workflows/playwright.yml))
 - Playwright JSON: `test-results/healthcare-test-results.json`
-- Accessibility Reports (WCAG/Axe): `accessibility/reports/`
+- Accessibility Reports (WCAG/Axe): `accessibility/reports/` (erzeugt im CI‑Workflow)

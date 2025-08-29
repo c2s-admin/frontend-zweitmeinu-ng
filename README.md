@@ -9,6 +9,7 @@
 [![Storybook](https://img.shields.io/badge/Storybook-9.1.1-FF4785?style=flat-square&logo=storybook)](https://storybook.js.org/)
 [![Bun](https://img.shields.io/badge/Bun-1.1.26-orange?style=flat-square&logo=bun)](https://bun.sh/)
 [![Strapi](https://img.shields.io/badge/Strapi-5.20.0-purple?style=flat-square&logo=strapi)](https://strapi.io/)
+[![Playwright](https://github.com/c2s-admin/frontend-zweitmeinu-ng/actions/workflows/playwright.yml/badge.svg)](https://github.com/c2s-admin/frontend-zweitmeinu-ng/actions/workflows/playwright.yml)
 
 ## 📘 Documentation
 
@@ -194,6 +195,8 @@ High-level system diagrams are documented in [docs/ARCHITECTURE.md](docs/ARCHITE
 - Playwright Report: [playwright-report/index.html](playwright-report/index.html)
 - Playwright JSON: [test-results/healthcare-test-results.json](test-results/healthcare-test-results.json)
 - Accessibility Reports (WCAG/Axe): [accessibility/reports/](accessibility/reports/)
+
+CI erzeugt Accessibility-Berichte im Job „CI“ (s. Badge oben). Der Playwright-Workflow lädt Screenshots/Reports als Artefakte hoch und ist über den Playwright‑Badge erreichbar.
 
 ---
 
