@@ -59,7 +59,8 @@ export default defineConfig({
     // E2E/API tests against Next.js
     {
       name: 'e2e',
-      testMatch: ['**/*.spec.ts', '!**/screenshots/**'],
+      testMatch: ['**/*.spec.ts'],
+      testIgnore: ['**/screenshots/**'],
       use: {
         baseURL: 'http://localhost:3000',
       },
