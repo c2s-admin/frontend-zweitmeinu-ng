@@ -21,6 +21,14 @@ export default defineConfig({
     toHaveScreenshot: {
       threshold: 0.2,
       maxDiffPixels: 500,
+      webServer: [
+        {
+          command: 'PLAYWRIGHT_USE_START=1 node tests/dev-with-mock.js',
+          port: 3000,
+          reuseExistingServer: !process.env.CI,
+          timeout: 180000,
+        },
+      ],
     },
     toMatchSnapshot: {
       threshold: 0.2,
@@ -64,6 +72,14 @@ export default defineConfig({
       use: {
         baseURL: 'http://localhost:3000',
       },
+      webServer: [
+        {
+          command: 'npm run storybook',
+          port: 6006,
+          reuseExistingServer: !process.env.CI,
+          timeout: 300000,
+        },
+      ],
     },
     // Screenshot projects against Storybook
     {
@@ -75,6 +91,14 @@ export default defineConfig({
         viewport: { width: 375, height: 667 },
         baseURL: 'http://localhost:6006',
       },
+      webServer: [
+        {
+          command: 'npm run storybook',
+          port: 6006,
+          reuseExistingServer: !process.env.CI,
+          timeout: 300000,
+        },
+      ],
     },
     {
       name: 'healthcare-tablet',
@@ -85,6 +109,14 @@ export default defineConfig({
         viewport: { width: 768, height: 1024 },
         baseURL: 'http://localhost:6006',
       },
+      webServer: [
+        {
+          command: 'npm run storybook',
+          port: 6006,
+          reuseExistingServer: !process.env.CI,
+          timeout: 300000,
+        },
+      ],
     },
     {
       name: 'healthcare-desktop',
@@ -109,26 +141,17 @@ export default defineConfig({
         },
         baseURL: 'http://localhost:6006',
       },
+      webServer: [
+        {
+          command: 'npm run storybook',
+          port: 6006,
+          reuseExistingServer: !process.env.CI,
+          timeout: 300000,
+        },
+      ],
     },
   ],
 
-  webServer: [
-    {
-      // Main Next.js application for integration tests
-      command: 'PLAYWRIGHT_USE_START=1 node tests/dev-with-mock.js',
-      port: 3000,
-      reuseExistingServer: !process.env.CI,
-      timeout: 120000,
-    },
-    {
-      // Storybook server for component screenshot tests
-      command: 'npm run storybook',
-      port: 6006,
-      reuseExistingServer: !process.env.CI,
-      timeout: 120000,
-      // Healthcare Storybook needs time to build all components
-    },
-  ],
   
   // Output directories for healthcare test artifacts
   outputDir: 'test-results/',
