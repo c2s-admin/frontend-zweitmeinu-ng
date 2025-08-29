@@ -47,11 +47,11 @@ sequenceDiagram
 ## Development Architecture
 
 ### Frontend Stack
-- **Next.js 15.4.6** - React framework with App Router
-- **TypeScript 5.5.4** - Type safety and developer experience  
-- **Tailwind CSS 3.4.10** - Utility-first styling with healthcare tokens
-- **Storybook 9.1.1** - Component development and design system
-- **Bun 1.1.26** - Fast package manager and runtime
+- **Next.js** - App Router
+- **TypeScript** - Type safety and DX  
+- **Tailwind CSS** - Utility-first styling with healthcare tokens
+- **Storybook** - Component development and design system
+- **Package manager**: npm (see `package.json` scripts)
 
 ### Component Development Flow
 ```mermaid
@@ -79,5 +79,4 @@ sequenceDiagram
 
 ---
 
-*Zuletzt aktualisiert: 2025-08-06 - Storybook Integration*
-
+Referenzen: `docs/DESIGN-SYSTEM.md`, `docs/ACCESSIBILITY.md`, Storybook.

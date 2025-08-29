@@ -1,18 +1,14 @@
-# API Reference - Strapi v5 TypeScript Project
+# API Reference (Strapi)
 
-> **Project Context**: Healthcare Multi-Site Platform with TypeScript-only implementation
-> **Language**: TypeScript ONLY - All client implementations must be TypeScript
-> **API Version**: REST API (GraphQL available but REST recommended for stability)
+Project context: Healthcare multi-site platform with a TypeScript client.
+Language: TypeScript.
+API style: REST (GraphQL available but REST recommended).
 
 ## 🎯 Quick Reference
 
 ### Base Configuration
-- **Base URL**: `http://localhost:1337/api` (Production: adjust based on deployment)
-- **Strapi Version**: v5.20.0
-- **Database**: PostgreSQL (strapi_production)
-- **Status**: ✅ Running and stable (August 2025)
-- **Authentication**: JWT tokens + API tokens
-- **Rate Limiting**: Configured per endpoint
+- **Base URL**: `process.env.NEXT_PUBLIC_STRAPI_URL` (fallback `http://localhost:1337/api`)
+- **Authentication**: JWT/API tokens (as configured by environment)
 
 ### Essential TypeScript Types
 ```typescript
@@ -103,7 +99,7 @@ const pages = await api.get<ApiPagePage[]>('/pages', {
 })
 ```
 
-## 🏗️ Content Type APIs
+## Content Type APIs
 
 ### 1. Pages API
 

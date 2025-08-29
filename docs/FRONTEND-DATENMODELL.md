@@ -1,10 +1,6 @@
-# Frontend Datenmodell - Strapi v5 TypeScript Project
+# Frontend Datenmodell (Kurzreferenz)
 
-> **Project Context**: Healthcare Multi-Site Platform with TypeScript-only codebase
-> **Strapi Version**: v5.20.0
-> **Database**: PostgreSQL (strapi_production)
-> **Language**: TypeScript ONLY - No JavaScript files allowed in production
-> **Component System**: Storybook 9.1.1 Healthcare Design System
+Projekt: Healthcare Multi‑Site Platform mit TypeScript‑only Frontend und Storybook‑basiertem Design System.
 
 ## 🎯 Quick Reference
 
@@ -15,7 +11,7 @@
 - **TypeScript Interfaces** for all data structures
 - **Healthcare Design System** via Storybook integration
 
-### Essential Commands
+### Wichtige Kommandos
 ```bash
 # Generate TypeScript types
 npm run ts:generate-types
@@ -55,9 +51,7 @@ interface AccessibilityStandards {
 
 Das Strapi-Backend verwendet **13 Collection Types** und **keine Single Types**. Alle Daten sind in Collection Types organisiert, wobei `site-configuration` als zentraler Hub fungiert.
 
-> **✅ System Status**: Strapi v5.20.0 läuft stabil mit PostgreSQL-Datenbank. Database Configuration und Schema Registry wurden erfolgreich behoben (August 2025).
-
-> **⚠️ Wichtiger Hinweis**: Das Appointment-System wurde entfernt. Alle neuen Features MÜSSEN in TypeScript implementiert werden.
+Quelle der Wahrheit: Generierte Typen in `src/types/generated` und die Storybook‑Demos. Diese Datei dient nur als Übersicht, keine vollständige Aufzählung.
 
 ## Content Types nach Kategorie
 
