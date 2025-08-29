@@ -18,6 +18,8 @@ jobs:
         run: npm ci
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
+      - name: Build Next.js (for e2e server)
+        run: npm run build
       - name: Run screenshot suite (if baselines exist)
         if: ${{ hashFiles('tests/**/*-snapshots/**', 'tests/**/__snapshots__/**') != '' }}
         env:

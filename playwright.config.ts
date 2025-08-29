@@ -115,7 +115,7 @@ export default defineConfig({
   webServer: [
     {
       // Main Next.js application for integration tests
-      command: 'node tests/dev-with-mock.js',
+      command: 'PLAYWRIGHT_USE_START=1 node tests/dev-with-mock.js',
       port: 3000,
       reuseExistingServer: !process.env.CI,
       timeout: 120000,

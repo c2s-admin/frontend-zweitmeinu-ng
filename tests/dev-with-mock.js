@@ -33,7 +33,8 @@ strapiServer.listen(5050, () => {
   console.log('Mock Strapi server running on http://localhost:5050');
 });
 
-const dev = spawn('npm', ['run', 'dev'], {
+const useStart = process.env.PLAYWRIGHT_USE_START === '1' || process.argv.includes('--prod');
+const dev = spawn('npm', ['run', useStart ? 'start' : 'dev'], {
   env: {
     ...process.env,
     STRAPI_API_URL: 'http://localhost:5050',
