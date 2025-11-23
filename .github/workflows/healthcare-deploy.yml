@@ -1,0 +1,187 @@
+name: Healthcare Platform CI/CD
+
+on:
+  push:
+    branches:
+      - main
+      - development
+  pull_request:
+    branches:
+      - main
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  # ======================================
+  # Phase 1: Healthcare Validation
+  # ======================================
+  validate:
+    name: Healthcare Validation & Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type checking
+        run: npm run type-check
+
+      - name: Linting
+        run: npm run lint
+
+      - name: Healthcare accessibility validation
+        run: npm run accessibility:ci
+        continue-on-error: true
+
+      - name: Healthcare performance validation
+        run: npm run size:healthcare
+        continue-on-error: true
+
+      - name: Build application
+        run: npm run build
+        env:
+          NEXT_PUBLIC_STRAPI_URL: ${{ secrets.NEXT_PUBLIC_STRAPI_URL }}
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output-${{ github.sha }}
+          path: .next/
+          retention-days: 7
+
+      - name: Build summary
+        run: |
+          echo "## ✅ Healthcare Platform Build Successful" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commit**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Node Version**: ${{ env.NODE_VERSION }}" >> $GITHUB_STEP_SUMMARY
+
+  # ======================================
+  # Phase 2: Trigger Plesk Deployment
+  # ======================================
+  deploy-production:
+    name: Deploy to Production
+    needs: validate
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://zweitmeinu.ng
+
+    steps:
+      - name: Trigger Plesk Git Webhook
+        run: |
+          echo "🚀 Triggering production deployment via Plesk webhook..."
+          curl -X POST "${{ secrets.PLESK_PRODUCTION_WEBHOOK_URL }}" \
+               -H "Content-Type: application/json" \
+               -H "X-Hub-Signature-256: ${{ secrets.PLESK_WEBHOOK_SECRET }}" \
+               -d '{"ref":"refs/heads/main","repository":{"full_name":"${{ github.repository }}"}}'
+
+      - name: Wait for deployment
+        run: sleep 60
+
+      - name: Verify deployment
+        run: |
+          echo "🏥 Verifying production health..."
+          HEALTH_STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://zweitmeinu.ng/api/health)
+          if [ "$HEALTH_STATUS" -eq 200 ]; then
+            echo "✅ Production is healthy (HTTP $HEALTH_STATUS)"
+          else
+            echo "❌ Production health check failed (HTTP $HEALTH_STATUS)"
+            exit 1
+          fi
+
+      - name: Deployment summary
+        if: always()
+        run: |
+          echo "## 🚀 Production Deployment" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Environment**: Production" >> $GITHUB_STEP_SUMMARY
+          echo "- **URL**: https://zweitmeinu.ng" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commit**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Deployed By**: ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+
+  deploy-development:
+    name: Deploy to Development
+    needs: validate
+    if: github.ref == 'refs/heads/development' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    environment:
+      name: development
+      url: https://dev.zweitmeinu.ng
+
+    steps:
+      - name: Trigger Plesk Git Webhook
+        run: |
+          echo "🚀 Triggering development deployment via Plesk webhook..."
+          curl -X POST "${{ secrets.PLESK_DEVELOPMENT_WEBHOOK_URL }}" \
+               -H "Content-Type: application/json" \
+               -H "X-Hub-Signature-256: ${{ secrets.PLESK_WEBHOOK_SECRET }}" \
+               -d '{"ref":"refs/heads/development","repository":{"full_name":"${{ github.repository }}"}}'
+
+      - name: Wait for deployment
+        run: sleep 60
+
+      - name: Verify deployment
+        run: |
+          echo "🏥 Verifying development health..."
+          HEALTH_STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://dev.zweitmeinu.ng/api/health)
+          if [ "$HEALTH_STATUS" -eq 200 ]; then
+            echo "✅ Development is healthy (HTTP $HEALTH_STATUS)"
+          else
+            echo "⚠️ Development health check failed (HTTP $HEALTH_STATUS)"
+          fi
+        continue-on-error: true
+
+      - name: Deployment summary
+        if: always()
+        run: |
+          echo "## 🔧 Development Deployment" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Environment**: Development" >> $GITHUB_STEP_SUMMARY
+          echo "- **URL**: https://dev.zweitmeinu.ng" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commit**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+
+  # ======================================
+  # Phase 3: Notify on Failure
+  # ======================================
+  notify-failure:
+    name: Notify on Failure
+    needs: [validate, deploy-production]
+    if: failure()
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Create failure issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '🚨 Healthcare Platform Deployment Failed',
+              body: `## Deployment Failure Report
+
+              **Workflow**: ${context.workflow}
+              **Run ID**: ${context.runId}
+              **Commit**: ${context.sha}
+              **Branch**: ${context.ref}
+              **Actor**: ${context.actor}
+
+              Please investigate and fix the deployment issue.
+
+              [View Workflow Run](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})
+              `,
+              labels: ['deployment', 'critical', 'healthcare']
+            })

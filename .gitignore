@@ -36,6 +36,9 @@ yarn-error.log*
 !.env.example
 !.env.redis.example
 !.env.logging.example
+!.env.production.example
+!.env.development.example
+!.env.analytics.*
 
 # secrets
 .secrets

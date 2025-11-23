@@ -1,16 +1,18 @@
 # Fehlende Seiten - Übersicht
 
-Stand: 20.11.2025
+Stand: 22.11.2025
 
-## ✅ Vorhandene Seiten (7)
+## ✅ Vorhandene Seiten (9)
 
 1. **Homepage** (`/`) ✅
 2. **FAQ** (`/faq`) ✅
 3. **Motivation** (`/motivation`) ✅
 4. **Impressum** (`/impressum`) ✅ *Erstellt am 20.11.2025*
-5. **Fachbereich Kardiologie** (`/fachbereiche/kardiologie`) ✅
-6. **Fachbereich Onkologie** (`/fachbereiche/onkologie`) ✅
-7. **Fachbereich Intensivmedizin** (`/fachbereiche/intensivmedizin`) ✅
+5. **Datenschutzerklärung** (`/datenschutz`) ✅ *Erstellt am 22.11.2025 - Strapi-integriert mit alfright.eu iframe*
+6. **Kontakt** (`/kontakt`) ✅ *Erstellt am 22.11.2025 - Mit SMTP-Integration, hCaptcha & React Hook Form*
+7. **Fachbereich Kardiologie** (`/fachbereiche/kardiologie`) ✅
+8. **Fachbereich Onkologie** (`/fachbereiche/onkologie`) ✅
+9. **Fachbereich Intensivmedizin** (`/fachbereiche/intensivmedizin`) ✅
 
 ---
 
@@ -22,7 +24,7 @@ Diese Seiten sind rechtlich zwingend erforderlich nach TMG/DSGVO:
 
 | Seite | Route | Status | Begründung |
 |-------|-------|--------|------------|
-| **Datenschutzerklärung** | `/datenschutz` | ❌ Fehlt | DSGVO-Pflicht, wird im Impressum verlinkt |
+| **Datenschutzerklärung** | `/datenschutz` | ✅ Fertig | DSGVO-Pflicht, Strapi-integriert mit alfright.eu iframe |
 | **AGB** | `/agb` | ❌ Fehlt | Geschäftsbedingungen, wird im Impressum verlinkt |
 | **Cookie-Policy** | `/cookie-richtlinie` | ❌ Fehlt | DSGVO-Pflicht für Cookie-Verwendung |
 
@@ -41,7 +43,7 @@ Diese Seiten werden in der Hauptnavigation verlinkt und sind für die User Exper
 |-------|-------|--------|-------------|
 | **So funktioniert's** | `/so-funktionierts` | ❌ Fehlt | Header-Navigation |
 | **Über uns** | `/ueber-uns` | ❌ Fehlt | Header-Navigation |
-| **Kontakt** | `/kontakt` | ❌ Fehlt | Header-Navigation, Footer, Impressum |
+| **Kontakt** | `/kontakt` | ✅ Fertig | Header-Navigation, Footer, Impressum |
 | **Notfall** | `/notfall` | ❌ Fehlt | CTA-Button im Header |
 
 **User Impact:**
@@ -94,33 +96,35 @@ Optionale Seiten für vollständiges Portal-Erlebnis:
 
 | Kategorie | Anzahl | Status |
 |-----------|--------|--------|
-| **Vorhandene Seiten** | 7 | ✅ Implementiert |
-| **P0 - Rechtlich kritisch** | 3 | ❌ Fehlt |
-| **P1 - Wichtig für UX** | 4 | ❌ Fehlt |
+| **Vorhandene Seiten** | 9 | ✅ Implementiert |
+| **P0 - Rechtlich kritisch** | 2 | ❌ Fehlt (1 von 3 fertig) |
+| **P1 - Wichtig für UX** | 3 | ❌ Fehlt (1 von 4 fertig) |
 | **P2 - Fachbereiche** | 4 | ❌ Fehlt |
 | **P3 - Ergänzend** | 12 | ❌ Fehlt |
-| **Gesamt fehlend** | **23** | ❌ |
+| **Gesamt fehlend** | **21** | ❌ |
 
 ---
 
 ## 💡 Empfohlene Implementierungsreihenfolge
 
-### Phase 1: Rechtliche Compliance (P0)
-1. **Datenschutzerklärung** - Höchste Priorität
+### Phase 1: Rechtliche Compliance (P0) - IN PROGRESS
+1. ✅ **Datenschutzerklärung** - FERTIG (22.11.2025)
 2. **AGB** - Rechtlich erforderlich
 3. **Cookie-Policy** - DSGVO-Compliance
 
-**Zeitaufwand:** ~1-2 Tage
+**Zeitaufwand:** ~1-2 Tage (1/3 fertig)
 **Content-Quelle:** Strapi CMS (legal-pages Content Type)
+**Status:** Datenschutz implementiert mit Strapi-Integration, alfright.eu iframe, Error Handling, Loading States
 
-### Phase 2: Kernseitennavigation (P1)
-4. **Kontakt** - Mehrfach verlinkt, wichtig für Support
+### Phase 2: Kernseitennavigation (P1) - IN PROGRESS
+4. ✅ **Kontakt** - FERTIG (22.11.2025) - SMTP-Integration, hCaptcha, React Hook Form
 5. **So funktioniert's** - User Journey Erklärung
 6. **Über uns** - Vertrauensbildung
 7. **Notfall** - CTA-Landing Page
 
-**Zeitaufwand:** ~2-3 Tage
+**Zeitaufwand:** ~2-3 Tage (1/4 fertig)
 **Content-Quelle:** Strapi CMS + Custom Design
+**Status:** Kontakt implementiert mit Email-Versand, CAPTCHA-Schutz, GDPR-Compliance
 
 ### Phase 3: Fachbereich-Vervollständigung (P2)
 8. **Gallenblase**
@@ -235,6 +239,9 @@ Für jede neue Seite durchführen:
 
 ---
 
-**Letzte Aktualisierung:** 20.11.2025
+**Letzte Aktualisierung:** 22.11.2025
 **Erstellt durch:** Claude Code
-**Status:** In Bearbeitung - Phase 1 (P0 Pages)
+**Status:** In Bearbeitung - Phase 1 & 2 aktiv
+- ✅ Phase 1 (P0): 1/3 fertig - Datenschutz
+- ✅ Phase 2 (P1): 1/4 fertig - Kontakt
+**Nächste Schritte:** AGB, Cookie-Policy, So funktioniert's, Über uns, Notfall

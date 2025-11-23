@@ -65,6 +65,7 @@
     "@analytics/google-analytics": "^1.1.0",
     "@hcaptcha/react-hcaptcha": "^1.12.0",
     "@sentry/nextjs": "^10.1.0",
+    "@types/nodemailer": "^7.0.4",
     "@vercel/analytics": "^1.5.0",
     "analytics": "^0.8.18",
     "beasties": "^0.1.0",
@@ -74,6 +75,7 @@
     "ioredis": "^5.7.0",
     "lucide-react": "^0.536.0",
     "next": "^15.3.2",
+    "nodemailer": "^7.0.10",
     "pino": "^9.7.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -83,7 +85,7 @@
     "swr": "^2.3.4",
     "tailwind-merge": "^3.3.0",
     "tailwindcss-animate": "^1.0.7",
-    "zod": "^4.0.14"
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@axe-core/puppeteer": "^4.10.2",

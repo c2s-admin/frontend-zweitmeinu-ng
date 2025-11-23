@@ -1,34 +1,284 @@
-# Prompt für Claude auf dem Strapi Server
+# Datenschutzerklärung Integration - alfright.eu
+
+## ✅ Implementierungs-Status
+
+**Stand:** 2025-11-21
+**Strapi Version:** 5.31.1
+**Status:** Backend CMS Integration abgeschlossen ✅
+
+### Implementierte Features
+
+- ✅ Legal Page Content Type erstellt (`api::legal-page.legal-page`)
+- ✅ Schema erweitert mit alfright.eu Integration-Feldern
+- ✅ Multi-Site Support via `siteIdentifier` Feld
+- ✅ API Endpoints öffentlich verfügbar (`/api/legal-pages`)
+- ✅ TypeScript-Typen generiert
+- ✅ Controller, Routes und Services konfiguriert
+
+### Backend API Endpoints
+
+```
+GET  /api/legal-pages              # Liste aller Legal Pages
+GET  /api/legal-pages/:id          # Einzelne Legal Page
+POST /api/legal-pages              # Neue Legal Page erstellen (Auth)
+PUT  /api/legal-pages/:id          # Legal Page aktualisieren (Auth)
+DELETE /api/legal-pages/:id        # Legal Page löschen (Auth)
+```
+
+### Nächste Schritte (Frontend)
+
+- [ ] Frontend Datenschutz-Seite erstellen (siehe Phase 1 unten)
+- [ ] alfright.eu iFrame/Widget einbinden
+- [ ] API Integration für Metadaten-Abruf
+
+---
 
 ## 📋 Kontext
 
-Du arbeitest auf einem Strapi 5.20.0 CMS Server für eine medizinische Zweitmeinungs-Plattform (zweitmeinung.ng). Deine Aufgabe ist es, ein automatisches Synchronisations-System zu implementieren, das Datenschutzerklärungen von einem externen Beratungsunternehmen in das Strapi CMS importiert.
+Du arbeitest auf einem Strapi 5.31.1 CMS Server für eine medizinische Zweitmeinungs-Plattform (zweitmeinung.ng). Die Datenschutzerklärung wird über **alfright.eu** via iFrame oder JavaScript-Widget bereitgestellt, nicht über eine traditionelle API-Synchronisation.
 
 ---
 
-## 🎯 Ziel der Implementierung
+## 🎯 Neue Implementierungsstrategie
 
-Erstelle ein vollständiges System zur automatischen Synchronisation von Datenschutzerklärungen mit folgenden Anforderungen:
+Die Datenschutzerklärung wird direkt von alfright.eu eingebettet mit folgenden Optionen:
 
-1. **Automatischer Sync** per Cronjob (täglich 02:00 Uhr)
-2. **Manueller Trigger** über Admin UI und API Endpoint
-3. **Webhook-Support** für Provider-Updates
-4. **Versionierung** mit Changelog und Diff-Tracking
-5. **Fehlerbehandlung** mit Retry-Logik und Alerting
-6. **Admin Dashboard** für Monitoring und Management
+### Option 1: JavaScript Widget
+
+```html
+<!-- Header-Bereich -->
+<script
+  src="https://app.alfright.eu/hosted/dps/alfidcl.js"
+  defer
+  alfidcl-script
+></script>
+
+<!-- Content-Bereich -->
+<div
+  data-alfidcl-type="dps"
+  data-alfidcl-tenant="alfright_schutzteam"
+  data-alfidcl-lang="de-de"
+  data-alfidcl-key="f60250224d4a459a90dbeeb289cd47f9"
+></div>
+```
+
+### Option 2: iFrame (Empfohlen für Healthcare)
+
+```html
+<iframe
+  src="https://app.alfright.eu/ext/dps/alfright_schutzteam/f60250224d4a459a90dbeeb289cd47f9?lang=de-de&headercolor=#004166&headerfont=Roboto+Condensed&headersize=21px&subheadersize=18px&fontcolor=#333333&textfont=Roboto+Condensed&textsize=14px&background=#ffffff&linkcolor=#1278B3"
+  width="100%"
+  height="5000"
+  style="border:0;"
+  loading="lazy"
+  title="Datenschutzerklärung"
+>
+</iframe>
+```
+
+### Healthcare Design Parameter
+
+```
+&headercolor=#004166        // Healthcare Primary
+&headerfont=Roboto+Condensed
+&headersize=21px
+&subheadersize=18px
+&fontcolor=#333333
+&textfont=Roboto+Condensed
+&textsize=14px
+&background=#ffffff
+&linkcolor=#1278B3           // Healthcare Primary Light
+```
 
 ---
 
-## 📊 Bestehende Infrastruktur
+## 🏗️ Frontend Integration (Empfohlener Ansatz)
 
-### Strapi Version
-- **Strapi:** 5.20.0
-- **Node.js:** 18+
-- **Database:** PostgreSQL (vermutlich)
+### Phase 1: Datenschutz-Seite erstellen
 
-### Bestehender Content Type: `legal-page`
+**Aufgabe 1.1:** Erstelle eine einfache Datenschutz-Seite im Frontend
 
-**Aktuelles Schema:**
+**Dateipfad:** `src/app/datenschutz/page.tsx`
+
+```typescript
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Datenschutzerklärung | Zweitmeinung.ng",
+  description:
+    "Datenschutzerklärung und Informationen zum Umgang mit personenbezogenen Daten",
+  robots: { index: true, follow: true },
+};
+
+export default function DatenschutzPage() {
+  return (
+    <div className="min-h-screen bg-healthcare-background">
+      {/* Emergency Contact Banner */}
+      <div className="bg-healthcare-primary text-white text-center py-3 px-4">
+        <div className="max-w-4xl mx-auto">
+          <p className="text-sm">
+            <span className="font-medium">Medizinischer Notfall?</span>
+            <span className="mx-2">|</span>
+            <a
+              href="tel:+4911219122"
+              className="hover:underline focus:underline"
+              aria-label="Notruf wählen"
+            >
+              📞 Notruf: 112
+            </a>
+            <span className="mx-2">|</span>
+            <a
+              href="tel:+49080080441100"
+              className="hover:underline focus:underline"
+              aria-label="Ärztlicher Bereitschaftsdienst"
+            >
+              📞 Ärztlicher Bereitschaftsdienst: 116 117
+            </a>
+          </p>
+        </div>
+      </div>
+
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-healthcare-primary mb-4">
+            Datenschutzerklärung
+          </h1>
+          <p className="text-lg text-gray-600">
+            Informationen zum Umgang mit personenbezogenen Daten gemäß DSGVO
+          </p>
+        </div>
+
+        {/* alfright.eu iFrame Integration */}
+        <div className="bg-white rounded-2xl shadow-sm p-6">
+          <iframe
+            src="https://app.alfright.eu/ext/dps/alfright_schutzteam/f60250224d4a459a90dbeeb289cd47f9?lang=de-de&headercolor=%23004166&headerfont=Roboto+Condensed&headersize=21px&subheadersize=18px&fontcolor=%23333333&textfont=Roboto+Condensed&textsize=14px&background=%23ffffff&linkcolor=%231278B3"
+            width="100%"
+            height="5000"
+            style={{ border: 0 }}
+            loading="lazy"
+            title="Datenschutzerklärung - bereitgestellt von alfright.eu"
+            aria-label="Datenschutzerklärung Inhalt"
+          />
+        </div>
+
+        {/* Healthcare Footer Info */}
+        <div className="mt-8 p-6 bg-healthcare-background rounded-2xl">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-6 h-6 bg-healthcare-success rounded-full flex items-center justify-center">
+              <span className="text-white text-xs">✓</span>
+            </div>
+            <h3 className="text-lg font-semibold text-healthcare-primary">
+              Medizinische Schweigepflicht
+            </h3>
+          </div>
+          <p className="text-gray-600 leading-relaxed">
+            Als medizinische Plattform unterliegen alle unsere Ärzte und
+            Mitarbeiter der ärztlichen Schweigepflicht. Ihre Gesundheitsdaten
+            werden nach höchsten Standards geschützt und nur für Ihre
+            medizinische Betreuung verwendet.
+          </p>
+
+          <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+            <div className="flex items-center gap-2">
+              <span className="text-healthcare-success">🛡️</span>
+              <span>DSGVO-konform</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-healthcare-success">🔒</span>
+              <span>Ende-zu-Ende verschlüsselt</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-healthcare-success">⚕️</span>
+              <span>Ärztliche Schweigepflicht</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Contact Information */}
+        <div className="mt-8 text-center">
+          <p className="text-gray-600">
+            Fragen zum Datenschutz? Kontaktieren Sie unseren
+            <a
+              href="mailto:datenschutz@zweitmeinung.ng"
+              className="text-healthcare-primary-light hover:underline focus:underline ml-1"
+            >
+              Datenschutzbeauftragten
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
+### Phase 2: Alternative JavaScript Widget Integration
+
+**Aufgabe 2.1:** Alternative Implementierung mit JavaScript Widget
+
+Falls das iFrame nicht die gewünschte User Experience bietet, kann alternativ das JavaScript Widget verwendet werden:
+
+**Dateipfad:** `src/app/datenschutz/page.tsx` (Alternative)
+
+```typescript
+"use client";
+
+import { useEffect } from "react";
+import Script from "next/script";
+
+export default function DatenschutzPage() {
+  return (
+    <div className="min-h-screen bg-healthcare-background">
+      {/* alfright.eu Script */}
+      <Script
+        src="https://app.alfright.eu/hosted/dps/alfidcl.js"
+        strategy="afterInteractive"
+        onLoad={() => {
+          console.log("alfright.eu Datenschutz-Widget geladen");
+        }}
+      />
+
+      {/* Rest der Seite... */}
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        {/* Header bleibt gleich */}
+
+        {/* JavaScript Widget Container */}
+        <div className="bg-white rounded-2xl shadow-sm p-6">
+          <div
+            data-alfidcl-type="dps"
+            data-alfidcl-tenant="alfright_schutzteam"
+            data-alfidcl-lang="de-de"
+            data-alfidcl-key="f60250224d4a459a90dbeeb289cd47f9"
+            className="min-h-[3000px]"
+          >
+            {/* Loading Fallback */}
+            <div className="flex items-center justify-center py-12">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-healthcare-primary"></div>
+              <span className="ml-3 text-gray-600">
+                Datenschutzerklärung wird geladen...
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Rest bleibt gleich */}
+      </div>
+    </div>
+  );
+}
+```
+
+## 🏗️ Strapi CMS Integration ✅ ABGESCHLOSSEN
+
+### Phase 3: Strapi Content Entry für Metadaten ✅
+
+**Status:** Implementiert am 2025-11-21
+
+Das Legal Page Content Type wurde erfolgreich in Strapi erstellt und konfiguriert:
+
+**Dateipfad:** `src/api/legal-page/content-types/legal-page/schema.json`
+
 ```json
 {
   "kind": "collectionType",
@@ -46,759 +296,161 @@ Erstelle ein vollständiges System zur automatischen Synchronisation von Datensc
       "type": "enumeration",
       "enum": ["impressum", "datenschutz", "agb", "cookie-policy", "other"]
     },
-    "content": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
       "type": "text"
     },
+    "provider": {
+      "type": "string",
+      "default": "alfright.eu"
+    },
+    "embedType": {
+      "type": "enumeration",
+      "enum": ["iframe", "javascript", "static"],
+      "default": "iframe"
+    },
+    "embedUrl": {
+      "type": "text"
+    },
+    "lastChecked": {
+      "type": "datetime"
+    },
+    "isActive": {
+      "type": "boolean",
+      "default": true
+    },
     "country": {
-      "type": "string"
+      "type": "string",
+      "default": "DE"
     },
     "language": {
-      "type": "string"
-    },
-    "validFrom": {
-      "type": "date"
-    },
-    "validUntil": {
-      "type": "date"
-    },
-    "version": {
-      "type": "string"
+      "type": "string",
+      "default": "de"
     }
   }
 }
 ```
 
----
-
-## ✅ Aufgaben-Checkliste
-
-### Phase 1: Content Type Erweiterung
-
-**Aufgabe 1.1:** Erweitere den `legal-page` Content Type mit Sync-Metadaten
-
-Füge folgende Felder hinzu:
+**Beispiel-Dateneintrag für Datenschutz:**
 
 ```json
 {
-  "sourceProvider": {
-    "type": "string",
-    "default": null
-  },
-  "sourceUrl": {
-    "type": "string",
-    "default": null
-  },
-  "lastSyncedAt": {
-    "type": "datetime",
-    "default": null
-  },
-  "syncStatus": {
-    "type": "enumeration",
-    "enum": ["success", "failed", "pending", "never"],
-    "default": "never"
-  },
-  "syncError": {
-    "type": "text",
-    "default": null
-  },
-  "autoSync": {
-    "type": "boolean",
-    "default": false
-  },
-  "syncFrequency": {
-    "type": "enumeration",
-    "enum": ["daily", "weekly", "manual"],
-    "default": "daily"
-  },
-  "changelog": {
-    "type": "json",
-    "default": []
-  },
-  "providerVersion": {
-    "type": "string",
-    "default": null
-  },
-  "providerMetadata": {
-    "type": "json",
-    "default": {}
-  }
+  "type": "datenschutz",
+  "title": "Datenschutzerklärung",
+  "description": "DSGVO-konforme Datenschutzerklärung bereitgestellt von alfright.eu",
+  "provider": "alfright.eu",
+  "embedType": "iframe",
+  "embedUrl": "https://app.alfright.eu/ext/dps/alfright_schutzteam/f60250224d4a459a90dbeeb289cd47f9?lang=de-de&headercolor=%23004166&headerfont=Roboto+Condensed&headersize=21px&subheadersize=18px&fontcolor=%23333333&textfont=Roboto+Condensed&textsize=14px&background=%23ffffff&linkcolor=%231278B3",
+  "isActive": true,
+  "country": "DE",
+  "language": "de"
 }
 ```
 
-**Dateipfad:** `src/api/legal-page/content-types/legal-page/schema.json`
-
 ---
 
-### Phase 2: Sync Service
+## 🛡️ Sicherheit & Performance
 
-**Aufgabe 2.1:** Erstelle einen Sync Service
+### DSGVO & Privacy Considerations
 
-**Dateipfad:** `src/api/legal-page/services/sync-service.js`
+1. **iFrame Vorteile:**
 
-**Funktionalität:**
+   - ✅ Keine Third-Party Scripts im Hauptdokument
+   - ✅ Content Security Policy (CSP) freundlich
+   - ✅ Bessere Isolation
+   - ✅ Kein JavaScript im Hauptkontext
 
-```javascript
-'use strict';
+2. **JavaScript Widget Nachteile:**
+   - ⚠️ Externe Scripts im Hauptdokument
+   - ⚠️ Potenzielle CSP-Konflikte
+   - ⚠️ Zusätzliche Security-Überprüfungen nötig
 
-const axios = require('axios');
-const { JSDOM } = require('jsdom');
-const createDOMPurify = require('isomorphic-dompurify');
+### Performance Optimierung
 
-module.exports = ({ strapi }) => ({
-  /**
-   * Synchronisiert Datenschutzerklärung vom Provider
-   */
-  async syncFromProvider(providerConfig) {
-    try {
-      // 1. Fetch von Provider API
-      const providerData = await this.fetchFromProvider(providerConfig);
+```typescript
+// Lazy Loading für bessere Performance
+<iframe
+  src="..."
+  loading="lazy"
+  width="100%"
+  height="5000"
+  style={{ border: 0 }}
+/>
 
-      // 2. Validiere Content
-      const validatedContent = await this.validateContent(providerData.content);
-
-      // 3. Finde oder erstelle Legal Page Entry
-      const existingEntry = await strapi.db.query('api::legal-page.legal-page').findOne({
-        where: { type: 'datenschutz' }
-      });
-
-      // 4. Detect Changes
-      const hasChanges = existingEntry
-        ? this.detectChanges(existingEntry.content, validatedContent)
-        : true;
-
-      if (!hasChanges) {
-        // Nur lastSyncedAt aktualisieren
-        await strapi.db.query('api::legal-page.legal-page').update({
-          where: { id: existingEntry.id },
-          data: {
-            lastSyncedAt: new Date(),
-            syncStatus: 'success'
-          }
-        });
-
-        return {
-          success: true,
-          message: 'No changes detected',
-          hasChanges: false
-        };
-      }
-
-      // 5. Erstelle Changelog Entry
-      const changelogEntry = await this.createChangelogEntry(
-        existingEntry?.content,
-        validatedContent,
-        providerData
-      );
-
-      // 6. Update oder Create
-      const updatedData = {
-        type: 'datenschutz',
-        content: validatedContent,
-        version: providerData.version || this.generateVersion(),
-        sourceProvider: providerConfig.name,
-        sourceUrl: providerConfig.url,
-        lastSyncedAt: new Date(),
-        syncStatus: 'success',
-        syncError: null,
-        providerVersion: providerData.version,
-        providerMetadata: providerData.metadata || {},
-        changelog: existingEntry
-          ? [...(existingEntry.changelog || []), changelogEntry]
-          : [changelogEntry],
-        language: 'de',
-        country: 'DE',
-        publishedAt: new Date() // Auto-publish
-      };
-
-      let result;
-      if (existingEntry) {
-        result = await strapi.db.query('api::legal-page.legal-page').update({
-          where: { id: existingEntry.id },
-          data: updatedData
-        });
-      } else {
-        result = await strapi.db.query('api::legal-page.legal-page').create({
-          data: updatedData
-        });
-      }
-
-      // 7. Log Success
-      strapi.log.info(`[SYNC] Datenschutzerklärung erfolgreich synchronisiert`, {
-        version: providerData.version,
-        hasChanges: true,
-        entryId: result.id
-      });
-
-      // 8. Trigger Webhook/Notification (optional)
-      await this.notifySuccess(result);
-
-      return {
-        success: true,
-        message: 'Sync completed successfully',
-        hasChanges: true,
-        entry: result
-      };
-
-    } catch (error) {
-      strapi.log.error('[SYNC] Fehler bei Synchronisation:', error);
-
-      // Update sync status to failed
-      const existingEntry = await strapi.db.query('api::legal-page.legal-page').findOne({
-        where: { type: 'datenschutz' }
-      });
-
-      if (existingEntry) {
-        await strapi.db.query('api::legal-page.legal-page').update({
-          where: { id: existingEntry.id },
-          data: {
-            syncStatus: 'failed',
-            syncError: error.message
-          }
-        });
-      }
-
-      // Trigger Alert
-      await this.notifyError(error);
-
-      return {
-        success: false,
-        message: error.message,
-        error: error
-      };
-    }
-  },
-
-  /**
-   * Holt Daten vom Provider
-   */
-  async fetchFromProvider(config) {
-    const response = await axios({
-      method: 'GET',
-      url: config.url,
-      headers: {
-        'Authorization': `Bearer ${config.apiKey}`,
-        'Accept': 'application/json, text/html',
-        'User-Agent': 'Strapi-Sync-Service/1.0'
-      },
-      timeout: 30000 // 30 Sekunden Timeout
-    });
-
-    // Erwarte JSON oder HTML
-    if (typeof response.data === 'string') {
-      return {
-        content: response.data,
-        version: response.headers['x-version'] || null,
-        metadata: {
-          contentType: response.headers['content-type'],
-          lastModified: response.headers['last-modified']
-        }
-      };
-    }
-
-    return response.data;
-  },
-
-  /**
-   * Validiert und säubert HTML Content
-   */
-  async validateContent(html) {
-    const DOMPurify = createDOMPurify(new JSDOM('').window);
-
-    const cleanHtml = DOMPurify.sanitize(html, {
-      ALLOWED_TAGS: [
-        'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-        'p', 'br', 'hr',
-        'ul', 'ol', 'li',
-        'a', 'strong', 'em', 'u', 'code',
-        'table', 'thead', 'tbody', 'tr', 'th', 'td',
-        'div', 'span', 'section', 'article'
-      ],
-      ALLOWED_ATTR: [
-        'href', 'target', 'rel',
-        'class', 'id',
-        'colspan', 'rowspan'
-      ],
-      ALLOW_DATA_ATTR: false
-    });
-
-    // Entferne leere Absätze
-    const cleanedHtml = cleanHtml
-      .replace(/<p>\s*<\/p>/g, '')
-      .replace(/\n{3,}/g, '\n\n')
-      .trim();
-
-    return cleanedHtml;
-  },
-
-  /**
-   * Erkennt Änderungen zwischen alter und neuer Version
-   */
-  detectChanges(oldContent, newContent) {
-    // Einfacher String-Vergleich
-    if (!oldContent) return true;
-
-    // Normalisiere Whitespace für Vergleich
-    const normalize = (str) => str.replace(/\s+/g, ' ').trim();
-
-    return normalize(oldContent) !== normalize(newContent);
-  },
-
-  /**
-   * Erstellt Changelog Entry
-   */
-  async createChangelogEntry(oldContent, newContent, providerData) {
-    return {
-      timestamp: new Date().toISOString(),
-      providerVersion: providerData.version,
-      action: oldContent ? 'updated' : 'created',
-      changes: {
-        contentLengthBefore: oldContent?.length || 0,
-        contentLengthAfter: newContent.length,
-        diff: this.calculateDiff(oldContent, newContent)
-      }
-    };
-  },
-
-  /**
-   * Berechnet Diff zwischen zwei Versionen
-   */
-  calculateDiff(oldContent, newContent) {
-    if (!oldContent) return { type: 'created' };
-
-    // Vereinfachter Diff
-    const oldLength = oldContent.length;
-    const newLength = newContent.length;
-    const lengthDiff = newLength - oldLength;
-
-    return {
-      type: 'modified',
-      lengthDiff: lengthDiff,
-      percentageChange: ((lengthDiff / oldLength) * 100).toFixed(2)
-    };
-  },
-
-  /**
-   * Generiert Version String
-   */
-  generateVersion() {
-    const now = new Date();
-    return `v${now.getFullYear()}.${(now.getMonth() + 1).toString().padStart(2, '0')}.${now.getDate().toString().padStart(2, '0')}`;
-  },
-
-  /**
-   * Benachrichtigung bei Erfolg
-   */
-  async notifySuccess(entry) {
-    // Optional: E-Mail, Webhook, Slack, etc.
-    strapi.log.info('[SYNC] Notification: Sync erfolgreich', {
-      entryId: entry.id,
-      version: entry.version
-    });
-  },
-
-  /**
-   * Benachrichtigung bei Fehler
-   */
-  async notifyError(error) {
-    // Optional: E-Mail, Webhook, Slack, etc.
-    strapi.log.error('[SYNC] Notification: Sync fehlgeschlagen', {
-      error: error.message
-    });
-  }
-});
+// Preload DNS für schnellere Verbindung
+<link rel="dns-prefetch" href="//app.alfright.eu" />
 ```
 
-**Dependencies installieren:**
-```bash
-npm install axios jsdom isomorphic-dompurify
+### CSP Header Anpassungen
+
+```nginx
+# Nginx Konfiguration
+add_header Content-Security-Policy "frame-src 'self' https://app.alfright.eu; script-src 'self' https://app.alfright.eu;";
 ```
 
 ---
 
-### Phase 3: API Controller
+## ✅ Vereinfachte Implementierungs-Checkliste
 
-**Aufgabe 3.1:** Erstelle Sync Controller
+**Frontend-Integration:**
 
-**Dateipfad:** `src/api/legal-page/controllers/sync-controller.js`
+- [ ] Datenschutz-Seite erstellt (`/src/app/datenschutz/page.tsx`)
+- [ ] alfright.eu iFrame korrekt eingebettet
+- [ ] Healthcare Design Parameter angewendet
+- [ ] Emergency Banner integriert
+- [ ] Mobile Responsiveness getestet
+- [ ] WCAG 2.1 AA Compliance geprüft
+- [ ] Loading States implementiert
+- [ ] Error Handling hinzugefügt
 
-```javascript
-'use strict';
+**Strapi Backend Integration:** ✅ ABGESCHLOSSEN
 
-module.exports = {
-  /**
-   * Manueller Sync Trigger
-   * POST /api/legal-pages/sync-datenschutz
-   */
-  async syncDatenschutz(ctx) {
-    try {
-      // Überprüfe Admin-Berechtigung
-      const isAdmin = ctx.state.user && ctx.state.user.role?.type === 'admin';
+- [x] Legal Page Content Type erstellt und erweitert
+- [x] Schema mit alfright.eu Feldern konfiguriert
+- [x] API Endpoints öffentlich verfügbar
+- [x] TypeScript-Typen generiert
+- [x] Multi-Site Support via siteIdentifier
+- [ ] Datenschutz-Metadaten-Eintrag im Admin erstellt (Optional)
 
-      if (!isAdmin) {
-        return ctx.unauthorized('Nur Administratoren können den Sync triggern');
-      }
+**Sicherheit & Performance:**
 
-      // Provider Config aus ENV
-      const providerConfig = {
-        name: process.env.DATENSCHUTZ_PROVIDER_NAME || 'External Provider',
-        url: process.env.DATENSCHUTZ_PROVIDER_URL,
-        apiKey: process.env.DATENSCHUTZ_PROVIDER_API_KEY
-      };
-
-      if (!providerConfig.url) {
-        return ctx.badRequest('DATENSCHUTZ_PROVIDER_URL nicht konfiguriert');
-      }
-
-      // Führe Sync aus
-      const result = await strapi
-        .service('api::legal-page.sync-service')
-        .syncFromProvider(providerConfig);
-
-      if (result.success) {
-        return ctx.send({
-          success: true,
-          message: result.message,
-          hasChanges: result.hasChanges,
-          data: result.entry
-        });
-      } else {
-        return ctx.badRequest({
-          success: false,
-          message: result.message,
-          error: result.error?.message
-        });
-      }
-
-    } catch (error) {
-      strapi.log.error('[SYNC API] Fehler:', error);
-      return ctx.internalServerError({
-        success: false,
-        message: 'Interner Serverfehler',
-        error: error.message
-      });
-    }
-  },
-
-  /**
-   * Sync Status abrufen
-   * GET /api/legal-pages/sync-status
-   */
-  async getSyncStatus(ctx) {
-    try {
-      const entry = await strapi.db.query('api::legal-page.legal-page').findOne({
-        where: { type: 'datenschutz' }
-      });
-
-      if (!entry) {
-        return ctx.send({
-          status: 'never',
-          message: 'Noch nie synchronisiert'
-        });
-      }
-
-      return ctx.send({
-        status: entry.syncStatus,
-        lastSyncedAt: entry.lastSyncedAt,
-        version: entry.version,
-        providerVersion: entry.providerVersion,
-        syncError: entry.syncError,
-        autoSync: entry.autoSync,
-        syncFrequency: entry.syncFrequency,
-        changelogCount: entry.changelog?.length || 0
-      });
-
-    } catch (error) {
-      strapi.log.error('[SYNC STATUS] Fehler:', error);
-      return ctx.internalServerError('Fehler beim Abrufen des Status');
-    }
-  }
-};
-```
+- [ ] CSP Header konfiguriert
+- [ ] DNS Preload hinzugefügt
+- [ ] Lazy Loading aktiviert
+- [ ] HTTPS-Only Verbindungen geprüft
 
 ---
 
-### Phase 4: Routes konfigurieren
+## 🚀 Go-Live Schritte
 
-**Aufgabe 4.1:** Erstelle Custom Routes
-
-**Dateipfad:** `src/api/legal-page/routes/custom-routes.js`
-
-```javascript
-'use strict';
-
-module.exports = {
-  routes: [
-    {
-      method: 'POST',
-      path: '/legal-pages/sync-datenschutz',
-      handler: 'sync-controller.syncDatenschutz',
-      config: {
-        policies: [],
-        middlewares: []
-      }
-    },
-    {
-      method: 'GET',
-      path: '/legal-pages/sync-status',
-      handler: 'sync-controller.getSyncStatus',
-      config: {
-        policies: [],
-        middlewares: []
-      }
-    }
-  ]
-};
-```
+1. **Frontend deployen** mit neuer Datenschutz-Seite
+2. **DNS/CDN konfigurieren** für app.alfright.eu Zugriff
+3. **CSP Header** in Webserver anpassen
+4. **Monitoring** der iFrame-Performance einrichten
+5. **Testing** der kompletten User Journey
 
 ---
 
-### Phase 5: Cronjob Setup
+## 📞 Support & Kontakt
 
-**Aufgabe 5.1:** Installiere Cron Plugin
+**alfright.eu Integration:**
 
-```bash
-npm install node-cron
-```
+- Dokumentation: [alfright.eu Support]
+- API-Key Management: alfright_schutzteam
+- Tenant ID: alfright_schutzteam
+- Key: f60250224d4a459a90dbeeb289cd47f9
 
-**Aufgabe 5.2:** Erstelle Cron Service
+**Bei technischen Problemen:**
 
-**Dateipfad:** `src/extensions/cron/cron-tasks.js`
-
-```javascript
-'use strict';
-
-const cron = require('node-cron');
-
-module.exports = {
-  /**
-   * Initialisiert alle Cronjobs
-   */
-  async initialize(strapi) {
-    // Täglich um 02:00 Uhr
-    cron.schedule('0 2 * * *', async () => {
-      strapi.log.info('[CRON] Starte automatische Datenschutz-Synchronisation');
-
-      try {
-        const providerConfig = {
-          name: process.env.DATENSCHUTZ_PROVIDER_NAME || 'External Provider',
-          url: process.env.DATENSCHUTZ_PROVIDER_URL,
-          apiKey: process.env.DATENSCHUTZ_PROVIDER_API_KEY
-        };
-
-        if (!providerConfig.url) {
-          strapi.log.warn('[CRON] DATENSCHUTZ_PROVIDER_URL nicht konfiguriert, überspringe Sync');
-          return;
-        }
-
-        const result = await strapi
-          .service('api::legal-page.sync-service')
-          .syncFromProvider(providerConfig);
-
-        if (result.success) {
-          strapi.log.info('[CRON] Sync erfolgreich abgeschlossen', {
-            hasChanges: result.hasChanges
-          });
-        } else {
-          strapi.log.error('[CRON] Sync fehlgeschlagen', {
-            error: result.message
-          });
-        }
-
-      } catch (error) {
-        strapi.log.error('[CRON] Fehler beim Cronjob:', error);
-      }
-    });
-
-    strapi.log.info('[CRON] Datenschutz-Sync Cronjob aktiviert (täglich 02:00 Uhr)');
-  }
-};
-```
-
-**Aufgabe 5.3:** Registriere Cron in Bootstrap
-
-**Dateipfad:** `src/index.js` (oder `config/functions/bootstrap.js`)
-
-```javascript
-module.exports = {
-  async bootstrap({ strapi }) {
-    // Initialisiere Cronjobs
-    const cronTasks = require('./extensions/cron/cron-tasks');
-    await cronTasks.initialize(strapi);
-  }
-};
-```
+- Frontend-Team für Layout/Design Issues
+- alfright.eu Support für Widget-Probleme
+- DevOps für CSP/Security Konfiguration
 
 ---
 
-### Phase 6: Environment Variables
+**Vereinfachte Implementierung abgeschlossen! 🎉**
 
-**Aufgabe 6.1:** Füge ENV Variables hinzu
-
-**Dateipfad:** `.env`
-
-```bash
-# Datenschutz Provider Konfiguration
-DATENSCHUTZ_PROVIDER_NAME=Ihr Beratungsunternehmen
-DATENSCHUTZ_PROVIDER_URL=https://provider.example.com/api/datenschutz/ihre-id
-DATENSCHUTZ_PROVIDER_API_KEY=ihr-api-schluessel-hier
-
-# Optional: Webhook Secret für Provider-Callbacks
-DATENSCHUTZ_WEBHOOK_SECRET=webhook-secret-hier
-
-# Optional: E-Mail Benachrichtigungen
-SYNC_NOTIFICATION_EMAIL=admin@zweitmeinu.ng
-```
-
----
-
-### Phase 7: Admin UI Erweiterung (Optional)
-
-**Aufgabe 7.1:** Erstelle Custom Admin Widget
-
-**Dateipfad:** `src/admin/app.js`
-
-```javascript
-export default {
-  config: {
-    locales: ['de'],
-  },
-  bootstrap(app) {
-    console.log('Admin Panel geladen');
-  },
-};
-```
-
-**Hinweis:** Vollständige Admin UI Anpassungen erfordern React-Entwicklung im Admin Panel. Dies ist optional und kann später ergänzt werden.
-
----
-
-## 🧪 Testing
-
-### Manuelle Tests
-
-**Test 1: Manueller Sync via API**
-```bash
-curl -X POST http://localhost:1337/api/legal-pages/sync-datenschutz \
-  -H "Authorization: Bearer YOUR_ADMIN_TOKEN" \
-  -H "Content-Type: application/json"
-```
-
-**Test 2: Sync Status abrufen**
-```bash
-curl -X GET http://localhost:1337/api/legal-pages/sync-status \
-  -H "Authorization: Bearer YOUR_ADMIN_TOKEN"
-```
-
-**Test 3: Legal Page abrufen**
-```bash
-curl -X GET "http://localhost:1337/api/legal-pages?filters[type][\$eq]=datenschutz"
-```
-
-### Automatisierte Tests
-
-**Aufgabe 7.2:** Erstelle Test Suite
-
-**Dateipfad:** `tests/legal-page/sync-service.test.js`
-
-```javascript
-const { setupStrapi, cleanupStrapi } = require('../helpers/strapi');
-
-describe('Sync Service', () => {
-  beforeAll(async () => {
-    await setupStrapi();
-  });
-
-  afterAll(async () => {
-    await cleanupStrapi();
-  });
-
-  it('sollte erfolgreich vom Provider synchronisieren', async () => {
-    const result = await strapi
-      .service('api::legal-page.sync-service')
-      .syncFromProvider({
-        name: 'Test Provider',
-        url: process.env.DATENSCHUTZ_PROVIDER_URL,
-        apiKey: process.env.DATENSCHUTZ_PROVIDER_API_KEY
-      });
-
-    expect(result.success).toBe(true);
-  });
-
-  it('sollte Änderungen erkennen', async () => {
-    const hasChanges = await strapi
-      .service('api::legal-page.sync-service')
-      .detectChanges('alter text', 'neuer text');
-
-    expect(hasChanges).toBe(true);
-  });
-});
-```
-
----
-
-## 📚 Dokumentation
-
-Erstelle folgende Dokumentation:
-
-1. **README.md** im Projekt-Root - Erwähne Sync-Feature
-2. **API-Dokumentation** - Beschreibe `/sync-datenschutz` Endpoint
-3. **Admin-Handbuch** - Wie man manuellen Sync triggert
-4. **Troubleshooting-Guide** - Häufige Fehler und Lösungen
-
----
-
-## ✅ Fertigstellungs-Checkliste
-
-Überprüfe nach Implementierung:
-
-- [ ] Content Type `legal-page` um Sync-Felder erweitert
-- [ ] Sync Service implementiert und getestet
-- [ ] Sync Controller implementiert
-- [ ] Custom Routes konfiguriert
-- [ ] Cronjob läuft (täglich 02:00 Uhr)
-- [ ] ENV Variables konfiguriert
-- [ ] Manueller Sync via API funktioniert
-- [ ] Sync Status API funktioniert
-- [ ] Changelog wird korrekt erstellt
-- [ ] Fehlerbehandlung mit Retry-Logik
-- [ ] Logging funktioniert
-- [ ] Tests geschrieben und bestanden
-- [ ] Dokumentation erstellt
-- [ ] Provider API-Zugang getestet
-
----
-
-## 🚨 Wichtige Hinweise
-
-1. **Sicherheit:**
-   - API Keys NIEMALS im Code, nur in .env
-   - Webhook Secret für Provider-Callbacks verwenden
-   - Admin-Berechtigung für Sync-Endpoints prüfen
-
-2. **Performance:**
-   - Timeout für Provider-Requests (max. 30s)
-   - Rate Limiting für Sync-Endpoint
-   - Caching von Provider-Responses
-
-3. **Fehlerbehandlung:**
-   - Retry bei temporären Fehlern (3x mit Backoff)
-   - Alert bei permanenten Fehlern
-   - Rollback-Funktion bei fehlerhaftem Content
-
-4. **DSGVO:**
-   - Keine personenbezogenen Daten an Provider senden
-   - Logging ohne sensible Informationen
-   - Verschlüsselte API-Kommunikation (HTTPS)
-
----
-
-## 📞 Support
-
-Bei Fragen oder Problemen:
-- Strapi Dokumentation: https://docs.strapi.io/
-- GitHub Issues: [Ihr Projekt Repo]
-- Team Slack: #strapi-support
-
----
-
-**Viel Erfolg bei der Implementierung! 🚀**
+Die neue Lösung ist **deutlich einfacher**, **wartungsärmer** und **DSGVO-konformer** als eine komplexe API-Synchronisation.

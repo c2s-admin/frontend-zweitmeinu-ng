@@ -6,6 +6,20 @@ export interface LegalPage {
   documentId: string
   type: 'impressum' | 'datenschutz' | 'agb' | 'cookie-policy' | 'other'
   content: string
+
+  // iframe/embed Integration
+  embedType?: 'iframe' | 'javascript' | 'static'
+  embedUrl?: string | null
+  provider?: string | null
+  siteIdentifier?: string | null
+  isActive?: boolean
+
+  // Metadata
+  title?: string
+  description?: string
+  slug?: string
+
+  // Existing fields
   country: string
   language: string
   validFrom: string | null

@@ -120,6 +120,7 @@ export default async function RootLayout({
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
+        <link rel="dns-prefetch" href="https://app.alfright.eu" />
         <meta name="theme-color" content="#004166" />
       </head>
       <body className="min-h-screen flex flex-col antialiased">

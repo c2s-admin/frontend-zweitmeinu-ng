@@ -12,11 +12,12 @@ const STRAPI_ORIGIN = STRAPI.origin
 
 const ContentSecurityPolicy = `
   default-src 'self';
-  script-src 'self' ${process.env.NODE_ENV === 'development' ? "'unsafe-inline' 'unsafe-eval'" : ''};
-  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+  script-src 'self' https://js.hcaptcha.com https://hcaptcha.com ${process.env.NODE_ENV === 'development' ? "'unsafe-inline' 'unsafe-eval'" : ''};
+  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://hcaptcha.com;
   img-src 'self' data: https:;
-  connect-src 'self' ${STRAPI_ORIGIN} ${process.env.NODE_ENV === 'development' ? 'ws: wss:' : ''};
+  connect-src 'self' ${STRAPI_ORIGIN} https://hcaptcha.com https://*.hcaptcha.com ${process.env.NODE_ENV === 'development' ? 'ws: wss:' : ''};
   font-src 'self' https://fonts.gstatic.com;
+  frame-src 'self' https://app.alfright.eu https://hcaptcha.com https://*.hcaptcha.com;
   frame-ancestors 'none';
 `
 
