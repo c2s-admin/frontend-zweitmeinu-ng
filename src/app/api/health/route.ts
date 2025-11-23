@@ -38,8 +38,10 @@ export async function GET() {
   try {
     const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
     if (strapiUrl) {
-      const strapiResponse = await fetch(strapiUrl, {
-        method: 'HEAD',
+      // Test a real endpoint that exists in Strapi (e.g., /pages)
+      const testEndpoint = `${strapiUrl}/pages?pagination[pageSize]=1`
+      const strapiResponse = await fetch(testEndpoint, {
+        method: 'GET',
         signal: AbortSignal.timeout(5000), // 5s timeout
       })
       health.strapi = strapiResponse.ok ? 'connected' : 'error'
