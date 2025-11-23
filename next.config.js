@@ -10,9 +10,22 @@ const STRAPI_BASE_PATH = STRAPI.pathname
 const STRAPI_UPLOADS_SEGMENT = 'uploads'
 const STRAPI_ORIGIN = STRAPI.origin
 
+/**
+ * Content Security Policy (CSP) for Healthcare Platform
+ *
+ * IMPORTANT: 'unsafe-inline' for script-src is required for Next.js hydration
+ *
+ * Current Configuration:
+ * - script-src: Allows Next.js inline scripts + hCaptcha
+ * - style-src: Allows inline styles (required for styled components)
+ * - frame-src: Allows alfright.eu iframe + hCaptcha
+ *
+ * TODO: Implement nonce-based CSP for better security
+ * @see https://nextjs.org/docs/app/building-your-application/configuring/content-security-policy
+ */
 const ContentSecurityPolicy = `
   default-src 'self';
-  script-src 'self' https://js.hcaptcha.com https://hcaptcha.com ${process.env.NODE_ENV === 'development' ? "'unsafe-inline' 'unsafe-eval'" : ''};
+  script-src 'self' 'unsafe-inline' https://js.hcaptcha.com https://hcaptcha.com ${process.env.NODE_ENV === 'development' ? "'unsafe-eval'" : ''};
   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://hcaptcha.com;
   img-src 'self' data: https:;
   connect-src 'self' ${STRAPI_ORIGIN} https://hcaptcha.com https://*.hcaptcha.com ${process.env.NODE_ENV === 'development' ? 'ws: wss:' : ''};
