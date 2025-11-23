@@ -191,7 +191,7 @@ export async function POST(request: NextRequest) {
     const validationResult = contactFormSchema.safeParse(body)
     if (!validationResult.success) {
       logger.warn('Form validation failed', {
-        errors: validationResult.error.errors,
+        errors: validationResult.error.issues,
         formData: Object.keys(body),
         ip
       })
