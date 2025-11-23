@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { getLegalPage } from "@/lib/strapi/legal-pages";
 import { notFound } from "next/navigation";
-import { Suspense } from "react";
 import { LegalIframe } from "@/components/legal/LegalIframe";
 
 // Dynamic metadata from Strapi
