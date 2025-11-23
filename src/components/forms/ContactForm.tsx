@@ -45,7 +45,8 @@ export function ContactForm({ onSuccess, className = '' }: ContactFormProps) {
       // Get CAPTCHA token if enabled
       let captchaToken: string | undefined
       if (captchaEnabled && captchaRef.current) {
-        captchaToken = await captchaRef.current.execute({ async: true })
+        const result = await captchaRef.current.execute({ async: true })
+        captchaToken = result?.response
       }
 
       // Submit form data
