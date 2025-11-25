@@ -74,6 +74,22 @@ export const sectionComponents = {
   'sections.mission-statement': dynamic<MissionStatementSection>(() => import('./MissionStatement'), {
     loading: LoadingSection
   }),
+  // "So funktioniert's" Page Specific Components
+  'sections.process-steps-detailed': dynamic(() => import('./ProcessStepsDetailed'), {
+    loading: LoadingSection
+  }),
+  'sections.why-choose-cards': dynamic(() => import('./WhyChooseCards'), {
+    loading: LoadingSection
+  }),
+  'sections.service-tiers-timeline': dynamic(() => import('./ServiceTiersTimeline'), {
+    loading: LoadingSection
+  }),
+  'sections.benefits-comparison': dynamic(() => import('./BenefitsComparison'), {
+    loading: LoadingSection
+  }),
+  'sections.process-cta': dynamic(() => import('./ProcessCTA'), {
+    loading: LoadingSmall
+  }),
 } as unknown as SectionComponents
 
 export function renderSection(section: DynamicZoneSection, index?: number) {
